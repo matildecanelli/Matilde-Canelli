@@ -15,11 +15,7 @@
 
 /* ---------- Variabili ---------- */
 :root {
-  --fondo: #0b0b0c;        /* fondo: quasi nero */
-  --pannello: #141416;     /* il pannello che si apre, un passo più chiaro */
-  --chiaro: #f1efea;       /* testo e PORTFOLIO */
-  --tenue: #a7a29c;        /* testo secondario */
-  --bordeaux: #510000;     /* la stella */
+  /* i colori sono in stella.css, nel blocco PALETTE (sei colori e i loro token) */
 
   --font: "Satoshi", "Helvetica Neue", Arial, sans-serif;
 

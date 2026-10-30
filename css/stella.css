@@ -59,13 +59,14 @@ html { overflow-x: hidden; }
 [data-tema="chiaro"] .tema__luna { opacity: 0; transform: rotate(90deg) scale(0.6); }
 [data-tema="chiaro"] .tema__sole { opacity: 1; transform: none; }
 
-/* Le stelline dello scoppio: piccole stelle di Matilde che volano via dal pulsante e svaniscono */
+/* Le stelline dello scoppio: piccole costellazioni di Matilde che volano via dal pulsante.
+   La forma arriva da --forma (una delle stelle essenziali, scelta a caso da tema.js) */
 .stellina {
   position: fixed; z-index: 50; left: 0; top: 0;
-  width: 14px; height: 15px;
-  background: var(--colore-tema);
-  -webkit-mask: url("../assets/img/stella.png") center / contain no-repeat;
-          mask: url("../assets/img/stella.png") center / contain no-repeat;
+  width: 16px; height: 16px;
+  background: var(--stella-pieno);
+  -webkit-mask: var(--forma, url("../assets/img/stelle/singole/essenziale-02.svg")) center / contain no-repeat;
+          mask: var(--forma, url("../assets/img/stelle/singole/essenziale-02.svg")) center / contain no-repeat;
   pointer-events: none;
 }
 
@@ -80,19 +81,9 @@ html { overflow-x: hidden; }
 [data-tema="chiaro"] .menu a[style*="--sopra"]:focus-visible { color: var(--c1); }
 
 /* ---------- I due temi ----------
-   Scuro (di base): fondo quasi nero, nome bianco.
-   Chiaro: fondo bianco caldo, nome bordeaux, testi scuri.
-   Si cambiano le variabili di base.css: tutto il resto le legge da lì. */
-:root { --colore-nome: #e9c9c3; --bling: #ffffff; --colore-tema: #ffffff; }   /* tema scuro: il nome in rosa cipria, il bordeaux schiarito */
-:root[data-tema="chiaro"] {
-  --fondo: #f3e3ad;          /* giallo burro: con il bordeaux fa contrasto (12:1) e ha carattere */
-  --pannello: #f9efcc;       /* i pannelli un gradino più chiari del fondo */
-  --chiaro: #141416;         /* "chiaro" è il colore del testo: nel tema chiaro diventa scuro */
-  --tenue: #5c4a2e;          /* un marrone caldo, che sul burro si legge meglio del grigio */
-  --colore-nome: #141416;    /* il nome nero sul giallo burro (gli strass diventano bordeaux) */
-  --colore-tema: #510000;    /* il pulsante del tema, bordeaux sul bianco */
-  --bling: #510000;
-}
+   Scuro (di base): fondo quasi nero violaceo, testi avorio, accento lilla.
+   Chiaro: fondo avorio, testi quasi neri, accento viola.
+   I colori sono tutti in fondo al file, nel blocco PALETTE. */
 html, body { transition: background-color 400ms ease, color 400ms ease; }
 .nome { transition: color 400ms ease; }
 /* nel tema chiaro l'alone scuro dietro le scritte non serve */
@@ -104,9 +95,8 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
 [data-tema="chiaro"] .pannello::before {
   background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c1) 25%, var(--pannello)) 0%, var(--pannello) 75%);
 }
-/* il riflesso a stella del bling: bianco sul nero, bordeaux sul bianco */
+/* il riflesso a stella del bling: prende l'accento del tema */
 .bling { background: var(--bling); }
-[data-tema="chiaro"] .lampo { background: #510000; }
 
 /* La stella di riserva: solo se WebGL o Three.js non partono, nella posizione finale */
 .stella-riserva { display: none; }
@@ -164,7 +154,6 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
   font-family: "Anton", Impact, sans-serif; font-weight: 400;
   font-size: 12.2cqw; line-height: 0.9; letter-spacing: 0;
   text-transform: uppercase; white-space: nowrap; text-align: center;
-  color: #510000;                      /* bordeaux in tutti e due i temi: la foto è la stessa */
 }
 .ritratto__scontorno { z-index: 1; }
 .pannello__testo--sotto { grid-row: 2; }
@@ -296,59 +285,143 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
 .pannello__indietro:hover { transform: translateX(-3px); }
 
 /* ==========================================================================
-   PALETTE: viola minerale, verde lichene, nero carbone, bianco calce.
-   Matte e un po' desaturata. Le variabili hanno un nome che dice a cosa
-   servono, non che colore sono: così i due temi cambiano solo i valori.
-   Contrasti verificati (WCAG AA): testo 13–15:1, testo secondario 4,6–8,5:1,
-   viola dei link 4,8–6,7:1, testo dei pulsanti verdi 10:1.
+   PALETTE: sei colori, e i token che li usano
+   1. --palette-*: i sei colori, scritti una volta sola.
+   2. --colore-* e --stella-*: i token "semantici", dicono a cosa servono
+      (fondo, testo, accento, stelle). Il tema chiaro cambia solo questi.
+   3. --fondo, --chiaro, --viola...: i nomi che il resto del CSS usava già,
+      ora collegati ai token (così non serve riscrivere tutto il resto).
+   Contrasti verificati (WCAG AA):
+   - scuro: testo avorio su quasi nero 14,6:1; lilla (link, accento) 7,3:1;
+     testo secondario 7,4:1; quasi nero sui pulsanti lilla 7,3:1.
+   - chiaro: testo quasi nero su avorio 14,6:1; viola (link, accento) 5,7:1;
+     testo secondario 6,2:1; bianco sui pulsanti viola 6,4:1.
+   - il salvia (2,9:1 su avorio) e il lilla nel tema chiaro (2:1) sono solo
+     decorativi: stelle, contorni, intrecci. Mai per testo o controlli.
    ========================================================================== */
 :root {
-  --fondo: #191A18;          /* fondo principale: nero carbone */
-  --pannello: #272B23;       /* fondo secondario: i pannelli */
-  --chiaro: #EFEEE8;         /* testo principale */
-  --tenue: #B2B7A8;          /* testo secondario */
-  --viola: #AE96CE;          /* link e dettagli */
-  --verde: #BED487;          /* accenti */
-  --separatore: #41463A;
-  --bottone-fondo: #BED487;  /* pulsanti principali: verde con testo nero, in tutti e due i temi */
-  --bottone-testo: #20211E;
-  --bottone-bordo: #BED487;
-  --colore-nome: var(--chiaro);
-  --colore-tema: var(--viola);
-  --bling: var(--viola);
+  --palette-bianco: #FFFFFF;
+  --palette-avorio: #F4F0E7;
+  --palette-nero: #201D24;        /* quasi nero violaceo */
+  --palette-viola: #705094;       /* il colore identitario */
+  --palette-lilla: #B9A2D2;
+  --palette-salvia: #7D927D;      /* accento occasionale */
+
+  /* tema scuro (di base) */
+  --colore-fondo: var(--palette-nero);
+  --colore-superficie: color-mix(in srgb, var(--palette-viola) 14%, var(--palette-nero));   /* i pannelli: il quasi nero appena velato di viola */
+  --colore-testo: var(--palette-avorio);
+  --colore-testo-tenue: color-mix(in srgb, var(--palette-avorio) 68%, var(--palette-nero));
+  --colore-accento: var(--palette-lilla);           /* sul fondo scuro il viola pieno si perde: l'accento è il lilla */
+  --colore-su-accento: var(--palette-nero);         /* il testo sopra l'accento (pulsanti) */
+  --colore-separatore: color-mix(in srgb, var(--palette-avorio) 18%, var(--palette-nero));
+  /* le costellazioni: pieni, contorni e intrecci */
+  --stella-pieno: var(--palette-lilla);
+  --stella-contorno: var(--palette-salvia);
+
+  /* i nomi usati nel resto del CSS */
+  --fondo: var(--colore-fondo);
+  --pannello: var(--colore-superficie);
+  --chiaro: var(--colore-testo);
+  --tenue: var(--colore-testo-tenue);
+  --viola: var(--colore-accento);
+  --verde: var(--palette-salvia);
+  --separatore: var(--colore-separatore);
+  --bottone-fondo: var(--colore-accento);
+  --bottone-testo: var(--colore-su-accento);
+  --bottone-bordo: var(--colore-accento);
+  --colore-nome: var(--colore-testo);
+  --colore-tema: var(--colore-accento);
+  --bling: var(--colore-accento);
 }
 :root[data-tema="chiaro"] {
-  --fondo: #EFEEE8;          /* bianco calce */
-  --pannello: #E1E4D8;
-  --chiaro: #20211E;
-  --tenue: #62665C;
-  --viola: #70568F;
-  --verde: #59683A;          /* verde oliva */
-  --separatore: #CFD1C7;
-  --bottone-bordo: #59683A;  /* sul calce il verde chiaro si stacca poco: un bordo oliva lo delimita */
-  --colore-nome: var(--chiaro);
-  --colore-tema: var(--viola);
-  --bling: var(--viola);
+  --colore-fondo: var(--palette-avorio);
+  --colore-superficie: var(--palette-bianco);       /* il bianco per le superfici: i pannelli */
+  --colore-testo: var(--palette-nero);
+  --colore-testo-tenue: color-mix(in srgb, var(--palette-nero) 72%, var(--palette-avorio));
+  --colore-accento: var(--palette-viola);
+  --colore-su-accento: var(--palette-bianco);
+  --colore-separatore: color-mix(in srgb, var(--palette-nero) 15%, var(--palette-avorio));
+  --stella-pieno: var(--palette-viola);
+  --stella-contorno: var(--palette-salvia);
+  --stella-variante: var(--palette-lilla);          /* contorni secondari, dove serve una variante */
 }
-::selection { background: var(--viola); color: var(--fondo); }
-:focus-visible { outline-color: var(--viola); }
+::selection { background: var(--colore-accento); color: var(--colore-su-accento); }
+:focus-visible { outline-color: var(--colore-accento); }
 html { scrollbar-color: var(--separatore) var(--fondo); }
 
-/* link e dettagli in viola */
+/* link e dettagli nell'accento */
 .link, .contatti__email { color: var(--viola); }
 .menu a:hover, .menu a:focus-visible { color: var(--viola); }
 .scheda__risultato dt { color: var(--viola); }
-.ritratto__scritta { color: #70568F; }   /* sulla foto chiara: lo stesso viola nei due temi */
+.ritratto__scritta { color: var(--palette-viola); }   /* sulla foto chiara: lo stesso viola nei due temi */
 
-/* pulsanti principali: verde lichene, testo nero */
+/* pulsanti principali: l'accento pieno */
 .js .pannello__chiudi { background: var(--bottone-fondo); color: var(--bottone-testo); border: 2px solid var(--bottone-bordo); }
 .js .pannello__indietro { border-color: var(--tenue); color: var(--chiaro); }
 
 /* superfici piatte e opache: niente sfumature né bagliori */
-.pannello::before, [data-tema="chiaro"] .pannello::before { background: color-mix(in srgb, var(--viola) 14%, var(--pannello)); }
+.pannello::before, [data-tema="chiaro"] .pannello::before { background: var(--pannello); }
 .lampo { display: none; }
 [data-tema="chiaro"] .testa, [data-tema="chiaro"] .palco__cv, [data-tema="chiaro"] .azioni, [data-tema="chiaro"] .ruolo { text-shadow: none; }
 
 /* i colori dei progetti nel tema chiaro: il giallo e l'azzurro scuriti per reggere il contrasto sul calce */
 [data-tema="chiaro"] #synapses, [data-tema="chiaro"] .elenco-progetti__voce[href="#synapses"] { --c1: #7a5f00 !important; }
 [data-tema="chiaro"] #energiapura, [data-tema="chiaro"] .elenco-progetti__voce[href="#energiapura"] { --c1: #2c6f78 !important; }
+
+/* ==========================================================================
+   LE COSTELLAZIONI: le 12 composizioni di stelle di Matilde
+   Stanno tutte in assets/img/stelle/costellazione.svg (uno "sprite": un file
+   con 12 simboli). Nell'HTML se ne richiama una così:
+     <svg class="costellazione ..." viewBox="0 0 L A" aria-hidden="true" focusable="false">
+       <use href="assets/img/stelle/costellazione.svg#espressiva-01" width="L" height="A"/>
+     </svg>
+   (L e A sono larghezza e altezza del suo viewBox nello sprite).
+   I colori arrivano dai token --stella-pieno e --stella-contorno: cambiando tema
+   cambia solo il colore, non la forma né la misura.
+   ========================================================================== */
+.costellazione {
+  display: block; flex: none;
+  height: auto;                 /* l'altezza segue le proporzioni del viewBox */
+  overflow: visible;            /* nessuna punta tagliata */
+  pointer-events: none;         /* decorative: non intercettano clic né tocchi */
+}
+
+/* la firma accanto al ruolo, nella hero: piccola, sulla stessa riga */
+.costellazione--ruolo { display: inline-block; width: 1.35em; margin-left: 0.3em; vertical-align: -0.3em; }
+
+/* sul telefono, accanto al nome (al posto della vecchia stellina); sul computer non c'è.
+   (svg.… pesa più di .costellazione, che le renderebbe di nuovo visibili) */
+svg.stella-telefono { display: none; width: 5.5rem; }
+@media (max-width: 40rem) {
+  /* sotto il nome, a destra, nello spazio libero: non tocca le lettere
+     (il nome è alto due righe da 25vw × 0,9) */
+  svg.stella-telefono { display: block; top: calc(var(--margine) + 5.5rem + 47vw); right: var(--margine); }
+}
+
+/* la riserva, se WebGL non parte: solo allora */
+svg.stella-riserva { display: none; }
+.js.senza-webgl svg.stella-riserva { display: block; }
+@media (max-width: 40rem) { .js.senza-webgl svg.stella-riserva { display: none; } }
+
+/* la firma accanto alla prima riga del titolo di un progetto (e di Contatti) */
+.costellazione--firma { display: inline-block; width: 0.62em; margin-left: 0.12em; vertical-align: 0.02em; }
+
+/* Progetti: nello spazio libero in basso a destra, lontano dai nomi */
+.pannello > .costellazione--angolo {
+  position: absolute; z-index: 0;
+  right: clamp(1.5rem, 6vw, 6rem); bottom: clamp(1.5rem, 6vh, 5rem);
+  width: clamp(9rem, 15vw, 15rem);
+}
+
+/* Chi sono: accanto al testo, nella colonna libera a destra */
+.costellazione--chi { grid-column: 10 / 13; grid-row: 2; align-self: center; justify-self: center; width: min(100%, 15rem); }
+
+/* Telefono e schermi stretti: meno decorazioni, quelle che restano sono intere */
+@media (max-width: 52rem) {
+  .costellazione--chi { display: none; }
+}
+@media (max-width: 40rem) {
+  .pannello > .costellazione--angolo { display: none; }   /* i nomi dei progetti occupano tutta la larghezza */
+  .costellazione--ruolo { display: none; }                /* sul telefono c'è già la costellazione accanto al nome */
+}

@@ -225,8 +225,9 @@
 .bling {
   left: 0; top: 0; width: 200px; height: 210px;
   background: #fff;
-  -webkit-mask: url("../assets/img/stella.png") center / contain no-repeat;
-          mask: url("../assets/img/stella.png") center / contain no-repeat;
+  /* la stella a sei punte irregolari delle costellazioni: si allarga come un riflesso */
+  -webkit-mask: url("../assets/img/stelle/singole/essenziale-01.svg") center / contain no-repeat;
+          mask: url("../assets/img/stelle/singole/essenziale-01.svg") center / contain no-repeat;
   transform: translate(-50%, -50%) scale(0);
 }
 .lampo { inset: 0; background: #fff; opacity: 0; }

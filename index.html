@@ -12,7 +12,7 @@
   <meta property="og:description" content="Web & visual designer. Cerco uno stage in sviluppo frontend.">
   <meta property="og:image" content="assets/img/anteprima.jpg">
   <meta property="og:locale" content="it_IT">
-  <meta name="theme-color" content="#0b0b0c">
+  <meta name="theme-color" content="#201D24">
 
   <link rel="preload" href="assets/fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/satoshi-500.woff2" as="font" type="font/woff2" crossorigin>
@@ -65,9 +65,9 @@
     </div>
 
     <!-- Il ruolo, sopra il nome: entra con lo scroll insieme al resto -->
-    <p class="ruolo" data-entra>Digital designer, wannabe web designer.</p>
-    <!-- Sul telefono, una stellina ferma accanto al nome (la stella di strass lì svanisce) -->
-    <img class="stella-telefono" src="assets/img/stella.png" width="891" height="934" alt="" data-entra>
+    <p class="ruolo" data-entra>Digital designer, wannabe web designer. <svg class="costellazione costellazione--ruolo" viewBox="0 0 341 337" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-02" width="341" height="337"/></svg></p>
+    <!-- Sul telefono, una costellazione ferma accanto al nome (la stella di strass lì svanisce) -->
+    <svg class="costellazione stella-telefono" data-entra viewBox="0 0 489 515" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-05" width="489" height="515"/></svg>
 
     <!-- Il nome è il titolo della pagina: testo vero, nitido, due righe che entrano separate -->
     <h1 class="nome">
@@ -78,7 +78,7 @@
 
     <canvas class="palco__scena" data-scena aria-hidden="true"></canvas>
     <!-- La stella di riserva: si vede se WebGL o Three.js non partono -->
-    <img class="stella-riserva" src="assets/img/stella.png" width="891" height="934" alt="">
+    <svg class="costellazione stella-riserva" viewBox="0 0 450 468" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-06" width="450" height="468"/></svg>
     <!-- Un invito discreto a scorrere: sparisce appena lo scroll comincia -->
     <p class="scorri" data-scorri aria-hidden="true">Scorri</p>
 
@@ -99,9 +99,11 @@
 
     <!-- I progetti: cinque nomi giganti. Cliccandone uno, il nome si rimpicciolisce
          e vola in alto a sinistra, dove diventa il titolo del progetto (js/progetti.js). -->
-    <section class="pannello pannello--progetti" id="progetti" aria-labelledby="progetti-titolo" data-pannello style="--c1:#510000; --c2:#120202; --titolo:#f1efea">
+    <section class="pannello pannello--progetti" id="progetti" aria-labelledby="progetti-titolo" data-pannello style="--c1:var(--colore-testo); --c2:var(--colore-fondo); --titolo:var(--colore-testo)">
       <button class="pannello__chiudi" type="button" data-chiudi>Chiudi</button>
       <h2 class="pannello__titolo solo-lettori" id="progetti-titolo" tabindex="-1">Progetti</h2>
+      <!-- una costellazione nello spazio libero: decorativa, non si clicca e i lettori di schermo la saltano -->
+      <svg class="costellazione costellazione--angolo" viewBox="0 0 521 451" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-01" width="521" height="451"/></svg>
       <ol class="elenco-progetti">
         <li><a class="elenco-progetti__voce" href="#imaze" data-voce="imaze" data-strass="#e12354" style="--sopra:#ff6b85; --c1:#e12354">
           <span class="elenco-progetti__nome">Imaze</span>
@@ -131,7 +133,7 @@
       <!-- torna alla lista dei progetti -->
       <a class="pannello__indietro" href="#progetti"><span aria-hidden="true">←</span> Progetti</a>
       <div class="pannello__testo">
-        <h2 class="pannello__titolo" id="imaze-titolo" tabindex="-1"><span>Landing page</span> <span class="pannello__nome">Imaze</span></h2>
+        <h2 class="pannello__titolo" id="imaze-titolo" tabindex="-1"><span>Landing page <svg class="costellazione costellazione--firma" viewBox="0 0 474 430" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-01" width="474" height="430"/></svg></span> <span class="pannello__nome">Imaze</span></h2>
         <dl class="scheda">
           <div class="scheda__risultato"><dt>Risultato</dt><dd>Una landing con sezioni su spazio, utilizzi, setup, team e FAQ, e un modulo per prenotare lo studio o l'attrezzatura.</dd></div>
           <div><dt>Anno</dt><dd>2026</dd></div>
@@ -162,7 +164,7 @@
       <!-- torna alla lista dei progetti -->
       <a class="pannello__indietro" href="#progetti"><span aria-hidden="true">←</span> Progetti</a>
       <div class="pannello__testo">
-        <h2 class="pannello__titolo" id="synapses-titolo" tabindex="-1"><span>Progetto</span> <span class="pannello__nome">Synapses</span></h2>
+        <h2 class="pannello__titolo" id="synapses-titolo" tabindex="-1"><span>Progetto <svg class="costellazione costellazione--firma" viewBox="0 0 458 409" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-03" width="458" height="409"/></svg></span> <span class="pannello__nome">Synapses</span></h2>
         <dl class="scheda">
           <div class="scheda__risultato"><dt>Risultato</dt><dd><strong>Il progetto è stato adottato da LABA</strong> come identità ufficiale di Synapses 2026: sito, locandine, allestimenti, newsletter e merchandising.</dd></div>
           <div><dt>Anno</dt><dd>a.a. 2025/2026</dd></div>
@@ -197,7 +199,7 @@
       <!-- torna alla lista dei progetti -->
       <a class="pannello__indietro" href="#progetti"><span aria-hidden="true">←</span> Progetti</a>
       <div class="pannello__testo">
-        <h2 class="pannello__titolo" id="ju1ce-titolo" tabindex="-1"><span>Progetto</span> <span class="pannello__nome">JU1CE</span></h2>
+        <h2 class="pannello__titolo" id="ju1ce-titolo" tabindex="-1"><span>Progetto <svg class="costellazione costellazione--firma" viewBox="0 0 420 368" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-04" width="420" height="368"/></svg></span> <span class="pannello__nome">JU1CE</span></h2>
         <dl class="scheda">
           <div class="scheda__risultato"><dt>Risultato</dt><dd>Brand identity, manifesti, flyer, sticker e sottobicchieri, con un piano di comunicazione online e offline tra marketing tradizionale e unconventional. Format progettato fino alla comunicazione, non realizzato.</dd></div>
           <div><dt>Anno</dt><dd>2025</dd></div>
@@ -237,7 +239,7 @@
       <!-- torna alla lista dei progetti -->
       <a class="pannello__indietro" href="#progetti"><span aria-hidden="true">←</span> Progetti</a>
       <div class="pannello__testo">
-        <h2 class="pannello__titolo" id="energiapura-titolo" tabindex="-1"><span>Progetto</span> <span class="pannello__nome">EnergiaPura</span></h2>
+        <h2 class="pannello__titolo" id="energiapura-titolo" tabindex="-1"><span>Progetto <svg class="costellazione costellazione--firma" viewBox="0 0 381 403" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-05" width="381" height="403"/></svg></span> <span class="pannello__nome">EnergiaPura</span></h2>
         <dl class="scheda">
           <div class="scheda__risultato"><dt>Risultato</dt><dd>Tra i dieci migliori lavori delle sedi IUSVE di Verona e Mestre. Alla premiazione con l'azienda il video ha vinto il <strong>premio Miglior Soggetto</strong>.</dd></div>
           <div><dt>Anno</dt><dd>a.a. 2022/2023</dd></div>
@@ -270,7 +272,7 @@
       <!-- torna alla lista dei progetti -->
       <a class="pannello__indietro" href="#progetti"><span aria-hidden="true">←</span> Progetti</a>
       <div class="pannello__testo">
-        <h2 class="pannello__titolo" id="virtuoso-titolo" tabindex="-1"><span>Progetto</span> <span class="pannello__nome">Virtuoso</span></h2>
+        <h2 class="pannello__titolo" id="virtuoso-titolo" tabindex="-1"><span>Progetto <svg class="costellazione costellazione--firma" viewBox="0 0 454 369" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-06" width="454" height="369"/></svg></span> <span class="pannello__nome">Virtuoso</span></h2>
         <dl class="scheda">
           <div><dt>Anno</dt><dd>a.a. 2025/2026</dd></div>
           <div><dt>Contesto</dt><dd>Corso di Art Direction</dd></div>
@@ -286,7 +288,7 @@
       <p class="pannello__dopo"><a class="link" href="#imaze">Ricomincia: Imaze</a></p>
     </section>
 
-    <section class="pannello" id="chi-sono" aria-labelledby="chi-sono-titolo" data-pannello style="--c1:#c0392b; --c2:#510000; --titolo:#ef7a6c">
+    <section class="pannello" id="chi-sono" aria-labelledby="chi-sono-titolo" data-pannello style="--c1:var(--colore-testo); --c2:var(--colore-fondo); --titolo:var(--colore-testo)">
       <button class="pannello__chiudi" type="button" data-chiudi>Chiudi</button>
       <!-- Il ritratto a tutta scheda, in tre strati uno sopra l'altro:
            1. la foto intera; 2. la scritta "Ma questa chi è?"; 3. la stessa foto scontornata.
@@ -305,12 +307,13 @@
         <p>Dalla comunicazione e della grafica ho sviluppato le mie competenze di progettazione, fare (tante) domande e creare connessioni. Credo che la differenza stia nella cura dei dettagli: forse per questo mi complico la vita finché un progetto non mi convince davvero.</p>
         <p>Per il resto lascio parlare i miei lavori.</p>
       </div>
+      <svg class="costellazione costellazione--chi" viewBox="0 0 498 422" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-04" width="498" height="422"/></svg>
     </section>
 
-    <section class="pannello" id="contatti" aria-labelledby="contatti-titolo" data-pannello style="--c1:#510000; --c2:#120202; --titolo:#f1efea">
+    <section class="pannello" id="contatti" aria-labelledby="contatti-titolo" data-pannello style="--c1:var(--colore-testo); --c2:var(--colore-fondo); --titolo:var(--colore-testo)">
       <button class="pannello__chiudi" type="button" data-chiudi>Chiudi</button>
       <div class="pannello__testo pannello__testo--largo">
-        <h2 class="pannello__titolo" id="contatti-titolo" tabindex="-1"><span class="pannello__nome">Contatti</span></h2>
+        <h2 class="pannello__titolo" id="contatti-titolo" tabindex="-1"><span class="pannello__nome">Contatti <svg class="costellazione costellazione--firma" viewBox="0 0 453 442" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-03" width="453" height="442"/></svg></span></h2>
         <p class="pannello__frase">Cerco uno stage in sviluppo frontend. Scrivimi.</p>
         <a class="contatti__email" href="mailto:canellimatildee@gmail.com">canellimatildee@<wbr>gmail.com</a>
         <dl class="scheda scheda--contatti">

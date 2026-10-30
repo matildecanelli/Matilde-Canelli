@@ -21,6 +21,9 @@
     if (coloreBarra) coloreBarra.content = getComputedStyle(radice).getPropertyValue('--fondo').trim();
   }
 
+  // Le forme delle stelline: le quattro stelle piene delle costellazioni essenziali
+  const forme = ['01', '02', '03', '04'].map((n) => `url("assets/img/stelle/singole/essenziale-${n}.svg")`);
+
   // Lo scoppio: 9 stelline partono dal centro del pulsante in direzioni diverse,
   // ruotano un po', rimpiccioliscono e svaniscono
   function stelline() {
@@ -31,6 +34,7 @@
     for (let i = 0; i < quante; i++) {
       const s = document.createElement('span');
       s.className = 'stellina';
+      s.style.setProperty('--forma', forme[i % forme.length]);
       document.body.append(s);
       const angolo = (i / quante) * Math.PI * 2 + Math.random() * 0.5;
       const distanza = 28 + Math.random() * 26;
