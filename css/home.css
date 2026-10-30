@@ -1,0 +1,237 @@
+/* ==========================================================================
+   home.css: la scena con le particelle e i pannelli che si aprono
+   ========================================================================== */
+
+/* ---------- La scena ----------
+   Con JavaScript è una sola schermata nera: tutto il resto sta nei pannelli. */
+.palco {
+  position: relative;
+  min-height: 100svh;
+  padding: var(--margine);
+}
+.js body { overflow: hidden; }   /* la pagina non scorre: si aprono le particelle */
+.js .palco { height: 100svh; }
+
+/* Il canvas 3D con PORTFOLIO e le bolle di vetro copre tutta la scena */
+.palco__scena { display: none; }
+.js .palco__scena {
+  display: block;
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  touch-action: pan-y;
+}
+.palco__scena.e-sopra-bolla { cursor: pointer; }
+/* Il nome di ogni bolla, sempre al suo centro: così si capisce che le bolle
+   sono i progetti, anche sul telefono dove non si può "passare sopra".
+   Un po' trasparente a riposo, pieno quando la bolla è sotto il puntatore. */
+.palco__etichetta {
+  position: absolute; z-index: 2; left: 0; top: 0;
+  font-size: 0.875rem; font-weight: 700; letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: var(--chiaro);
+  /* lo stesso alone del menu: il nome si legge anche sopra la stella chiara */
+  text-shadow: 0 0 0.25em rgb(0 0 0 / 0.9), 0 0 0.8em rgb(0 0 0 / 0.8); /* taste-skill-ignore */
+  transform: translate(-50%, -50%);
+  opacity: 0.7;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+}
+.palco__etichetta.e-visibile { opacity: 1; }
+.palco__etichetta[hidden] { display: none; }
+/* Senza WebGL: niente canvas, la parola scritta normalmente */
+.senza-webgl .palco__scena { display: none; }
+
+/* Senza JavaScript: la parola scritta normalmente, al centro */
+.palco__titolo { min-height: 60svh; display: grid; place-items: center; }
+.palco__riserva {
+  display: block;
+  font-family: "Anton", Impact, sans-serif; font-weight: 400;
+  font-size: 18vw; line-height: 0.9; letter-spacing: 0.01em;
+  text-transform: uppercase; color: #e9e9e9;
+}
+.js .palco__titolo { min-height: 0; }
+.js .palco__riserva { display: none; }
+.js.senza-webgl .palco__titolo { position: absolute; inset: 0; display: grid; place-items: center; }
+.js.senza-webgl .palco__riserva { display: block; }
+
+/* In alto a sinistra: chi è. In alto a destra: il CV */
+/* Nome e ruolo sono la prima cosa che cerca un selezionatore: si leggono senza sforzo */
+.testa {
+  position: absolute; z-index: 2;
+  top: var(--margine); left: var(--margine);
+  display: flex; align-items: flex-start; gap: 0.9rem;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--tenue);
+}
+.testa__stella { width: 3rem; height: auto; flex: none; margin-top: -0.15rem; }
+.testa__chi strong { font-size: 1.25em; line-height: 1.3; font-weight: 700; color: var(--chiaro); }
+.palco__cv {
+  position: absolute; z-index: 2;
+  top: var(--margine); right: var(--margine);
+  font-size: 0.8125rem; font-weight: 500;
+  padding-block: 0.6rem; margin-top: -0.6rem;
+}
+
+/* Il menu: piccolo, a destra, centrato sull'altezza dello schermo */
+.menu {
+  position: absolute; z-index: 2;
+  right: var(--margine); top: 50%;
+  transform: translateY(-50%);
+}
+.menu ul { display: grid; gap: 0.15rem; justify-items: end; }
+.menu a {
+  display: inline-block;
+  padding: 0.4rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  color: var(--tenue);
+  /* un alone scuro dietro le lettere: si leggono anche quando passa una bolla chiara */
+  text-shadow: 0 0 0.25em rgb(0 0 0 / 0.9), 0 0 0.8em rgb(0 0 0 / 0.8); /* taste-skill-ignore */
+  transition: color 200ms ease, transform 300ms var(--ease);
+}
+.menu a:hover,
+.menu a:focus-visible { color: var(--chiaro); transform: translateX(-0.3rem); }
+.menu .pallino { display: none; }
+
+/* Telefono: il menu va in basso, centrato, su più righe */
+@media (max-width: 40rem) {
+  /* sul telefono il testo va a capo prima di arrivare al link del CV */
+  .testa { right: calc(var(--margine) + 6.5rem); font-size: 0.9375rem; gap: 0.75rem; }
+  .testa__stella { width: 2.5rem; }
+  .menu { top: auto; bottom: var(--margine); left: var(--margine); transform: none; }
+  .menu ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 1.1rem; }
+  .menu a { min-height: 2.75rem; display: inline-flex; align-items: center; }
+  .menu a:hover, .menu a:focus-visible { transform: none; }
+}
+
+/* ---------- I pannelli ----------
+   Senza JavaScript sono sezioni normali. Con JavaScript sono nascosti
+   finché non si apre la loro particella (pannelli.js). */
+.pannello {
+  position: relative;
+  padding: clamp(2rem, 6vw, 5rem) var(--margine);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  row-gap: 2.5rem;
+  align-content: start;
+}
+.js .pannello {
+  display: none;
+  position: fixed; inset: 0; z-index: 20;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--pannello);
+  --ritaglio: clamp(10px, 2.5vw, 36px);   /* lo stesso margine del ritaglio in pannelli.js */
+  padding: calc(var(--ritaglio) + clamp(1.25rem, 4vw, 4rem));
+}
+.js .pannello.e-aperto { display: grid; }
+
+/* Quando un pannello è aperto, la scena dietro si sfoca e si spegne */
+.palco { transition: filter 600ms ease, opacity 600ms ease; }
+.palco[inert] { filter: blur(10px); opacity: 0.35; }
+
+/* Lo strato colorato: il colore della particella che si allarga, poi svanisce */
+.pannello::before {
+  content: ""; position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c1) 45%, var(--pannello)) 0%, var(--pannello) 75%);
+  opacity: 0;
+  pointer-events: none;
+}
+.pannello > * { position: relative; z-index: 1; }
+
+.pannello__chiudi { display: none; }
+.js .pannello__chiudi {
+  display: inline-flex; align-items: center; justify-content: center;
+  position: fixed; z-index: 3;
+  top: calc(var(--ritaglio) + 1rem); right: calc(var(--ritaglio) + 1rem);
+  min-width: 2.75rem; min-height: 2.75rem; padding: 0 1.1rem;
+  border: 0; border-radius: 999px;
+  background: var(--chiaro); color: var(--fondo);
+  font-weight: 700; font-size: var(--t-piccolo);
+  cursor: pointer;
+  transition: transform 200ms var(--ease);
+}
+.pannello__chiudi:hover { transform: scale(1.06); }
+
+.pannello__testo { grid-column: 1 / 6; grid-row: 1 / span 2; display: grid; gap: 1.5rem; align-content: start; }
+.pannello__testo--largo { grid-column: 1 / 9; max-width: 44rem; }
+.pannello__titolo {
+  font-weight: 900; font-size: var(--t-titolo);
+  line-height: 1; letter-spacing: -0.04em;
+  text-wrap: balance;
+  outline: none;
+}
+.pannello__titolo span { display: block; }
+.pannello__nome { color: var(--titolo); margin-top: 0.06em; }
+.pannello__frase { font-size: var(--t-frase); font-weight: 700; line-height: 1.3; }
+.pannello__sotto { font-size: var(--t-frase); font-weight: 900; letter-spacing: -0.02em; margin-top: 1rem; }
+
+.scheda { display: grid; gap: 1rem; }
+.scheda div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; }
+.scheda dt { font-weight: 700; color: var(--tenue); }
+.scheda--contatti div { grid-template-columns: 6rem 1fr; }
+
+.pannello__immagini {
+  grid-column: 7 / 13; grid-row: 2;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  align-content: start;
+}
+.pannello__immagini .largo { grid-column: 1 / -1; }
+.pannello__immagini img,
+.pannello__video { width: 100%; height: auto; border-radius: 1.25rem; background: #000; }
+/* La moodboard: più immagini affiancate in una sola figura, tutte alla stessa altezza.
+   Le colonne si scelgono nell'HTML con --colonne: ognuna larga in proporzione
+   alla sua immagine. Se non si scrive niente, sono due colonne uguali. */
+.moodboard { display: grid; grid-template-columns: var(--colonne, 1fr 1fr); gap: 0.5rem; }
+.pannello__immagini .moodboard img { border-radius: 0.75rem; }
+
+/* Tre figure in fila, ognuna con la sua didascalia (es. poster, variante, flyer) */
+.riga-tre {
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem; align-items: start;
+}
+.pannello__immagini figcaption { margin-top: 0.5rem; font-size: var(--t-piccolo); color: var(--tenue); }
+
+.pannello__dopo { grid-column: 1 / -1; font-weight: 700; font-size: var(--t-frase); }
+.pannello__stella { grid-column: 9 / 13; grid-row: 2; width: 100%; height: auto; }
+
+.contatti__email {
+  font-weight: 700; font-size: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  line-height: 1.15; letter-spacing: -0.02em;
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.18em;
+  margin-top: 0.5rem;
+  overflow-wrap: anywhere;
+}
+.contatti__email:hover { text-decoration: underline; text-decoration-thickness: 3px; }
+.contatti__codice { color: var(--tenue); font-size: var(--t-piccolo); margin-top: 1rem; }
+
+@media (max-width: 52rem) {
+  .js .pannello { padding-top: calc(var(--ritaglio) + 4.75rem); }   /* spazio per Chiudi sopra il titolo */
+  .pannello__testo, .pannello__testo--largo, .pannello__immagini, .pannello__stella { grid-column: 1 / -1; grid-row: auto; }
+  .pannello__stella { width: 50%; justify-self: end; }
+  .scheda div { grid-template-columns: 1fr; gap: 0.15rem; }
+}
+
+/* ---------- PROVA 4: il bling ----------
+   La stella bianca che si allarga dallo strass cliccato e il lampo che abbaglia.
+   Stanno sopra a tutto, pannelli compresi, e non si possono cliccare. */
+.bling, .lampo { position: fixed; z-index: 40; pointer-events: none; }
+.bling { z-index: 41; }        /* la stella sta sopra il lampo: resta la cosa più luminosa */
+.bling {
+  left: 0; top: 0; width: 200px; height: 210px;
+  background: #fff;
+  -webkit-mask: url("../assets/img/stella.png") center / contain no-repeat;
+          mask: url("../assets/img/stella.png") center / contain no-repeat;
+  transform: translate(-50%, -50%) scale(0);
+}
+.lampo { inset: 0; background: #fff; opacity: 0; }
+/* i nomi dei progetti stanno sotto il loro strass, non al centro */
+.palco__etichetta { transform: translate(-50%, 0); }
+
+/* lo sfondo ora ha gemme: il testo in alto prende lo stesso alone del menu */
+.testa, .palco__cv { text-shadow: 0 0 0.25em rgb(0 0 0 / 0.95), 0 0 0.8em rgb(0 0 0 / 0.9); } /* taste-skill-ignore */

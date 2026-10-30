@@ -1,0 +1,354 @@
+/* ==========================================================================
+   stella.css: PROVA 5, la stella di strass e il nome
+   All'inizio si vede solo la stella; scorrendo entrano il nome, il ruolo e
+   il menu. Senza JavaScript (o con "riduci movimento") si vede subito la
+   composizione finale.
+   ========================================================================== */
+
+/* In questa prova la pagina scorre: lo scroll muove l'animazione (GSAP) */
+.js body { overflow-x: hidden; overflow-y: auto; }
+html { overflow-x: hidden; }
+.palco { overflow: hidden; }
+
+/* La stella (canvas WebGL trasparente) sta sopra il nome, come nel mock;
+   non intercetta i clic, così il menu e i link restano cliccabili */
+.js .palco__scena { z-index: 2; pointer-events: none; }
+.azioni, .menu { z-index: 3; }
+
+/* Il nome: due righe enormi in Anton, bianche, allineate a sinistra */
+.nome {
+  position: absolute; z-index: 1;
+  left: var(--margine); right: var(--margine);
+  top: calc(var(--margine) + 3.5rem);
+  margin: 0;
+  font-family: "Anton", Impact, sans-serif; font-weight: 400;
+  font-size: min(21vw, 37svh);
+  line-height: 0.9; letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--colore-nome);
+}
+.nome__riga { display: block; }
+
+/* In alto a destra: Scarica il CV, Scarica il portfolio, il cambio di tema */
+.azioni {
+  position: absolute; top: var(--margine); right: var(--margine);
+  display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline;
+  gap: 0.25rem 1.5rem;
+  font-size: 0.8125rem; font-weight: 500;
+}
+.azioni { align-items: center; }
+.azioni a { padding-block: 0.6rem; margin-block: -0.6rem; }
+
+/* Il cambio di tema: solo il simbolo e un bordo spesso ("chunky"), niente fondo dentro.
+   Bianco nel tema scuro, bordeaux nel tema chiaro. */
+.tema {
+  position: relative; flex: none;
+  display: grid; place-items: center;
+  width: 3.6rem; height: 2.4rem; padding: 0;
+  border: 3px solid var(--colore-tema); border-radius: 999px;
+  background: transparent; color: var(--colore-tema);
+  cursor: pointer;
+  transition: transform 160ms var(--ease), color 400ms ease, border-color 400ms ease;
+}
+.tema:hover { transform: scale(1.06); }
+.tema:active { transform: scale(0.94); }
+.tema svg { width: 1.25rem; height: 1.25rem; grid-area: 1 / 1; transition: opacity 250ms ease, transform 400ms var(--ease); }
+.tema__luna { fill: currentColor; }
+.tema__sole { fill: none; stroke: currentColor; stroke-width: 3.2; stroke-linecap: round; opacity: 0; transform: rotate(-90deg) scale(0.6); }
+.tema__sole circle { fill: currentColor; stroke: none; }
+[data-tema="chiaro"] .tema__luna { opacity: 0; transform: rotate(90deg) scale(0.6); }
+[data-tema="chiaro"] .tema__sole { opacity: 1; transform: none; }
+
+/* Le stelline dello scoppio: piccole stelle di Matilde che volano via dal pulsante e svaniscono */
+.stellina {
+  position: fixed; z-index: 50; left: 0; top: 0;
+  width: 14px; height: 15px;
+  background: var(--colore-tema);
+  -webkit-mask: url("../assets/img/stella.png") center / contain no-repeat;
+          mask: url("../assets/img/stella.png") center / contain no-repeat;
+  pointer-events: none;
+}
+
+/* Il menu: voci un po' più grandi */
+.menu a { font-size: 1.0625rem; }
+@media (max-width: 40rem) { .menu a { font-size: 1rem; } }
+
+/* Il menu: le voci dei progetti, al passaggio, prendono il colore del progetto */
+.menu a[style*="--sopra"]:hover,
+.menu a[style*="--sopra"]:focus-visible { color: var(--sopra); }
+[data-tema="chiaro"] .menu a[style*="--sopra"]:hover,
+[data-tema="chiaro"] .menu a[style*="--sopra"]:focus-visible { color: var(--c1); }
+
+/* ---------- I due temi ----------
+   Scuro (di base): fondo quasi nero, nome bianco.
+   Chiaro: fondo bianco caldo, nome bordeaux, testi scuri.
+   Si cambiano le variabili di base.css: tutto il resto le legge da lì. */
+:root { --colore-nome: #e9c9c3; --bling: #ffffff; --colore-tema: #ffffff; }   /* tema scuro: il nome in rosa cipria, il bordeaux schiarito */
+:root[data-tema="chiaro"] {
+  --fondo: #f3e3ad;          /* giallo burro: con il bordeaux fa contrasto (12:1) e ha carattere */
+  --pannello: #f9efcc;       /* i pannelli un gradino più chiari del fondo */
+  --chiaro: #141416;         /* "chiaro" è il colore del testo: nel tema chiaro diventa scuro */
+  --tenue: #5c4a2e;          /* un marrone caldo, che sul burro si legge meglio del grigio */
+  --colore-nome: #141416;    /* il nome nero sul giallo burro (gli strass diventano bordeaux) */
+  --colore-tema: #510000;    /* il pulsante del tema, bordeaux sul bianco */
+  --bling: #510000;
+}
+html, body { transition: background-color 400ms ease, color 400ms ease; }
+.nome { transition: color 400ms ease; }
+/* nel tema chiaro l'alone scuro dietro le scritte non serve */
+[data-tema="chiaro"] .menu a,
+[data-tema="chiaro"] .palco__etichetta { text-shadow: none; }
+/* i titoli dei pannelli: i colori chiari pensati per il nero non si leggono sul bianco,
+   quindi nel tema chiaro il nome del progetto prende la sua tinta piena */
+[data-tema="chiaro"] .pannello__nome { color: var(--c1); }
+[data-tema="chiaro"] .pannello::before {
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c1) 25%, var(--pannello)) 0%, var(--pannello) 75%);
+}
+/* il riflesso a stella del bling: bianco sul nero, bordeaux sul bianco */
+.bling { background: var(--bling); }
+[data-tema="chiaro"] .lampo { background: #510000; }
+
+/* La stella di riserva: solo se WebGL o Three.js non partono, nella posizione finale */
+.stella-riserva { display: none; }
+.js.senza-webgl .stella-riserva {
+  display: block; position: absolute; z-index: 2;
+  width: min(40svh, 34vw); height: auto;
+  left: 66%; top: 70%; transform: translate(-50%, -50%);
+}
+
+/* L'invito a scorrere, in fondo al centro */
+.scorri {
+  position: absolute; z-index: 3; left: 50%; bottom: var(--margine);
+  transform: translateX(-50%);
+  font-size: var(--t-piccolo); font-weight: 500; color: var(--tenue);
+}
+.statica .scorri, .senza-webgl .scorri, html:not(.js) .scorri { display: none; }
+
+/* Prima che GSAP parta, nome, ruolo e menu sono nascosti (li fa entrare lo scroll).
+   Solo se c'è JavaScript e non siamo in versione statica: altrimenti restano visibili. */
+.js:not(.statica):not(.senza-webgl) .nome__riga { visibility: hidden; }
+.js:not(.statica):not(.senza-webgl) [data-entra] { opacity: 0; }   /* solo opacità: si può ancora arrivarci con il tab */
+
+/* Telefono: nome più piccolo; la stella c'è solo al caricamento */
+@media (max-width: 40rem) {
+  .statica .palco__scena, .js.senza-webgl .stella-riserva { display: none !important; }
+  .nome { font-size: 25vw; top: calc(var(--margine) + 4.5rem); }
+  .azioni { left: var(--margine); right: var(--margine); justify-content: space-between; gap: 0.25rem 1rem; }
+  .js.senza-webgl .stella-riserva { left: 50%; top: 72%; width: 70vw; }
+}
+
+/* ---------- Chi sono: il ritratto a tutta scheda ----------
+   Esce dai margini del pannello e arriva ai suoi bordi (i margini negativi sono
+   uguali al respiro interno del pannello). È tagliato a metà del bicipite. */
+.ritratto {
+  grid-column: 1 / -1; grid-row: 1;
+  align-self: start;                   /* senza questo la griglia lo stira e il taglio non vale */
+  position: relative; margin: 0;
+  margin-inline: calc(-1 * clamp(1.25rem, 4vw, 4rem));
+  margin-top: calc(-1 * clamp(1.25rem, 4vw, 4rem));
+  /* il taglio, dall’alto fino a metà del braccio: 820 px su 1600 di larghezza.
+     L’altezza è scritta in vw (larghezza del pannello × 820/1600) perché dentro la griglia
+     aspect-ratio con i margini negativi non viene calcolato bene */
+  height: calc((100vw - 2 * var(--ritaglio, 0px)) * 0.5125);
+  overflow: hidden;
+  container-type: inline-size;         /* la scritta si misura sulla larghezza del ritratto */
+}
+.ritratto__foto, .ritratto__scontorno {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 0%;   /* identici per tutte e due: combaciano */
+  border-radius: 0; background: none;
+}
+.ritratto__scritta {
+  position: absolute; left: 3cqw; right: 3cqw; top: 12cqw;
+  font-family: "Anton", Impact, sans-serif; font-weight: 400;
+  font-size: 12.2cqw; line-height: 0.9; letter-spacing: 0;
+  text-transform: uppercase; white-space: nowrap; text-align: center;
+  color: #510000;                      /* bordeaux in tutti e due i temi: la foto è la stessa */
+}
+.ritratto__scontorno { z-index: 1; }
+.pannello__testo--sotto { grid-row: 2; }
+@media (max-width: 52rem) {
+  /* sul telefono: il pannello ha più spazio sopra (per Chiudi), e il ritratto è più alto
+     e tagliato sul volto, altrimenti diventerebbe una striscia */
+  .ritratto { margin-top: -4.75rem; height: calc((100vw - 2 * var(--ritaglio, 0px)) * 1.1); }
+  .ritratto__foto, .ritratto__scontorno { object-position: 58% 0%; }
+  .ritratto__scritta { top: 26cqw; font-size: 12cqw; }
+}
+
+/* Contatti: la stella con il selfie, a colori, accanto ai contatti */
+.contatti__foto { align-self: center; }
+
+/* ---------- Il ruolo, sopra il nome ---------- */
+.ruolo {
+  position: absolute; z-index: 3; top: var(--margine); left: var(--margine);
+  margin: 0; font-size: 1rem; font-weight: 500; color: var(--chiaro);
+}
+.stella-telefono { display: none; }
+
+/* ---------- Il menu: titoletto, "Progetto Nome · tipo" ---------- */
+.menu__titoletto {
+  font-size: 0.8125rem; font-weight: 500; color: var(--tenue);
+  padding-bottom: 0.2rem;
+}
+.menu__stacco { height: 0.9rem; }
+.menu__tipo { margin-left: 0.3em; color: var(--tenue); font-weight: 400; transition: color 200ms ease; }   /* il margine: nel flex lo spazio iniziale sparisce */
+.menu a:hover .menu__tipo, .menu a:focus-visible .menu__tipo { color: inherit; }
+
+/* ---------- Pannelli: titoli in Anton, risultato in evidenza ---------- */
+.pannello__titolo {
+  font-family: "Anton", Impact, sans-serif; font-weight: 400;
+  text-transform: uppercase; letter-spacing: 0; line-height: 0.95;
+}
+.scheda__risultato dd { font-weight: 700; font-size: var(--t-frase); line-height: 1.3; color: var(--chiaro); }
+.scheda__risultato dt { color: var(--colore-nome); }
+
+/* Contatti: la foto-stella più grande, riempie la destra */
+.contatti__foto { grid-column: 7 / 13; grid-row: 1 / span 2; max-height: 80svh; width: auto; justify-self: center; }
+
+/* ---------- Telefono ---------- */
+@media (max-width: 40rem) {
+  .ruolo { top: calc(var(--margine) + 3rem); font-size: 0.9375rem; }
+  .nome { top: calc(var(--margine) + 5.5rem); }
+  /* la stellina ferma, accanto al nome */
+  .stella-telefono {
+    display: block; position: absolute; z-index: 3;
+    width: 4.5rem; height: auto;
+    right: var(--margine); top: calc(var(--margine) + 5rem);
+  }
+
+  /* pannelli: titolo, poi la prima immagine, poi la scheda e il resto delle immagini */
+  .pannello__testo:not(.pannello__testo--largo), .pannello__immagini { display: contents; }
+  .pannello__testo:not(.pannello__testo--largo) > *, .pannello__immagini > * { grid-column: 1 / -1; order: 3; }
+  .pannello__titolo { order: 1 !important; }
+  .pannello__immagini > :first-child { order: 2 !important; }
+  .pannello__immagini > :not(:first-child) { order: 4 !important; }
+  .pannello__dopo { order: 5; }
+  .pannello:has(.pannello__immagini) { row-gap: 1.25rem; }
+  .contatti__foto { grid-column: 1 / -1; grid-row: auto; width: 80%; max-height: none; }
+}
+
+/* "Scorri": bianco nel tema scuro, bordeaux nel tema chiaro (lo stesso colore del pulsante del tema) */
+.scorri { color: var(--colore-tema); font-weight: 700; }
+
+
+/* ---------- Il menu: tre voci ---------- */
+.menu a { font-size: 1.0625rem; }
+@media (max-width: 40rem) {
+  .menu ul { display: flex; justify-content: flex-start; gap: 0 1.5rem; }
+  .menu a { font-size: 1.125rem; min-height: 2.75rem; }
+}
+
+/* ---------- Il pannello Progetti: cinque nomi giganti in Anton ---------- */
+.elenco-progetti {
+  grid-column: 1 / -1; align-self: center;
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 0;
+}
+.elenco-progetti__voce {
+  display: inline-flex; align-items: baseline; gap: 1rem;
+  text-decoration: none; color: var(--chiaro);
+  transition: color 250ms ease, opacity 250ms ease, transform 350ms var(--ease);
+}
+.elenco-progetti__nome {
+  font-family: "Anton", Impact, sans-serif; font-weight: 400;
+  font-size: clamp(3.2rem, 1rem + 8vw, 9rem); line-height: 0.92;
+  text-transform: uppercase;
+}
+.elenco-progetti__tipo { font-size: 1rem; color: var(--tenue); }
+/* al passaggio: il nome prende il colore del progetto, gli altri si spengono */
+.elenco-progetti:hover .elenco-progetti__voce { opacity: 0.35; }
+.elenco-progetti .elenco-progetti__voce:hover,
+.elenco-progetti .elenco-progetti__voce:focus-visible { opacity: 1; color: var(--sopra); transform: translateX(0.6rem); }
+[data-tema="chiaro"] .elenco-progetti .elenco-progetti__voce:hover,
+[data-tema="chiaro"] .elenco-progetti .elenco-progetti__voce:focus-visible { color: var(--c1); }
+.js .pannello--progetti { align-content: center; }
+
+/* il nome che vola: una copia fissa sopra tutto, mentre il pannello del progetto si apre sotto */
+.titolo-in-volo {
+  position: fixed; z-index: 45; margin: 0; pointer-events: none;
+  font-family: "Anton", Impact, sans-serif; font-weight: 400; text-transform: uppercase;
+  transform-origin: 0 0; white-space: nowrap;
+}
+@media (max-width: 40rem) {
+  .elenco-progetti__nome { font-size: 15vw; }
+  .elenco-progetti__voce { flex-direction: column; gap: 0; align-items: flex-start; margin-bottom: 0.6rem; }
+  .elenco-progetti__tipo { font-size: 0.875rem; }
+}
+
+/* i nomi dei progetti sono già nel colore del progetto:
+   la versione chiara sul nero, la tinta piena sul giallo burro */
+.elenco-progetti__voce { color: var(--sopra); }
+[data-tema="chiaro"] .elenco-progetti__voce { color: var(--c1); }
+
+/* Il tasto per tornare alla lista dei progetti: accanto a Chiudi, stessa forma ma solo bordo */
+.pannello__indietro { display: none; }
+.js .pannello__indietro {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  position: fixed; z-index: 3;
+  top: calc(var(--ritaglio) + 1rem); right: calc(var(--ritaglio) + 6.6rem);
+  min-height: 2.75rem; padding: 0 1.1rem;
+  border: 2px solid var(--chiaro); border-radius: 999px;
+  color: var(--chiaro); text-decoration: none;
+  font-weight: 700; font-size: var(--t-piccolo);
+  transition: transform 200ms var(--ease);
+}
+.pannello__indietro:hover { transform: translateX(-3px); }
+
+/* ==========================================================================
+   PALETTE: viola minerale, verde lichene, nero carbone, bianco calce.
+   Matte e un po' desaturata. Le variabili hanno un nome che dice a cosa
+   servono, non che colore sono: così i due temi cambiano solo i valori.
+   Contrasti verificati (WCAG AA): testo 13–15:1, testo secondario 4,6–8,5:1,
+   viola dei link 4,8–6,7:1, testo dei pulsanti verdi 10:1.
+   ========================================================================== */
+:root {
+  --fondo: #191A18;          /* fondo principale: nero carbone */
+  --pannello: #272B23;       /* fondo secondario: i pannelli */
+  --chiaro: #EFEEE8;         /* testo principale */
+  --tenue: #B2B7A8;          /* testo secondario */
+  --viola: #AE96CE;          /* link e dettagli */
+  --verde: #BED487;          /* accenti */
+  --separatore: #41463A;
+  --bottone-fondo: #BED487;  /* pulsanti principali: verde con testo nero, in tutti e due i temi */
+  --bottone-testo: #20211E;
+  --bottone-bordo: #BED487;
+  --colore-nome: var(--chiaro);
+  --colore-tema: var(--viola);
+  --bling: var(--viola);
+}
+:root[data-tema="chiaro"] {
+  --fondo: #EFEEE8;          /* bianco calce */
+  --pannello: #E1E4D8;
+  --chiaro: #20211E;
+  --tenue: #62665C;
+  --viola: #70568F;
+  --verde: #59683A;          /* verde oliva */
+  --separatore: #CFD1C7;
+  --bottone-bordo: #59683A;  /* sul calce il verde chiaro si stacca poco: un bordo oliva lo delimita */
+  --colore-nome: var(--chiaro);
+  --colore-tema: var(--viola);
+  --bling: var(--viola);
+}
+::selection { background: var(--viola); color: var(--fondo); }
+:focus-visible { outline-color: var(--viola); }
+html { scrollbar-color: var(--separatore) var(--fondo); }
+
+/* link e dettagli in viola */
+.link, .contatti__email { color: var(--viola); }
+.menu a:hover, .menu a:focus-visible { color: var(--viola); }
+.scheda__risultato dt { color: var(--viola); }
+.ritratto__scritta { color: #70568F; }   /* sulla foto chiara: lo stesso viola nei due temi */
+
+/* pulsanti principali: verde lichene, testo nero */
+.js .pannello__chiudi { background: var(--bottone-fondo); color: var(--bottone-testo); border: 2px solid var(--bottone-bordo); }
+.js .pannello__indietro { border-color: var(--tenue); color: var(--chiaro); }
+
+/* superfici piatte e opache: niente sfumature né bagliori */
+.pannello::before, [data-tema="chiaro"] .pannello::before { background: color-mix(in srgb, var(--viola) 14%, var(--pannello)); }
+.lampo { display: none; }
+[data-tema="chiaro"] .testa, [data-tema="chiaro"] .palco__cv, [data-tema="chiaro"] .azioni, [data-tema="chiaro"] .ruolo { text-shadow: none; }
+
+/* i colori dei progetti nel tema chiaro: il giallo e l'azzurro scuriti per reggere il contrasto sul calce */
+[data-tema="chiaro"] #synapses, [data-tema="chiaro"] .elenco-progetti__voce[href="#synapses"] { --c1: #7a5f00 !important; }
+[data-tema="chiaro"] #energiapura, [data-tema="chiaro"] .elenco-progetti__voce[href="#energiapura"] { --c1: #2c6f78 !important; }

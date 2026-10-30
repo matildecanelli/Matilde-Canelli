@@ -1,0 +1,85 @@
+/* ==========================================================================
+   base.css: regole comuni
+   Mondo visivo: PORTFOLIO nero e solido, bolle lucide nei colori dei
+   progetti che fanno da lente, la stella di Matilde, testi in Satoshi.
+   ========================================================================== */
+
+/* ---------- Font: Satoshi (lo stesso del CV), ospitato sul sito ---------- */
+@font-face { font-family: "Satoshi"; src: url("../assets/fonts/satoshi-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Satoshi"; src: url("../assets/fonts/satoshi-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Satoshi"; src: url("../assets/fonts/satoshi-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Satoshi"; src: url("../assets/fonts/satoshi-900.woff2") format("woff2"); font-weight: 900; font-display: swap; }
+/* Anton: il carattere "tipo Impact" della scritta PORTFOLIO (Impact non si può pubblicare) */
+@font-face { font-family: "Anton"; src: url("../assets/fonts/anton-latin.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Anton"; src: url("../assets/fonts/anton-latin-ext.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+/* ---------- Variabili ---------- */
+:root {
+  --fondo: #0b0b0c;        /* fondo: quasi nero */
+  --pannello: #141416;     /* il pannello che si apre, un passo più chiaro */
+  --chiaro: #f1efea;       /* testo e PORTFOLIO */
+  --tenue: #a7a29c;        /* testo secondario */
+  --bordeaux: #510000;     /* la stella */
+
+  --font: "Satoshi", "Helvetica Neue", Arial, sans-serif;
+
+  /* Cinque misure di testo */
+  --t-piccolo: 0.875rem;                                  /* 14px */
+  --t-testo: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);     /* 16–18px */
+  --t-frase: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);    /* 20–28px */
+  --t-titolo: clamp(2.75rem, 1.4rem + 5vw, 6rem);         /* 44–96px */
+  /* la quinta è PORTFOLIO, disegnato in SVG a tutta larghezza */
+
+  --margine: clamp(1rem, 2.5vw, 2.25rem);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Reset essenziale ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--chiaro);
+  font-family: var(--font);
+  font-size: var(--t-testo);
+  line-height: 1.55;
+}
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+h1, h2, h3, p, ol, ul, dl, dd, figure { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+p { text-wrap: pretty; }
+
+/* Le parti del browser che di solito si dimenticano */
+::selection { background: var(--chiaro); color: var(--fondo); }
+:focus-visible { outline: 2px solid var(--chiaro); outline-offset: 3px; border-radius: 3px; }
+
+.solo-lettori {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+.salta {
+  position: absolute; left: var(--margine); top: 0.5rem; z-index: 100;
+  background: var(--chiaro); color: var(--fondo); padding: 0.75rem 1rem;
+  clip-path: inset(50%);
+}
+.salta:focus { clip-path: none; }
+
+.link {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px; text-underline-offset: 0.25em;
+  transition: text-decoration-thickness 200ms ease;
+}
+.link:hover { text-decoration-thickness: 3px; }
+
+/* Il pallino sfumato che rappresenta una bolla (nel menu e nei pannelli) */
+.pallino {
+  display: inline-block; flex: none;
+  width: 0.85em; height: 0.85em; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 8%, var(--c1) 40%, var(--c2) 100%);
+}
+
+html { scrollbar-color: #3a3a3d var(--fondo); }
