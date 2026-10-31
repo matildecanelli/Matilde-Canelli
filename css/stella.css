@@ -464,62 +464,128 @@ svg.stella-riserva { display: none; }
 .coppia { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
 
 /* ==========================================================================
-   CONTATTI: fai le coccole a Bijou (js/bijou.js)
-   Bijou sta su una superficie bianca (il bianco della palette): la sua foto ha
-   il fondo bianco. A barra piena compare il giglio di codice da scaricare.
+   CONTATTI: il gioco con Bijou (la logica è in js/bijou.js, le pose in js/bijou-asset.js)
+   Bijou è scontornata: niente riquadri bianchi, sta sul fondo del pannello
+   in tutti e due i temi. Gli strumenti hanno il tratto delle illustrazioni.
    ========================================================================== */
 .bijou {
   grid-column: 8 / 13; grid-row: 1 / span 2; align-self: start;
-  display: grid; gap: 0.9rem; justify-items: center; text-align: center;
+  display: grid; gap: 0.75rem; justify-items: center; text-align: center;
 }
 .bijou__titolo { font-size: var(--t-frase); font-weight: 700; line-height: 1.2; }
-.bijou__aiuto { color: var(--tenue); font-size: var(--t-piccolo); max-width: 26rem; }
-.bijou__gatta {
-  width: min(100%, 24rem); aspect-ratio: 1;
-  border-radius: 1.75rem; overflow: hidden;
-  background: var(--palette-bianco);
-  cursor: grab;
-  touch-action: none;                    /* sul telefono il dito accarezza Bijou invece di scorrere la pagina */
-  user-select: none; -webkit-user-select: none;
-}
-.bijou__gatta img {
-  width: 100%; height: 100%; object-fit: cover;
-  transform: rotate(var(--inclina, 0deg)); transform-origin: 50% 85%;
-  transition: transform 300ms var(--ease);
-  pointer-events: none;
-}
-/* la barra delle fusa */
-.bijou__fusa {
-  width: min(100%, 24rem); height: 0.75rem;
-  border-radius: 999px; overflow: hidden;
+.bijou__aiuto { color: var(--tenue); font-size: var(--t-piccolo); max-width: 28rem; }
+
+/* le quattro stelline del progresso: spente (contorno) e accese (piene) */
+.bijou__progressi { display: flex; gap: 0.6rem; list-style: none; margin: 0; padding: 0; }
+.bijou__stellina {
+  display: block; width: 1.6rem; height: 1.6rem;
   background: var(--separatore);
+  -webkit-mask: url("../assets/img/stelle/singole/essenziale-02.svg") center / contain no-repeat;
+          mask: url("../assets/img/stelle/singole/essenziale-02.svg") center / contain no-repeat;
+  transition: background-color 300ms ease;
 }
-.bijou__fusa span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--colore-accento); transition: width 200ms ease; }
-.bijou__stato { min-height: 1.5em; font-weight: 700; color: var(--chiaro); }
-/* i pulsanti: l'accento pieno, come Chiudi */
+.e-accesa .bijou__stellina { background: var(--colore-accento); }
+
+/* il palco: misure fisse (il viewBox), così cambiando posa non salta niente */
+.bijou__palco { position: relative; width: min(100%, 34rem); user-select: none; -webkit-user-select: none; }
+.bijou__scena { display: none; width: 100%; height: auto; overflow: visible; }
+.e-pronto .bijou__scena { display: block; }
+.e-pronto .bijou__riserva { display: none; }
+.bijou__riserva { width: min(100%, 20rem); margin-inline: auto; }
+.bijou__scena g { transform-box: view-box; }
+.bijou__posa { transform-origin: 500px 580px; }          /* il punto tra le zampe, sul pavimento */
+/* mentre si accarezza o si gioca con la stellina il dito muove il gioco, non la pagina */
+.e-accarezza .bijou__palco, .e-gioca .bijou__palco { touch-action: none; }
+.e-accarezza .bijou__scena { cursor: none; }             /* la mano disegnata fa da cursore */
+.e-gioca .bijou__scena { cursor: grab; }
+
+/* la zona dove si può lasciare lo strumento: un'ellisse tratteggiata, appena accennata */
+.bijou__zona { fill: var(--colore-accento); fill-opacity: 0; stroke: var(--colore-accento); stroke-width: 3; stroke-dasharray: 10 10; opacity: 0; transition: opacity 200ms ease, fill-opacity 200ms ease; pointer-events: none; }
+.bijou__zona.e-attiva { opacity: 0.7; }
+.bijou__zona.e-sopra { opacity: 1; fill-opacity: 0.12; }
+.bijou__mano, .bijou__giocattolo { pointer-events: none; transition: opacity 180ms ease; }
+
+/* la barra degli strumenti */
+.bijou__strumenti { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+.bijou__strumenti[hidden] { display: none; }
+.bijou__strumento {
+  display: grid; justify-items: center; gap: 0.15rem;
+  min-width: 5rem; padding: 0.45rem 0.6rem 0.4rem;
+  border: 2px solid var(--separatore); border-radius: 1rem;
+  background: var(--pannello); color: var(--chiaro);
+  font-size: var(--t-piccolo); font-weight: 700;
+  cursor: grab; touch-action: none;                     /* il dito trascina lo strumento */
+  transition: border-color 160ms ease, transform 160ms var(--ease), opacity 160ms ease;
+}
+.bijou__strumento svg { width: 2.75rem; height: 2.75rem; }
+.bijou__strumento:hover { border-color: var(--colore-accento); transform: translateY(-2px); }
+.bijou__strumento[aria-pressed="true"] { border-color: var(--colore-accento); box-shadow: 0 0 0 2px var(--colore-accento); }
+.bijou__strumento[aria-disabled="true"] { opacity: 0.45; cursor: default; transform: none; }
+/* la copia che segue il puntatore mentre si trascina */
+.bijou__fantasma { position: fixed; left: 0; top: 0; z-index: 60; width: 80px; height: 80px; pointer-events: none; filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.25)); } /* taste-skill-ignore */
+.bijou__fantasma svg { width: 100%; height: 100%; }
+
+.bijou__stato { min-height: 1.5em; font-weight: 700; color: var(--chiaro); max-width: 28rem; }
+.bijou__fine { display: grid; gap: 0.75rem; justify-items: center; }
+.bijou__fine[hidden] { display: none; }
+.bijou__messaggio { font-size: var(--t-frase); font-weight: 700; line-height: 1.3; max-width: 24rem; }
 .bijou__bottone {
   display: inline-flex; align-items: center; justify-content: center;
   min-height: 2.75rem; padding: 0 1.25rem; border-radius: 999px;
   border: 2px solid var(--colore-accento);
   background: var(--colore-accento); color: var(--colore-su-accento);
-  font-weight: 700; font-size: var(--t-piccolo); text-decoration: none; cursor: pointer;
+  font-weight: 700; font-size: var(--t-piccolo); cursor: pointer;
   transition: transform 200ms var(--ease);
 }
 .bijou__bottone:hover { transform: scale(1.04); }
-.bijou__bottone--secondario { background: transparent; color: var(--chiaro); border-color: var(--tenue); }
-.bijou__bottone[aria-disabled="true"] { opacity: 0.5; cursor: progress; }
-/* il premio: il giglio sul suo fondo scuro, e sotto i due pulsanti */
-.bijou__premio { display: grid; gap: 1rem; justify-items: center; width: 100%; }
-.bijou__premio[hidden], .bijou__gatta[hidden], .bijou__fusa[hidden], .bijou__bottone[hidden] { display: none; }
-.bijou__giglio { width: min(100%, 24rem); height: auto; border-radius: 1.25rem; }
-.bijou__azioni { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
+
 /* senza JavaScript: solo Bijou, niente gioco */
-html:not(.js) .bijou__aiuto, html:not(.js) .bijou__fusa, html:not(.js) .bijou__stato, html:not(.js) .bijou__bottone { display: none; }
+html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bijou__strumenti, html:not(.js) .bijou__stato { display: none; }
 @media (max-width: 52rem) {
   .bijou { grid-column: 1 / -1; grid-row: auto; margin-top: 1rem; }
+}
+/* telefono: i quattro strumenti su una riga sola (restano grandi abbastanza per il dito) */
+@media (max-width: 26rem) {
+  .bijou__strumenti { gap: 0.35rem; flex-wrap: nowrap; }
+  .bijou__strumento { min-width: 0; flex: 1 1 0; padding-inline: 0.2rem; }
+  .bijou__strumento svg { width: 2.4rem; height: 2.4rem; }
 }
 /* sul computer il testo dei contatti lascia la destra a Bijou */
 @media (min-width: 52.01rem) { #contatti .pannello__testo--largo { grid-column: 1 / 8; } }
 /* telefono: dentro i blocchi di testo "largo" (Contatti) il titolo resta in cima
    (la regola dei pannelli dei progetti lo manderebbe in fondo) */
 @media (max-width: 40rem) { .pannello__testo--largo > .pannello__titolo { order: 0 !important; } }
+
+/* il bouquet in ASCII: sul suo fondo scuro in tutti e due i temi, così i petali bianchi si leggono.
+   È un canvas: le celle monospace restano nelle loro proporzioni e non vanno mai a capo */
+.bijou__bouquet { display: block; width: min(100%, 24rem); height: auto; border-radius: 1.25rem; background: #201D24; }
+.bijou__azioni { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
+.bijou__bottone--secondario { background: transparent; color: var(--chiaro); border-color: var(--tenue); }
+
+/* Bijou che dorme: tre "z" salgono piano sopra la sua testa (ferme con "riduci movimento") */
+.bijou__zzz { opacity: 0; pointer-events: none; font: 700 44px var(--font); fill: var(--colore-accento); transition: opacity 400ms ease; }
+.e-dorme .bijou__zzz { opacity: 1; }
+.e-dorme .bijou__zzz text { animation: bijou-zzz 2.4s ease-in-out infinite; }
+.e-dorme .bijou__zzz text:nth-child(2) { animation-delay: 0.6s; }
+.e-dorme .bijou__zzz text:nth-child(3) { animation-delay: 1.2s; }
+@keyframes bijou-zzz { 0% { opacity: 0; transform: translate(0, 10px); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(14px, -24px); } }
+@media (prefers-reduced-motion: reduce) { .e-dorme .bijou__zzz text { animation: none; } }
+/* telefono: i cinque strumenti su una riga */
+@media (max-width: 26rem) {
+  .bijou__strumenti { gap: 0.25rem; }
+  .bijou__strumento svg { width: 2.1rem; height: 2.1rem; }
+  .bijou__strumento { font-size: 0.75rem; }
+}
+
+/* all'apertura Bijou dorme: niente strumenti né stelline, solo lei e l'invito a svegliarla */
+.bijou__invito, .bijou__sveglia { display: none; }
+.e-in-attesa .bijou__invito { display: block; color: var(--tenue); max-width: 26rem; }
+.e-in-attesa .bijou__sveglia { display: inline-flex; }
+.e-in-attesa .bijou__aiuto, .e-in-attesa .bijou__progressi, .e-in-attesa .bijou__strumenti { display: none; }
+.e-in-attesa .bijou__scena { cursor: pointer; }
+
+/* le mani disegnate negli strumenti e nella copia che si trascina */
+.bijou__strumento img { width: 2.75rem; height: 2.75rem; object-fit: contain; pointer-events: none; }
+.bijou__fantasma img { width: 100%; height: 100%; object-fit: contain; }
+.bijou__fantasma { width: 110px; height: 110px; }
+@media (max-width: 26rem) { .bijou__strumento img { width: 2.1rem; height: 2.1rem; } }

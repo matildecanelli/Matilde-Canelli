@@ -352,23 +352,53 @@
         <!-- Quando il repository del sito avrà il suo nome definitivo, qui va il link diretto -->
         <p class="contatti__codice">Questo sito l'ho progettato e sviluppato io, in HTML, CSS e JavaScript. Il codice sarà pubblicato sul mio <a class="link" href="https://github.com/matildecanelli">profilo GitHub</a>.</p>
       </div>
-      <!-- Il gioco: fai le coccole a Bijou, la gatta di Matilde (js/bijou.js).
-           Con abbastanza coccole Bijou regala un giglio fatto di righe di codice, da scaricare.
-           Senza JavaScript si vede solo Bijou. -->
+      <!-- Il gioco con Bijou, la gatta di Matilde.
+           Configurazione delle pose e delle zone: js/bijou-asset.js. Logica: js/bijou.js.
+           Si trascina uno strumento su Bijou (o lo si tocca e poi si tocca Bijou; con la tastiera
+           si sceglie e si preme Invio). Quattro attività accendono quattro stelline; quando sono
+           tutte accese Bijou porta in regalo un bouquet di gigli. Niente tempo, niente punti persi. -->
       <div class="bijou" data-bijou>
-        <h3 class="bijou__titolo">Fai le coccole a Bijou</h3>
-        <p class="bijou__aiuto" id="bijou-aiuto">Accarezzala con il mouse o con il dito. Con abbastanza coccole ti regala un giglio fatto di codice.</p>
-        <div class="bijou__gatta" data-bijou-gatta aria-describedby="bijou-aiuto">
-          <img src="assets/img/bijou.jpg" width="900" height="900" loading="lazy" alt="Bijou, la gatta di Matilde, disegnata come un pupazzo con un passamontagna viola pieno di stelle dorate" draggable="false">
+        <h3 class="bijou__titolo">Gioca con Bijou</h3>
+        <!-- all'apertura Bijou dorme: si vede solo lei e questo invito; toccandola si sveglia e parte il gioco -->
+        <p class="bijou__invito" data-bijou-invito>Bijou dorme. Toccala per svegliarla e giocare con lei.</p>
+        <p class="bijou__aiuto" id="bijou-aiuto">Trascina uno strumento su Bijou, oppure toccalo e poi tocca lei. Con la tastiera: scegli uno strumento e premi Invio.</p>
+        <!-- le stelline si accendono sempre in ordine, dalla prima alla quarta, qualunque attività si faccia prima -->
+        <ol class="bijou__progressi" aria-label="Stelline accese con Bijou" data-bijou-progressi>
+          <li><span class="bijou__stellina" aria-hidden="true"></span><span class="solo-lettori">Stellina 1: </span><span class="solo-lettori" data-stato-attivita>spenta</span></li>
+          <li><span class="bijou__stellina" aria-hidden="true"></span><span class="solo-lettori">Stellina 2: </span><span class="solo-lettori" data-stato-attivita>spenta</span></li>
+          <li><span class="bijou__stellina" aria-hidden="true"></span><span class="solo-lettori">Stellina 3: </span><span class="solo-lettori" data-stato-attivita>spenta</span></li>
+          <li><span class="bijou__stellina" aria-hidden="true"></span><span class="solo-lettori">Stellina 4: </span><span class="solo-lettori" data-stato-attivita>spenta</span></li>
+        </ol>
+        <div class="bijou__palco" data-bijou-palco>
+          <!-- il palco: le pose le mette bijou.js leggendo bijou-asset.js -->
+          <svg class="bijou__scena" viewBox="0 40 1000 580" role="img" aria-labelledby="bijou-nome" aria-describedby="bijou-aiuto" data-bijou-scena>
+            <title id="bijou-nome">Bijou, la gatta di Matilde, con un passamontagna viola pieno di stelle</title>
+            <g data-bijou-pose></g>
+            <ellipse class="bijou__zona" data-bijou-zona cx="0" cy="0" rx="0" ry="0"/>
+            <g class="bijou__mano" data-bijou-mano></g>
+            <g class="bijou__giocattolo" data-bijou-giocattolo></g>
+            <g class="bijou__zzz" aria-hidden="true"><text x="610" y="235">z</text><text x="645" y="195">z</text><text x="685" y="150">Z</text></g>
+          </svg>
+          <!-- senza JavaScript: Bijou ferma, in piedi -->
+          <img class="bijou__riserva" src="assets/img/bijou-base.png" width="640" height="640" alt="Bijou, la gatta di Matilde, in piedi con il suo passamontagna viola" loading="lazy">
         </div>
-        <div class="bijou__fusa" role="progressbar" aria-label="Coccole a Bijou" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-bijou-fusa><span data-bijou-barra></span></div>
+        <div class="bijou__strumenti" role="toolbar" aria-label="Strumenti per giocare con Bijou" data-bijou-strumenti>
+          <button class="bijou__strumento" type="button" aria-pressed="false" aria-label="Mano aperta: pat pat sulla testa" data-strumento="pat"><img src="assets/img/mano-pat.png" width="360" height="321" alt="" draggable="false"><span aria-hidden="true">Pat pat</span></button>
+          <button class="bijou__strumento" type="button" aria-pressed="false" aria-label="Mano con le dita piegate: grattini sotto il mento" data-strumento="mento"><img src="assets/img/mano-mento.png" width="360" height="338" alt="" draggable="false"><span aria-hidden="true">Grattini</span></button>
+          <button class="bijou__strumento" type="button" aria-pressed="false" aria-label="Mano per le carezze al pancino" data-strumento="pancia"><img src="assets/img/mano-pancia.png" width="360" height="123" alt="" draggable="false"><span aria-hidden="true">Pancino</span></button>
+          <button class="bijou__strumento" type="button" aria-pressed="false" aria-label="Bacchetta con la stellina, per giocare" data-strumento="stellina"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M60 3 L44 20" fill="none" stroke="#1E1C22" stroke-width="4" stroke-linecap="round"/><path d="M44 20 Q38 22 32 22" fill="none" stroke="#1E1C22" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="23" r="3.2" fill="#F2C14E" stroke="#1E1C22" stroke-width="2"/><path d="M30.0 25.0 L34.7 36.5 L47.1 37.4 L37.6 45.5 L40.6 57.6 L30.0 51.0 L19.4 57.6 L22.4 45.5 L12.9 37.4 L25.3 36.5 Z" fill="#F2C14E" stroke="#1E1C22" stroke-width="3" stroke-linejoin="round"/></svg><span aria-hidden="true">Stellina</span></button>
+          <button class="bijou__strumento" type="button" aria-pressed="false" aria-label="Cuscino: Bijou fa la nanna" data-strumento="nanna"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M9 24 C6 14 14 11 20 15 L44 14 C50 10 58 14 55 24 L56 42 C58 52 50 55 44 50 L20 51 C14 55 6 52 9 42 C11 36 11 30 9 24 Z" fill="#B9A2D2" stroke="#1E1C22" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M17 23 C24 21 40 21 47 23 M17 42 C24 44 40 44 47 42" fill="none" stroke="#1E1C22" stroke-width="2" stroke-dasharray="3 4" stroke-linecap="round"/><circle cx="32" cy="32.5" r="2.6" fill="#F2C14E" stroke="#1E1C22" stroke-width="2"/></svg><span aria-hidden="true">Nanna</span></button>
+        </div>
+        <button class="bijou__bottone bijou__bottone--secondario bijou__sveglia" type="button" data-bijou-sveglia>Sveglia Bijou</button>
         <p class="bijou__stato" aria-live="polite" data-bijou-stato></p>
-        <button class="bijou__bottone" type="button" data-bijou-coccola>Fai una coccola</button>
-        <div class="bijou__premio" data-bijou-premio hidden>
-          <canvas class="bijou__giglio" width="1200" height="1600" role="img" aria-label="Un giglio disegnato con righe di codice: stelo e foglie verdi, petali bianchi" data-bijou-giglio></canvas>
+        <!-- il premio: compare solo dopo la vittoria. Il bouquet di gigli in ASCII colorata
+             fiorisce (js/bijou-bouquet.js) e si può scaricare come pagina HTML che funziona offline -->
+        <div class="bijou__fine" data-bijou-fine hidden>
+          <canvas class="bijou__bouquet" role="img" aria-label="Un bouquet di gigli bianchi disegnato con caratteri monospace colorati: petali bianchi e avorio, boccioli verdi chiari, foglie e steli verdi, piccoli fiori bianchi. I gigli fioriscono uno dopo l'altro." data-bijou-bouquet></canvas>
+          <p class="bijou__messaggio">Bijou ti ha portato un regalo.</p>
           <div class="bijou__azioni">
-            <a class="bijou__bottone" href="#" download="giglio-di-codice-bijou.png" data-bijou-scarica>Scarica il giglio</a>
-            <button class="bijou__bottone bijou__bottone--secondario" type="button" data-bijou-ancora>Altre coccole</button>
+            <button class="bijou__bottone" type="button" data-bijou-scarica>Scarica il tuo bouquet</button>
+            <button class="bijou__bottone bijou__bottone--secondario" type="button" data-bijou-ancora>Gioca ancora</button>
           </div>
         </div>
       </div>
@@ -383,6 +413,9 @@
   <script src="js/pannelli.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>
+  <script src="js/bijou-asset.js" defer></script>
+  <script src="js/bijou-bouquet-dati.js" defer></script>
+  <script src="js/bijou-bouquet.js" defer></script>
   <script src="js/bijou.js" defer></script>
 </body>
 </html>
