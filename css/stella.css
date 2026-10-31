@@ -158,22 +158,27 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
 .ritratto__scontorno { z-index: 1; }
 .pannello__testo--sotto { grid-row: 2; }
 @media (max-width: 52rem) {
-  /* sul telefono: il pannello ha più spazio sopra (per Chiudi), e il ritratto è più alto
-     e tagliato sul volto, altrimenti diventerebbe una striscia */
-  .ritratto { margin-top: -4.75rem; height: calc((100vw - 2 * var(--ritaglio, 0px)) * 1.1); }
-  .ritratto__foto, .ritratto__scontorno { object-position: 58% 0%; }
+  /* sul telefono: il pannello ha più spazio sopra (per Chiudi). La foto è ingrandita
+     (larga 1,65 volte il riquadro) così Matilde si vede bene, ed è tagliata come sul
+     computer, a metà del bicipite (il 77% dell'altezza della foto): sotto si vede il testo.
+     Altezza del riquadro = 1,65 × (2/3 per la foto 3:2) × 0,77 = 0,846 della larghezza.
+     Il centro è il viso: gli occhi stanno al 57% della larghezza della foto; spostando la
+     foto a sinistra del 44% del riquadro, gli occhi cadono proprio a metà. */
+  .ritratto { margin-top: -4.75rem; height: calc((100vw - 2 * var(--ritaglio, 0px)) * 0.846); }
+  .ritratto__foto, .ritratto__scontorno {
+    inset: auto; top: 0; left: -44%;
+    width: 165%; height: auto; max-width: none;
+    object-fit: fill;
+  }
   .ritratto__scritta { top: 26cqw; font-size: 12cqw; }
 }
 
-/* Contatti: la stella con il selfie, a colori, accanto ai contatti */
-.contatti__foto { align-self: center; }
 
 /* ---------- Il ruolo, sopra il nome ---------- */
 .ruolo {
   position: absolute; z-index: 3; top: var(--margine); left: var(--margine);
   margin: 0; font-size: 1rem; font-weight: 500; color: var(--chiaro);
 }
-.stella-telefono { display: none; }
 
 /* ---------- Il menu: titoletto, "Progetto Nome · tipo" ---------- */
 .menu__titoletto {
@@ -192,19 +197,11 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
 .scheda__risultato dd { font-weight: 700; font-size: var(--t-frase); line-height: 1.3; color: var(--chiaro); }
 .scheda__risultato dt { color: var(--colore-nome); }
 
-/* Contatti: la foto-stella più grande, riempie la destra */
-.contatti__foto { grid-column: 7 / 13; grid-row: 1 / span 2; max-height: 80svh; width: auto; justify-self: center; }
 
 /* ---------- Telefono ---------- */
 @media (max-width: 40rem) {
   .ruolo { top: calc(var(--margine) + 3rem); font-size: 0.9375rem; }
   .nome { top: calc(var(--margine) + 5.5rem); }
-  /* la stellina ferma, accanto al nome */
-  .stella-telefono {
-    display: block; position: absolute; z-index: 3;
-    width: 4.5rem; height: auto;
-    right: var(--margine); top: calc(var(--margine) + 5rem);
-  }
 
   /* pannelli: titolo, poi la prima immagine, poi la scheda e il resto delle immagini */
   .pannello__testo:not(.pannello__testo--largo), .pannello__immagini { display: contents; }
@@ -214,7 +211,6 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
   .pannello__immagini > :not(:first-child) { order: 4 !important; }
   .pannello__dopo { order: 5; }
   .pannello:has(.pannello__immagini) { row-gap: 1.25rem; }
-  .contatti__foto { grid-column: 1 / -1; grid-row: auto; width: 80%; max-height: none; }
 }
 
 /* "Scorri": bianco nel tema scuro, bordeaux nel tema chiaro (lo stesso colore del pulsante del tema) */
@@ -390,13 +386,34 @@ html { scrollbar-color: var(--separatore) var(--fondo); }
 /* la firma accanto al ruolo, nella hero: piccola, sulla stessa riga */
 .costellazione--ruolo { display: inline-block; width: 1.35em; margin-left: 0.3em; vertical-align: -0.3em; }
 
-/* sul telefono, accanto al nome (al posto della vecchia stellina); sul computer non c'è.
-   (svg.… pesa più di .costellazione, che le renderebbe di nuovo visibili) */
-svg.stella-telefono { display: none; width: 5.5rem; }
+/* La costellazione con tutte e 12: compare dove la stella di strass svanisce
+   (telefono e schermi in verticale: la stessa regola di stella.js) nello spazio
+   libero tra il nome e il fondo. È un solo SVG (un foglio 300 × 400): stelle e linee
+   si ingrandiscono insieme e restano al loro posto, qualunque sia lo schermo. */
+.cielo { display: none; }
+@media (max-width: 40rem), (max-aspect-ratio: 1/1) {
+  .cielo {
+    display: block;
+    position: absolute; z-index: 1;
+    /* schermi in verticale più larghi del telefono: il nome è min(21vw, 37svh) su due righe,
+       il menu sta a destra a metà altezza, quindi la costellazione gli lascia la colonna */
+    top: calc(var(--margine) + 3.5rem + 1.8 * min(21vw, 37svh) + 1.5rem);
+    bottom: var(--margine);
+    left: var(--margine); right: calc(var(--margine) + 8rem);
+    pointer-events: none;
+  }
+  .cielo__mappa { display: block; width: 100%; height: 100%; max-width: none; overflow: visible; }
+  /* le linee: sottili e salvia come i contorni; restano sottili a qualunque misura */
+  .cielo__linee { stroke: var(--stella-contorno); stroke-width: 1.25; stroke-linecap: round; fill: none; }
+  .cielo__linee line { vector-effect: non-scaling-stroke; }
+}
 @media (max-width: 40rem) {
-  /* sotto il nome, a destra, nello spazio libero: non tocca le lettere
-     (il nome è alto due righe da 25vw × 0,9) */
-  svg.stella-telefono { display: block; top: calc(var(--margine) + 5.5rem + 47vw); right: var(--margine); }
+  /* telefono: il nome è 25vw su due righe e il menu sta in fondo, su una riga */
+  .cielo {
+    top: calc(var(--margine) + 5.5rem + 45vw + 1rem);
+    bottom: calc(var(--margine) + 3.75rem);
+    right: var(--margine);
+  }
 }
 
 /* la riserva, se WebGL non parte: solo allora */
@@ -425,3 +442,84 @@ svg.stella-riserva { display: none; }
   .pannello > .costellazione--angolo { display: none; }   /* i nomi dei progetti occupano tutta la larghezza */
   .costellazione--ruolo { display: none; }                /* sul telefono c'è già la costellazione accanto al nome */
 }
+
+/* Chi sono: le due stelline nel cielo della foto. Stanno tra la foto e lo scontorno,
+   come la scritta: dietro la testa e la spalla. La foto è la stessa nei due temi,
+   quindi anche i colori: viola pieno e contorno lilla, che sul bianco e nero si vedono. */
+.ritratto__stella {
+  position: absolute; z-index: 0;
+  --stella-pieno: var(--palette-viola);
+  --stella-contorno: var(--palette-lilla);
+}
+.ritratto__stella--1 { left: 4cqw; top: 1cqw; width: 9cqw; }       /* nel cielo in alto, verso il bordo sinistro */
+.ritratto__stella--2 { left: 76cqw; top: 22cqw; width: 8cqw; }     /* a destra della testa, sopra le colline */
+@media (max-width: 52rem) {
+  /* sul telefono la foto è più alta e tagliata sul volto */
+  .ritratto__stella--1 { left: auto; right: 3cqw; top: 56cqw; width: 14cqw; }   /* sui palazzi a destra, lontano dal viso: in alto c'è Chiudi */
+  .ritratto__stella--2 { left: 6cqw; top: 8cqw; width: 15cqw; }
+}
+
+/* Due figure affiancate che devono stare insieme (i volantini di Prōsopon):
+   un blocco solo, così sul telefono arrivano tutte e due subito dopo il titolo */
+.coppia { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start; }
+
+/* ==========================================================================
+   CONTATTI: fai le coccole a Bijou (js/bijou.js)
+   Bijou sta su una superficie bianca (il bianco della palette): la sua foto ha
+   il fondo bianco. A barra piena compare il giglio di codice da scaricare.
+   ========================================================================== */
+.bijou {
+  grid-column: 8 / 13; grid-row: 1 / span 2; align-self: start;
+  display: grid; gap: 0.9rem; justify-items: center; text-align: center;
+}
+.bijou__titolo { font-size: var(--t-frase); font-weight: 700; line-height: 1.2; }
+.bijou__aiuto { color: var(--tenue); font-size: var(--t-piccolo); max-width: 26rem; }
+.bijou__gatta {
+  width: min(100%, 24rem); aspect-ratio: 1;
+  border-radius: 1.75rem; overflow: hidden;
+  background: var(--palette-bianco);
+  cursor: grab;
+  touch-action: none;                    /* sul telefono il dito accarezza Bijou invece di scorrere la pagina */
+  user-select: none; -webkit-user-select: none;
+}
+.bijou__gatta img {
+  width: 100%; height: 100%; object-fit: cover;
+  transform: rotate(var(--inclina, 0deg)); transform-origin: 50% 85%;
+  transition: transform 300ms var(--ease);
+  pointer-events: none;
+}
+/* la barra delle fusa */
+.bijou__fusa {
+  width: min(100%, 24rem); height: 0.75rem;
+  border-radius: 999px; overflow: hidden;
+  background: var(--separatore);
+}
+.bijou__fusa span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--colore-accento); transition: width 200ms ease; }
+.bijou__stato { min-height: 1.5em; font-weight: 700; color: var(--chiaro); }
+/* i pulsanti: l'accento pieno, come Chiudi */
+.bijou__bottone {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 2.75rem; padding: 0 1.25rem; border-radius: 999px;
+  border: 2px solid var(--colore-accento);
+  background: var(--colore-accento); color: var(--colore-su-accento);
+  font-weight: 700; font-size: var(--t-piccolo); text-decoration: none; cursor: pointer;
+  transition: transform 200ms var(--ease);
+}
+.bijou__bottone:hover { transform: scale(1.04); }
+.bijou__bottone--secondario { background: transparent; color: var(--chiaro); border-color: var(--tenue); }
+.bijou__bottone[aria-disabled="true"] { opacity: 0.5; cursor: progress; }
+/* il premio: il giglio sul suo fondo scuro, e sotto i due pulsanti */
+.bijou__premio { display: grid; gap: 1rem; justify-items: center; width: 100%; }
+.bijou__premio[hidden], .bijou__gatta[hidden], .bijou__fusa[hidden], .bijou__bottone[hidden] { display: none; }
+.bijou__giglio { width: min(100%, 24rem); height: auto; border-radius: 1.25rem; }
+.bijou__azioni { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
+/* senza JavaScript: solo Bijou, niente gioco */
+html:not(.js) .bijou__aiuto, html:not(.js) .bijou__fusa, html:not(.js) .bijou__stato, html:not(.js) .bijou__bottone { display: none; }
+@media (max-width: 52rem) {
+  .bijou { grid-column: 1 / -1; grid-row: auto; margin-top: 1rem; }
+}
+/* sul computer il testo dei contatti lascia la destra a Bijou */
+@media (min-width: 52.01rem) { #contatti .pannello__testo--largo { grid-column: 1 / 8; } }
+/* telefono: dentro i blocchi di testo "largo" (Contatti) il titolo resta in cima
+   (la regola dei pannelli dei progetti lo manderebbe in fondo) */
+@media (max-width: 40rem) { .pannello__testo--largo > .pannello__titolo { order: 0 !important; } }

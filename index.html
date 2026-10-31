@@ -66,8 +66,27 @@
 
     <!-- Il ruolo, sopra il nome: entra con lo scroll insieme al resto -->
     <p class="ruolo" data-entra>Digital designer, wannabe web designer. <svg class="costellazione costellazione--ruolo" viewBox="0 0 341 337" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-02" width="341" height="337"/></svg></p>
-    <!-- Sul telefono, una costellazione ferma accanto al nome (la stella di strass lì svanisce) -->
-    <svg class="costellazione stella-telefono" data-entra viewBox="0 0 489 515" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-05" width="489" height="515"/></svg>
+    <!-- Sul telefono (e sugli schermi in verticale), sotto il nome: una costellazione vera
+         con tutte e 12 le composizioni, unite da linee sottili come nelle mappe del cielo.
+         In alto le prime cinque stelle disegnano una M, come Cassiopea (e come Matilde);
+         poi la costellazione scende. È un solo disegno: si adatta allo spazio senza deformarsi. -->
+    <div class="cielo" aria-hidden="true" data-entra>
+      <svg class="cielo__mappa" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid meet" focusable="false">
+        <g class="cielo__linee"><line x1="59.4" y1="92.1" x2="100.6" y2="139.3"/><line x1="115.8" y1="137.0" x2="140.4" y2="81.5"/><line x1="160.5" y1="81.0" x2="189.4" y2="138.7"/><line x1="202.4" y1="139.8" x2="243.8" y2="82.5"/><line x1="257.0" y1="87.6" x2="247.2" y2="179.1"/><line x1="242.9" y1="220.9" x2="237.4" y2="275.8"/><line x1="245.3" y1="322.1" x2="262.9" y2="359.8"/><line x1="227.0" y1="210.8" x2="181.5" y2="238.1"/><line x1="164.3" y1="257.2" x2="138.2" y2="312.5"/><line x1="115.9" y1="316.8" x2="71.0" y2="274.9"/><line x1="112.7" y1="338.6" x2="71.3" y2="359.4"/></g>
+        <use href="assets/img/stelle/costellazione.svg#espressiva-05" x="5.0" y="33.1" width="70" height="73.7"/>
+        <use href="assets/img/stelle/costellazione.svg#essenziale-02" x="93.0" y="133.2" width="34" height="33.6"/>
+        <use href="assets/img/stelle/costellazione.svg#essenziale-01" x="122.0" y="34.6" width="56" height="50.8"/>
+        <use href="assets/img/stelle/costellazione.svg#essenziale-05" x="180.0" y="134.1" width="30" height="31.7"/>
+        <use href="assets/img/stelle/costellazione.svg#espressiva-01" x="227.0" y="31.4" width="66" height="57.1"/>
+        <use href="assets/img/stelle/costellazione.svg#espressiva-04" x="220.0" y="178.8" width="50" height="42.4"/>
+        <use href="assets/img/stelle/costellazione.svg#essenziale-03" x="154.0" y="230.7" width="32" height="28.6"/>
+        <use href="assets/img/stelle/costellazione.svg#espressiva-06" x="206.0" y="269.8" width="58" height="60.3"/>
+        <use href="assets/img/stelle/costellazione.svg#espressiva-03" x="250.0" y="355.5" width="40" height="39.0"/>
+        <use href="assets/img/stelle/costellazione.svg#essenziale-04" x="107.0" y="309.8" width="46" height="40.3"/>
+        <use href="assets/img/stelle/costellazione.svg#espressiva-02" x="29.0" y="240.4" width="52" height="39.3"/>
+        <use href="assets/img/stelle/costellazione.svg#essenziale-06" x="45.0" y="352.8" width="30" height="24.4"/>
+      </svg>
+    </div>
 
     <!-- Il nome è il titolo della pagina: testo vero, nitido, due righe che entrano separate -->
     <h1 class="nome">
@@ -178,8 +197,12 @@
       </div>
       <div class="pannello__immagini">
         <!-- Prima Prōsopon: la grafica nata per la newsletter, che ha dato la struttura a tutta la comunicazione -->
-        <figure><img src="assets/img/pannelli/prosopon-modelle.jpg" width="726" height="900" loading="lazy" alt="Grafica della newsletter di Prōsopon con le foto delle modelle in bianco e nero e i piani isometrici azzurri, gialli e blu"><figcaption>Newsletter con le modelle: la grafica fa un passo indietro e lascia respirare la fotografia</figcaption></figure>
-        <figure><img src="assets/img/pannelli/prosopon-scura.jpg" width="730" height="912" loading="lazy" alt="La grafica della newsletter di Prōsopon su fondo scuro"><figcaption>Newsletter su fondo scuro: la nuova palette lascia protagonisti rettangoli e quadrati</figcaption></figure>
+        <!-- I due volantini di Prōsopon stanno insieme, affiancati, e sono la prima cosa del progetto
+             (anche sul telefono): sono i pezzi più faticosi e quelli di cui Matilde è più fiera -->
+        <div class="coppia">
+          <figure><img src="assets/img/pannelli/prosopon-modelle.jpg" width="726" height="900" loading="lazy" alt="Grafica della newsletter di Prōsopon con le foto delle modelle in bianco e nero e i piani isometrici azzurri, gialli e blu"><figcaption>Newsletter con le modelle: la grafica fa un passo indietro e lascia respirare la fotografia</figcaption></figure>
+          <figure><img src="assets/img/pannelli/prosopon-scura.jpg" width="730" height="912" loading="lazy" alt="La grafica della newsletter di Prōsopon su fondo scuro"><figcaption>Newsletter su fondo scuro: la nuova palette lascia protagonisti rettangoli e quadrati</figcaption></figure>
+        </div>
         <figure class="largo"><img src="assets/img/pannelli/prosopon-invito.jpg" width="1100" height="625" loading="lazy" alt="Invito di Prōsopon in formato cartolina, fronte e retro"><figcaption>L'invito di Prōsopon: cartolina stampata, fronte e retro</figcaption></figure>
         <figure class="largo"><img src="assets/img/pannelli/prosopon-newsletter.jpg" width="979" height="1400" loading="lazy" alt="Due newsletter di Prōsopon su fondo scuro: l'invito per tutti e l'invito VIP"><figcaption>La bozza della newsletter preparata dal gruppo di copywriting, poi rifatta</figcaption></figure>
         <!-- Il merchandising -->
@@ -282,8 +305,8 @@
         </dl>
       </div>
       <div class="pannello__immagini">
-        <figure class="largo"><img src="assets/img/pannelli/virtuoso-moodboard.jpg" width="944" height="1085" loading="lazy" alt="Moodboard di Virtuoso: velluti bordeaux, ceralacca, cristalli, flaconi bianchi e dettagli dorati"><figcaption>La moodboard</figcaption></figure>
         <figure class="largo"><img src="assets/img/pannelli/virtuoso-identita.jpg" width="1400" height="788" loading="lazy" alt="Tavola dell'identità di Virtuoso: i font Gunter e Quiche Sans Light, la palette dal bordeaux al rosa cipria, il logo, il packaging e la campagna"><figcaption>Font, palette, logo e packaging</figcaption></figure>
+        <figure class="largo"><img src="assets/img/pannelli/virtuoso-moodboard.jpg" width="944" height="1085" loading="lazy" alt="Moodboard di Virtuoso: velluti bordeaux, ceralacca, cristalli, flaconi bianchi e dettagli dorati"><figcaption>La moodboard</figcaption></figure>
       </div>
       <p class="pannello__dopo"><a class="link" href="#imaze">Ricomincia: Imaze</a></p>
     </section>
@@ -296,6 +319,9 @@
            Le due foto hanno la stessa misura e lo stesso taglio: combaciano al pixel. -->
       <figure class="ritratto">
         <img class="ritratto__foto" src="assets/img/chi-sono-foto.jpg" width="1600" height="1066" alt="Matilde su un balcone, appoggiata alla ringhiera, guarda lontano verso i palazzi e la collina">
+        <!-- le stelline nel cielo: stanno dietro la scritta e dietro lo scontorno, come la scritta -->
+        <svg class="costellazione ritratto__stella ritratto__stella--1" viewBox="0 0 499 377" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-02" width="499" height="377"/></svg>
+        <svg class="costellazione ritratto__stella ritratto__stella--2" viewBox="0 0 450 468" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-06" width="450" height="468"/></svg>
         <span class="ritratto__scritta" aria-hidden="true">Ma questa chi è?</span>
         <img class="ritratto__scontorno" src="assets/img/chi-sono-scontorno.png" width="1600" height="1066" alt="">
       </figure>
@@ -326,7 +352,26 @@
         <!-- Quando il repository del sito avrà il suo nome definitivo, qui va il link diretto -->
         <p class="contatti__codice">Questo sito l'ho progettato e sviluppato io, in HTML, CSS e JavaScript. Il codice sarà pubblicato sul mio <a class="link" href="https://github.com/matildecanelli">profilo GitHub</a>.</p>
       </div>
-      <img class="pannello__stella contatti__foto" src="assets/img/contatti-stella.png" width="891" height="934" loading="lazy" alt="Matilde in un selfie allo specchio, dentro la sua stella bordeaux">
+      <!-- Il gioco: fai le coccole a Bijou, la gatta di Matilde (js/bijou.js).
+           Con abbastanza coccole Bijou regala un giglio fatto di righe di codice, da scaricare.
+           Senza JavaScript si vede solo Bijou. -->
+      <div class="bijou" data-bijou>
+        <h3 class="bijou__titolo">Fai le coccole a Bijou</h3>
+        <p class="bijou__aiuto" id="bijou-aiuto">Accarezzala con il mouse o con il dito. Con abbastanza coccole ti regala un giglio fatto di codice.</p>
+        <div class="bijou__gatta" data-bijou-gatta aria-describedby="bijou-aiuto">
+          <img src="assets/img/bijou.jpg" width="900" height="900" loading="lazy" alt="Bijou, la gatta di Matilde, disegnata come un pupazzo con un passamontagna viola pieno di stelle dorate" draggable="false">
+        </div>
+        <div class="bijou__fusa" role="progressbar" aria-label="Coccole a Bijou" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-bijou-fusa><span data-bijou-barra></span></div>
+        <p class="bijou__stato" aria-live="polite" data-bijou-stato></p>
+        <button class="bijou__bottone" type="button" data-bijou-coccola>Fai una coccola</button>
+        <div class="bijou__premio" data-bijou-premio hidden>
+          <canvas class="bijou__giglio" width="1200" height="1600" role="img" aria-label="Un giglio disegnato con righe di codice: stelo e foglie verdi, petali bianchi" data-bijou-giglio></canvas>
+          <div class="bijou__azioni">
+            <a class="bijou__bottone" href="#" download="giglio-di-codice-bijou.png" data-bijou-scarica>Scarica il giglio</a>
+            <button class="bijou__bottone bijou__bottone--secondario" type="button" data-bijou-ancora>Altre coccole</button>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -338,5 +383,6 @@
   <script src="js/pannelli.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>
+  <script src="js/bijou.js" defer></script>
 </body>
 </html>
