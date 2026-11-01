@@ -194,6 +194,15 @@
         </dl>
         <h3 class="pannello__sotto">Prōsopon, la sfilata</h3>
         <p>Per la sfilata il sistema doveva diventare più elegante: dai colori del festival a una palette fredda. Ho costruito io la grafica della newsletter, che poi ha ispirato tutta la comunicazione di Prōsopon. Ne ho preparate due versioni: una con le foto delle modelle, dove la parte vettoriale si alleggerisce per non coprire la fotografia e lasciare il digitale respirabile; e una su fondo scuro, con la nuova palette, dove i protagonisti sono i rettangoli e i quadrati.</p>
+        <!-- Il lato creativo di Matilde: la lattina che ha tempestato di strass, da girare (js/lattina.js).
+             Finché il 3D non è pronto, o senza WebGL, si vede la foto. -->
+        <figure class="oggetto" data-lattina>
+          <div class="oggetto__palco" data-lattina-palco tabindex="0" role="slider" aria-label="Lattina tempestata di strass, da girare" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="0 gradi: si vede davanti, con il logo">
+            <canvas aria-hidden="true"></canvas>
+          </div>
+          <img class="oggetto__foto" src="assets/img/lattina-strass.jpg" width="570" height="760" loading="lazy" alt="Lattina di Monster Energy Zero Sugar tempestata a mano di strass gialli, neri e cristallo">
+          <figcaption>Una mia passione: tempestare oggetti di strass, a mano. Trascina la lattina per farla girare.</figcaption>
+        </figure>
       </div>
       <div class="pannello__immagini">
         <!-- Prima Prōsopon: la grafica nata per la newsletter, che ha dato la struttura a tutta la comunicazione -->
@@ -410,6 +419,7 @@
   <div class="lampo" data-lampo aria-hidden="true"></div>
 
   <script src="js/stella.js" type="module"></script>
+  <script src="js/lattina.js" type="module"></script>
   <script src="js/pannelli.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>
