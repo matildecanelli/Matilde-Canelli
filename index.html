@@ -331,6 +331,15 @@
           <div><dt>Obiettivo</dt><dd>Sviluppare la direzione creativa di un prodotto ispirato a una passione personale: un brand di skincare che unisce la cura della pelle al mondo della musica.</dd></div>
           <div><dt>Processo e risultato</dt><dd>Archetipo del brand, naming, moodboard, palette cromatica e font (Gunter, Quiche Sans Light), fino al packaging: un'identità coerente e riconoscibile.</dd></div>
         </dl>
+        <!-- Il lato creativo di Matilde: il barattolo che ha tempestato di strass, da girare (js/barattolo.js).
+             Finché il 3D non è pronto, o senza WebGL, si vede la foto. -->
+        <figure class="oggetto oggetto--largo" data-barattolo>
+          <div class="oggetto__palco" data-barattolo-palco tabindex="0" role="slider" aria-label="Barattolo di crema tempestato di strass, da girare" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="0 gradi: si vede davanti, con il logo">
+            <canvas aria-hidden="true"></canvas>
+          </div>
+          <img class="oggetto__foto" src="assets/img/barattolo-strass.jpg" width="900" height="900" loading="lazy" alt="Barattolo di crema tempestato a mano di strass azzurri e trasparenti">
+          <figcaption>Una mia passione: tempestare oggetti di strass, a mano. Trascina il barattolo per farlo girare.</figcaption>
+        </figure>
       </div>
       <div class="pannello__immagini">
         <figure class="largo"><img src="assets/img/pannelli/virtuoso-identita.jpg" width="1400" height="788" loading="lazy" alt="Tavola dell'identità di Virtuoso: i font Gunter e Quiche Sans Light, la palette dal bordeaux al rosa cipria, il logo, il packaging e la campagna"><figcaption>Font, palette, logo e packaging</figcaption></figure>
@@ -441,6 +450,7 @@
   <script src="js/lattina.js" type="module"></script>
   <script src="js/statua.js" type="module"></script>
   <script src="js/occhiali.js" type="module"></script>
+  <script src="js/barattolo.js" type="module"></script>
   <script src="js/pannelli.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>
