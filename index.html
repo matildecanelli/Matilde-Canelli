@@ -162,8 +162,19 @@
           <div><dt>Processo</dt><dd>Con l'AI e il vibe coding ho creato una moodboard e le prime proposte per trovare la direzione, poi ho sviluppato e rifinito la pagina in HTML, CSS (Tailwind) e JavaScript.</dd></div>
         </dl>
         <p><a class="link" href="https://matildecanelli.github.io/LP-IMAZE-RENT--safiro/">Guarda la landing page</a></p>
+        <!-- Il lato creativo di Matilde: la Madonna che ha tempestato di strass, da girare (js/statua.js).
+             Finché le foto del giro non sono arrivate, si vede la foto ferma. -->
+        <figure class="oggetto" data-statua>
+          <div class="oggetto__palco" data-statua-palco tabindex="0" role="slider" aria-label="Statua della Madonna tempestata di strass, da girare" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="0 gradi: si vede davanti, con le mani giunte">
+            <canvas aria-hidden="true"></canvas>
+          </div>
+          <img class="oggetto__foto" src="assets/img/statua-strass.jpg" width="570" height="760" loading="lazy" alt="Statuetta della Madonna a mani giunte, rosa, tempestata a mano di strass">
+          <figcaption>Una mia passione: tempestare oggetti di strass, a mano. Trascina la statua per farla girare.</figcaption>
+        </figure>
       </div>
       <div class="pannello__immagini">
+        <!-- Prima il risultato: la landing finale -->
+        <figure class="largo"><img src="assets/img/lavori/imaze.jpg" width="840" height="560" loading="lazy" alt="La landing page di Imaze Rent: il titolo Il tuo prossimo set su fondo fucsia"><figcaption>La landing page finale</figcaption></figure>
         <!-- Le tre proposte stanno insieme in una sola figura: sono la moodboard, non tre lavori separati -->
         <figure class="largo">
           <div class="moodboard" style="--colonne: 733fr 519fr 455fr">
@@ -173,7 +184,6 @@
           </div>
           <figcaption>Moodboard e prime proposte: da qui è nata la direzione della landing</figcaption>
         </figure>
-        <figure class="largo"><img src="assets/img/lavori/imaze.jpg" width="840" height="560" loading="lazy" alt="La landing page di Imaze Rent: il titolo Il tuo prossimo set su fondo fucsia"><figcaption>La landing page finale</figcaption></figure>
       </div>
       <p class="pannello__dopo"><a class="link" href="#synapses">Progetto successivo: Synapses</a></p>
     </section>
@@ -195,7 +205,7 @@
         <h3 class="pannello__sotto">Prōsopon, la sfilata</h3>
         <p>Per la sfilata il sistema doveva diventare più elegante: dai colori del festival a una palette fredda. Ho costruito io la grafica della newsletter, che poi ha ispirato tutta la comunicazione di Prōsopon. Ne ho preparate due versioni: una con le foto delle modelle, dove la parte vettoriale si alleggerisce per non coprire la fotografia e lasciare il digitale respirabile; e una su fondo scuro, con la nuova palette, dove i protagonisti sono i rettangoli e i quadrati.</p>
         <!-- Il lato creativo di Matilde: la lattina che ha tempestato di strass, da girare (js/lattina.js).
-             Finché il 3D non è pronto, o senza WebGL, si vede la foto. -->
+             Finché le foto del giro non sono arrivate, si vede la foto ferma. -->
         <figure class="oggetto" data-lattina>
           <div class="oggetto__palco" data-lattina-palco tabindex="0" role="slider" aria-label="Lattina tempestata di strass, da girare" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="0 gradi: si vede davanti, con il logo">
             <canvas aria-hidden="true"></canvas>
@@ -240,6 +250,15 @@
           <div><dt>Obiettivo</dt><dd>Garantire alle donne una serata senza pericoli con un format di evento notturno accessibile solo a loro, e allo stesso tempo provocare: il fatto che serva un evento così è già il messaggio.</dd></div>
           <div><dt>Processo</dt><dd>Schizzi a mano, poi il logo ridisegnato e un pattern di frutti; il cartone di succo con QR è sia sticker sia sottobicchiere.</dd></div>
         </dl>
+        <!-- Il lato creativo di Matilde: gli occhiali che ha tempestato di strass, da girare (js/occhiali.js).
+             Senza WebGL si vede la foto ferma. -->
+        <figure class="oggetto oggetto--largo" data-occhiali>
+          <div class="oggetto__palco" data-occhiali-palco tabindex="0" role="slider" aria-label="Occhiali da sole tempestati di strass, da girare" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="0 gradi: si vede davanti, con le lenti nere">
+            <canvas aria-hidden="true"></canvas>
+          </div>
+          <img class="oggetto__foto" src="assets/img/occhiali/00.webp" width="900" height="675" loading="lazy" alt="Occhiali da sole con le lenti nere, tempestati a mano di strass">
+          <figcaption>Una mia passione: tempestare oggetti di strass, a mano. Trascina gli occhiali per farli girare.</figcaption>
+        </figure>
       </div>
       <div class="pannello__immagini">
         <!-- In ordine di processo: dal primo logo al materiale per l'evento -->
@@ -420,6 +439,8 @@
 
   <script src="js/stella.js" type="module"></script>
   <script src="js/lattina.js" type="module"></script>
+  <script src="js/statua.js" type="module"></script>
+  <script src="js/occhiali.js" type="module"></script>
   <script src="js/pannelli.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>

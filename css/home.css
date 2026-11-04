@@ -176,7 +176,8 @@
 .scheda--contatti div { grid-template-columns: 6rem 1fr; }
 
 .pannello__immagini {
-  grid-column: 7 / 13; grid-row: 2;
+  grid-column: 7 / 13; grid-row: 1 / span 2;   /* parte in alto, anche quando il testo accanto è più lungo */
+  margin-top: 2.5rem;                          /* così non finisce sotto i pulsanti Progetti e Chiudi */
   display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
   align-content: start;
 }
@@ -213,6 +214,7 @@
 @media (max-width: 52rem) {
   .js .pannello { padding-top: calc(var(--ritaglio) + 4.75rem); }   /* spazio per Chiudi sopra il titolo */
   .pannello__testo, .pannello__testo--largo, .pannello__immagini, .pannello__stella { grid-column: 1 / -1; grid-row: auto; }
+  .pannello__immagini { margin-top: 0; }
   .pannello__stella { width: 50%; justify-self: end; }
   .scheda div { grid-template-columns: 1fr; gap: 0.15rem; }
 }

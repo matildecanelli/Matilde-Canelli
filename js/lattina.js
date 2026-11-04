@@ -185,6 +185,7 @@ function prepara() {
     stato.preso = true; stato.ultimaX = e.clientX; stato.ultimaY = e.clientY; stato.ultimoT = performance.now(); stato.velocita = 0;
     try { palco.setPointerCapture(e.pointerId); } catch (errore) { /* niente */ }
     palco.classList.add('e-presa');
+    palco.classList.add('e-col-mouse');   // il riquadro di selezione serve solo a chi usa la tastiera
     sveglia();
   });
   palco.addEventListener('pointermove', (e) => {
@@ -208,6 +209,7 @@ function prepara() {
   palco.addEventListener('pointercancel', lascia);
 
   palco.addEventListener('keydown', (e) => {
+    palco.classList.remove('e-col-mouse');
     const gradi = { ArrowRight: REGOLA.passoTastiera, ArrowUp: REGOLA.passoTastiera, ArrowLeft: -REGOLA.passoTastiera, ArrowDown: -REGOLA.passoTastiera }[e.key];
     if (gradi == null && e.key !== 'Home') return;
     e.preventDefault();

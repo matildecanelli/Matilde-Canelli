@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "oversized-h1",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-01T08:31:00.236Z",
+        "reason": "Claude: the h1 is the two-word name 'Canelli / Matilde' on two lines, the intentional hero of the portfolio, not a full-sentence headline"
+      }
+    ]
+  }
+}
