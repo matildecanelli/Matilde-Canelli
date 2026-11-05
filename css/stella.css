@@ -610,3 +610,5 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
 .oggetto.e-3d .oggetto__palco { display: block; }
 .oggetto.e-3d .oggetto__foto { display: none; }
 .oggetto figcaption { margin-top: 0.5rem; font-size: var(--t-piccolo); color: var(--tenue); }
+/* l'etichetta "non fa parte del progetto" sta sulla sua riga, sopra l'istruzione */
+.oggetto__etichetta { display: block; }

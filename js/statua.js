@@ -2,21 +2,21 @@
    statua.js: la Madonna di strass di Matilde, in 3D (Three.js)
 
    Il lato creativo di Matilde dentro la scheda di Imaze. Si comporta come la
-   lattina di Synapses, ma la forma è ricostruita dal suo video:
+   lattina di Synapses, e come lei indossa le foto vere:
    1. La forma: 88 fotogrammi del video, passati in fotogrammetria (Object Capture
       di Apple), danno una sola statua vera, uguale da ogni lato (assets/3d/madonna.bin).
-   2. Sotto: la pelle ricavata dal video, scurita, si vede solo negli spazi tra le pietre
-      (assets/3d/madonna-pelle.jpg).
-   3. Le pietre: gemme 3D vere posate sulla superficie, così sporgono anche dal
-      contorno (assets/3d/madonna-pietre.bin, da strumenti/madonna-pietre.js).
-      Hanno poche faccette, quindi vanno bene anche sui telefoni.
+   2. La pelle: 27 fotogrammi del video proiettati sulla forma. Ogni punto prende il colore
+      da quello che lo vede più di fronte, quindi le pietre sono quelle vere
+      (assets/3d/madonna-pelle.jpg). La luce del sole è stata attenuata.
+   3. Il piedistallo è un blocco rigido, costruito qui sulle misure vere, con le sue
+      pietre proiettate dai fotogrammi (assets/3d/madonna-base.jpg): girando resta squadrato.
+   Il rilievo e i lampi si ricavano dalla pelle, come sulla lattina.
    4. Si gira trascinando (mouse o dito), con le frecce della tastiera, e quando
       nessuno la tocca gira piano da sola. Con "riduci movimento" sta ferma.
    Si disegna solo quando il pannello è aperto e la statua si vede.
    ========================================================================== */
 
 import * as THREE from 'three';
-import { pietre, materialeGemma, geometriaPietra } from './strass.js';
 
 const figura = document.querySelector('[data-statua]');
 if (figura) prepara();
@@ -28,6 +28,7 @@ function prepara() {
 
   /* ---------- REGOLAZIONI ---------- */
   const REGOLA = {
+    scintille: 0.6,          // la forza dei lampi di luce sulle pietre (0 = spenti)
     giroDaSola: 0.28,        // quanto gira da sola, in radianti al secondo
     trascina: 0.011,         // quanto gira per ogni pixel trascinato
     attrito: 3.2,            // quanto in fretta si ferma dopo una spinta
@@ -52,26 +53,50 @@ function prepara() {
 
   const uniformi = {
     uPelle: { value: null },
-    uLuce: { value: new THREE.Vector3(-0.45, 0.65, 0.75).normalize() },
-    uLuce2: { value: new THREE.Vector3(0.7, 0.25, 0.55).normalize() },
+    uLuce: { value: new THREE.Vector3(-0.35, 0.55, 1).normalize() },
+    uScintille: { value: REGOLA.scintille },
+    uPassoT: { value: new THREE.Vector2(1 / 2048, 1 / 2048) },
+    uCelle: { value: new THREE.Vector2(150, 150) },
   };
-  // la superficie sotto le pietre: scura, si vede solo negli spazi e dà il rilievo
   const materiale = new THREE.ShaderMaterial({
     uniforms: uniformi,
     side: THREE.DoubleSide,
     vertexShader: `
-      varying vec2 vUv; varying vec3 vN;
+      varying vec2 vUv; varying vec3 vN; varying vec3 vP;
       void main(){
         vUv = uv;
-        vN = normalize((modelMatrix * vec4(normal, 0.0)).xyz);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vP = mv.xyz;
+        vN = normalMatrix * normal;
+        gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: `
-      uniform sampler2D uPelle; uniform vec3 uLuce; uniform vec3 uLuce2;
-      varying vec2 vUv; varying vec3 vN;
+      uniform sampler2D uPelle; uniform vec3 uLuce; uniform vec2 uPassoT; uniform float uScintille; uniform vec2 uCelle;
+      varying vec2 vUv; varying vec3 vN; varying vec3 vP;
+      float chiaro(vec3 c){ return dot(c, vec3(0.3, 0.59, 0.11)); }
+      float caso(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
       void main(){
+        vec3 foto = texture2D(uPelle, vUv).rgb;
         vec3 n = normalize(vN);
-        vec3 c = texture2D(uPelle, vUv).rgb * 0.34 * (0.6 + 0.6 * max(dot(n, uLuce), 0.0) + 0.26 * max(dot(n, uLuce2), 0.0));
+        if (!gl_FrontFacing) n = -n;
+        // la base sulla superficie, dalle derivate: la pelle è fatta a pezzi
+        vec3 dp1 = dFdx(vP), dp2 = dFdy(vP); vec2 du1 = dFdx(vUv), du2 = dFdy(vUv);
+        vec3 t = normalize(dp2 * du1.y * -1.0 + dp1 * du2.y), b = normalize(dp2 * du1.x - dp1 * du2.x);
+        // le pietre in rilievo: la pendenza si ricava dalla foto
+        vec2 d = uPassoT * 2.5;
+        float dx = chiaro(textureLod(uPelle, vUv + vec2(d.x, 0.0), 1.0).rgb) - chiaro(textureLod(uPelle, vUv - vec2(d.x, 0.0), 1.0).rgb);
+        float dy = chiaro(textureLod(uPelle, vUv + vec2(0.0, d.y), 1.0).rgb) - chiaro(textureLod(uPelle, vUv - vec2(0.0, d.y), 1.0).rgb);
+        vec3 m = normalize(n - (t * dx + b * dy) * 0.55);
+        vec3 l = normalize(uLuce), occhio = normalize(-vP), meta = normalize(l + occhio);
+        // la forma dà le ombre delle pieghe; la foto ha già la sua luce, quindi poca
+        float tondo = clamp(dot(n, normalize(l + vec3(0.0, 0.0, 1.2))), 0.0, 1.0);
+        vec3 c = foto * (0.66 + 0.46 * tondo);
+        c *= mix(0.78, 1.0, smoothstep(0.0, 0.45, dot(n, occhio)));
+        c += vec3(1.0, 0.92, 0.94) * pow(max(dot(m, meta), 0.0), 60.0) * 0.08;
+        // le scintille: ogni cella ha la sua inclinazione, mentre gira lampeggia
+        vec2 cella = floor(vUv * uCelle);
+        vec3 faccetta = normalize(m + 0.55 * (vec3(caso(cella), caso(cella + 3.7), caso(cella + 7.1)) - 0.5));
+        c += vec3(1.0, 0.97, 0.96) * pow(max(dot(faccetta, meta), 0.0), 420.0) * 1.7 * uScintille;
         gl_FragColor = vec4(c, 1.0);
         #include <colorspace_fragment>
       }`,
@@ -173,19 +198,43 @@ function prepara() {
     statua.add(mesh);
   }
 
-  // Le pietre: posizione, normale, raggio e colore, una per una
-  function posaPietre(dati) {
-    const dv = new DataView(dati), voci = [];
-    for (let i = 0, n = dv.getUint32(0, true); i < n; i++) {
-      const o = 4 + i * 16;
-      voci.push({
-        p: new THREE.Vector3(dv.getInt16(o, true) / 32767, dv.getInt16(o + 2, true) / 32767, dv.getInt16(o + 4, true) / 32767),
-        n: new THREE.Vector3(dv.getInt8(o + 6) / 127, dv.getInt8(o + 7) / 127, dv.getInt8(o + 8) / 127).normalize(),
-        r: dv.getUint8(o + 9) / 10000,
-        colore: [dv.getUint8(o + 10) / 255, dv.getUint8(o + 11) / 255, dv.getUint8(o + 12) / 255],
-      });
+  /* ---------- Il piedistallo: un blocco rastremato con gli spigoli appena arrotondati ---------- */
+  function costruisciBlocco(pelleBase) {
+    const Y0 = 0.014, Y1 = 0.088, L0 = 0.118, L1 = 0.109, R = 0.009, PC = 6;
+    // il contorno, faccia per faccia. u corre lungo le quattro facce, come nella pelle
+    const contorno = [];
+    for (let f = 0; f < 4; f++) for (let i = 0; i <= 24 + PC; i++) {
+      let g, n;                                  // g: lungo la faccia (-1..1), n: fuori (0..1 solo sullo spigolo)
+      if (i <= 24) { g = (i / 24) * 2 - 1; n = 0; } else { g = 1; n = (i - 24) / PC; }
+      contorno.push({ f, g, n, u: i <= 24 ? (f + 0.5 + g * 0.5) / 4 : (f + 1) / 4 });
     }
-    statua.add(pietre(voci, materialeGemma(), geometriaPietra({ alta: 1.2, semplice: true })));
+    const punto = (c, L) => {
+      const interno = L - R, a = (c.n * Math.PI) / 2, s = c.g * interno + Math.sin(a) * R, d = interno + Math.cos(a) * R;
+      const [x, z] = [[s, d], [d, -s], [-s, -d], [-d, s]][c.f];
+      const [nx, nz] = [[Math.sin(a), Math.cos(a)], [Math.cos(a), -Math.sin(a)], [-Math.sin(a), -Math.cos(a)], [-Math.cos(a), Math.sin(a)]][c.f];
+      return { x, z, nx, nz };
+    };
+    const pos = [], uvs = [], nor = [], idx = [], N = contorno.length;
+    [[Y1, L1, 0], [Y0, L0, 1], [Y0 - 0.002, L0 - 0.004, 1]].forEach(([y, L, v]) => contorno.forEach((c) => { const q = punto(c, L); pos.push(q.x, y, q.z); uvs.push(c.u, v); nor.push(q.nx, 0.12, q.nz); }));
+    for (let r = 0; r < 2; r++) for (let i = 0; i < N; i++) { const a = r * N + i, b = r * N + (i + 1) % N, c = a + N, d = b + N; idx.push(a, c, b, b, c, d); }
+    // il piano in alto, su cui poggia il rialzo: si vede solo ai bordi
+    const inizio = pos.length / 3;
+    contorno.forEach((c) => { const q = punto(c, L1); pos.push(q.x, Y1, q.z); uvs.push(q.x / (8 * L1), q.z / (2 * L1) * 3); nor.push(0, 1, 0); });
+    pos.push(0, Y1, 0); uvs.push(0, 0); nor.push(0, 1, 0);
+    for (let i = 0; i < N; i++) idx.push(inizio + N, inizio + i, inizio + (i + 1) % N);
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+    g.setIndex(idx);
+    const m = materiale.clone();
+    m.uniforms.uLuce = uniformi.uLuce; m.uniforms.uScintille = { value: 0 };   // le pietre del blocco brillano già nella foto
+    m.uniforms.uPelle = { value: pelleBase };
+    m.uniforms.uPassoT = { value: new THREE.Vector2(1 / 2160, 1 / 180) };
+    m.uniforms.uCelle = { value: new THREE.Vector2(72, 7) };
+    const blocco = new THREE.Mesh(g, m);
+    blocco.frustumCulled = false;
+    statua.add(blocco);
   }
 
   // i file pesano, quindi si scaricano solo la prima volta che la statua si vede.
@@ -202,9 +251,10 @@ function prepara() {
       ok(tex);
     }, undefined, no));
     const scarica = (file) => fetch(file).then((r) => { if (!r.ok) throw new Error(file); return r.arrayBuffer(); });
-    Promise.all([scarica('assets/3d/madonna.bin'), scarica('assets/3d/madonna-pietre.bin'), carica('assets/3d/madonna-pelle.jpg', true)]).then(([dati, sassi, pelle]) => {
+    Promise.all([scarica('assets/3d/madonna.bin'), carica('assets/3d/madonna-pelle.jpg', true), carica('assets/3d/madonna-base.jpg', true)]).then(([dati, pelle, base]) => {
       costruisci(dati);
-      posaPietre(sassi);
+      base.wrapS = THREE.RepeatWrapping; base.wrapT = THREE.MirroredRepeatWrapping; base.needsUpdate = true;
+      costruisciBlocco(base);
       uniformi.uPelle.value = pelle;
       pronta = true;
       figura.classList.add('e-3d');
