@@ -45,7 +45,7 @@ window.BIJOU_ASSET = {
           larghezza: 1536,
           altezza: 1024,
           scala: 0.4286,
-          x: 314.0,
+          x: 170.0,
           y: 161.7
       },
       stalking: {
@@ -91,7 +91,7 @@ window.BIJOU_ASSET = {
       davanti: [850, 450, 140, 130],   // il pavimento davanti a Bijou, per la stellina
       nanna: [500, 400, 210, 180],     // tutta Bijou, per il cuscino
     },
-    belly: { pancia: [768, 406, 118, 90] },            // il pancino esposto, da accarezzare
+    belly: { pancia: [624, 406, 118, 90] },            // il pancino esposto, da accarezzare (posa centrata sul palco)
     stalking: { zampe: [710, 470, 120, 110] },         // davanti alle zampe anteriori
     pawing: { zampe: [710, 300, 120, 120] },
   },
