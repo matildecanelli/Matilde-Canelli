@@ -242,12 +242,22 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
 }
 .elenco-progetti__tipo { font-size: 1rem; color: var(--tenue); }
 /* al passaggio: il nome prende il colore del progetto, gli altri si spengono */
-.elenco-progetti:hover .elenco-progetti__voce { opacity: 0.35; }
+/* solo quando il mouse è proprio su un nome: la lista è larga quanto il pannello, e nel vuoto restano tutti accesi */
+.elenco-progetti:has(.elenco-progetti__voce:hover, .elenco-progetti__voce:focus-visible) .elenco-progetti__voce:not(:hover, :focus-visible) { opacity: 0.35; }
 .elenco-progetti .elenco-progetti__voce:hover,
 .elenco-progetti .elenco-progetti__voce:focus-visible { opacity: 1; color: var(--sopra); transform: translateX(0.6rem); }
 [data-tema="chiaro"] .elenco-progetti .elenco-progetti__voce:hover,
 [data-tema="chiaro"] .elenco-progetti .elenco-progetti__voce:focus-visible { color: var(--c1); }
 .js .pannello--progetti { align-content: center; }
+
+/* i nomi tempestati di strass (js/nomi-strass.js): le pietre stanno in un canvas sopra le lettere;
+   sotto, la lettera si scurisce nel colore del progetto, come la colla tra una pietra e l'altra */
+.elenco-progetti__nome, .pannello__nome { position: relative; transition: color 250ms ease; }
+.nome-strass { position: absolute; pointer-events: none; opacity: 0; transition: opacity 250ms ease; }
+.e-strass > .nome-strass { opacity: 1; }
+.elenco-progetti .elenco-progetti__nome.e-strass,
+.pannello__nome.e-strass,
+.titolo-in-volo.e-strass { color: var(--strass); }   /* la lettera dipinta nel colore del progetto, sotto i cristalli */
 
 /* il nome che vola: una copia fissa sopra tutto, mentre il pannello del progetto si apre sotto */
 .titolo-in-volo {

@@ -36,6 +36,7 @@
         fontSize: stile.fontSize, lineHeight: stile.lineHeight, color: stile.color,
       });
       document.body.append(copia);
+      window.nomiStrass?.vesti(nome, copia);   // se il nome è tempestato, vola con i suoi strass (js/nomi-strass.js)
 
       // 2. il progetto si apre sotto, subito
       window.aperturaDiretta = id;
@@ -45,6 +46,7 @@
       setTimeout(() => {   // un attimo dopo: il pannello nuovo è già disegnato e si può misurare
         const arrivo = destinazione.querySelector('.pannello__nome');
         if (!arrivo) { copia.remove(); return; }
+        window.nomiStrass?.titolo(arrivo);     // il titolo del progetto è già tempestato quando la copia atterra
         arrivo.style.visibility = 'hidden';
         const a = arrivo.getBoundingClientRect();
         const scala = parseFloat(getComputedStyle(arrivo).fontSize) / parseFloat(stile.fontSize);
@@ -81,6 +83,9 @@
       copia.setAttribute('aria-hidden', 'true');
       Object.assign(copia.style, { left: `${da.left}px`, top: `${da.top}px`, fontSize: stile.fontSize, lineHeight: stile.lineHeight, color: stile.color });
       document.body.append(copia);
+      // gli strass del titolo si spengono durante il volo: nella lista il nome torna liscio
+      const strass = window.nomiStrass?.vesti(titolo, copia);
+      if (strass) strass.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, easing: 'ease-in', fill: 'forwards' });
 
       // la lista si apre subito, sotto
       window.aperturaDiretta = 'progetti';
