@@ -138,6 +138,7 @@ function avvia() {
     uPastello: { value: REGOLA.iride.pastello },             // quanto bianco nei cristalli
     uForzaCorpo: { value: REGOLA.iride.corpo },
     uForzaRiflesso: { value: 1 },                            // nel tema scuro i riflessi sono un po' più luminosi
+    uNero: { value: 0 },                                     // nel tema chiaro la stella diventa di vetro nero (0..1, sfuma)
     uPuntatore: { value: new THREE.Vector2(0, 0) },
     uRaggioLuce: { value: REGOLA.raggioLuce },
     uAltezza: { value: REGOLA.altezzaLuce },
@@ -170,7 +171,7 @@ function avvia() {
         gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position * misura, 1.0);
       }`,
     fragmentShader: `
-      uniform float uPastello; uniform float uForzaRiflesso;
+      uniform float uPastello; uniform float uForzaRiflesso; uniform float uNero;
       varying vec3 vN; varying vec3 vColore; varying float vFase;
       varying vec3 vL; varying float vVicino; varying float vLato;
       // l'arcobaleno: un numero (0..1) diventa un colore, e il giro ricomincia
@@ -199,6 +200,10 @@ function avvia() {
         // il punto di luce: piccolissimo e vivo
         float punto = pow(max(dot(n, meta), 0.0), 260.0);
         c += vec3(1.0) * punto * 2.0 * uForzaRiflesso;
+        // il vetro nero (tema chiaro): niente colore, solo i riflessi della stanza e della luce del mouse
+        vec3 nero = vec3(0.008 + 0.02 * caso) + vec3(1.0) * (stanza * 0.3 + punto * 2.4);
+        nero *= mix(1.0, 0.5, smoothstep(0.75, 0.95, lato));
+        c = mix(c, nero, uNero);
         gl_FragColor = vec4(c, 1.0);
         #include <colorspace_fragment>
       }`,
@@ -310,7 +315,7 @@ function avvia() {
         gl_Position = projectionMatrix * p;
       }`,
     fragmentShader: `
-      uniform vec2 uPuntatore; uniform float uAltezza; uniform float uForzaRiflesso; uniform float uForzaCorpo;
+      uniform vec2 uPuntatore; uniform float uAltezza; uniform float uForzaRiflesso; uniform float uForzaCorpo; uniform float uNero;
       varying vec3 vN; varying vec3 vPos;
       vec3 iride(float t){ return 0.5 + 0.5 * cos(6.2831 * (t + vec3(0.0, 0.33, 0.67))); }
       void main(){
@@ -321,6 +326,9 @@ function avvia() {
         vec3 c = iride(bordo * 1.3 + n.x * 0.35 - n.y * 0.25 + 0.1) * uForzaCorpo;
         c *= 0.55 + 0.45 * smoothstep(-0.6, 0.4, sin(r.y * 5.0 + r.x * 2.0));   // le bande dello specchio
         c += pow(max(dot(r, l), 0.0), 40.0) * 0.9 * uForzaRiflesso;            // il lampo di luce
+        // il corpo nero (tema chiaro): uno specchio scuro con le sue bande e il lampo del mouse
+        vec3 nero = vec3(0.01) + vec3(0.05) * smoothstep(-0.6, 0.4, sin(r.y * 5.0 + r.x * 2.0)) + vec3(1.0) * pow(max(dot(r, l), 0.0), 40.0) * 0.8;
+        c = mix(c, nero, uNero);
         gl_FragColor = vec4(c, 1.0);
         #include <colorspace_fragment>
       }`,
@@ -567,8 +575,16 @@ function avvia() {
 
   // quando cambia il tema, gli strass cambiano colore
   // il materiale è lo stesso nei due temi; nel tema scuro i riflessi sono un po' più luminosi
-  const aggiornaTema = () => { uniformi.uForzaRiflesso.value = document.documentElement.dataset.tema === 'chiaro' ? REGOLA.riflessoChiaro : REGOLA.riflessoScuro; };
+  // e nel tema chiaro diventa di vetro nero: uNero va verso 1 (sfuma nel disegno, vedi disegna)
+  let neroVoluto = 0;
+  const aggiornaTema = () => {
+    const chiaro = document.documentElement.dataset.tema === 'chiaro';
+    uniformi.uForzaRiflesso.value = chiaro ? REGOLA.riflessoChiaro : REGOLA.riflessoScuro;
+    neroVoluto = chiaro ? 1 : 0;
+    if (menoMovimento) uniformi.uNero.value = neroVoluto;
+  };
   aggiornaTema();
+  uniformi.uNero.value = neroVoluto;   // all'apertura il colore giusto subito, senza sfumare
   new MutationObserver(() => { aggiornaTema(); if (menoMovimento) disegna(performance.now()); })
     .observe(document.documentElement, { attributes: true, attributeFilter: ['data-tema'] });
 
@@ -589,6 +605,7 @@ function avvia() {
     if (luceAuto && !menoMovimento) uniformi.uPuntatore.value.set(stella.position.x + Math.cos(t * 0.5) * altaStella * 0.4, stella.position.y + Math.sin(t * 0.7) * altaStella * 0.3);
     nuoviColori(t);
     const k = menoMovimento ? 1 : Math.min(1, dt * 2.5);
+    uniformi.uNero.value += (neroVoluto - uniformi.uNero.value) * Math.min(1, dt * 3);   // il nero arriva in mezzo secondo circa
     uniformi.uTintaA.value.lerp(obiettivoA, k);
     uniformi.uTintaB.value.lerp(obiettivoB, k);
     piazzaStella();
@@ -704,7 +721,9 @@ function avvia() {
 
   /* ---------- Avvio: basta la stella, il resto arriva mentre gli strass compaiono ---------- */
   const pronta = stellaImg.decode ? stellaImg.decode() : new Promise((ok) => { stellaImg.onload = ok; });
+  let pronto = false;
   pronta.then(() => {
+    pronto = true;
     misuraSagoma();
     misura();
     preparaScintille();
@@ -714,11 +733,20 @@ function avvia() {
     // quando anche i font sono pronti, ScrollTrigger rifà le misure (il nome cambia larghezza)
     document.fonts.ready.then(() => window.ScrollTrigger && window.ScrollTrigger.refresh());
   });
+  // la stella si rimisura quando cambia la misura VERA del canvas, non solo quella della finestra:
+  // durante lo scroll GSAP tiene ferma la scena e la ridimensiona dopo la finestra; misurando troppo
+  // presto la stella si disegnava con le misure vecchie e poi il browser la stirava (grande e deformata)
   let attesa;
-  window.addEventListener('resize', () => {
-    clearTimeout(attesa);
-    attesa = setTimeout(() => { misura(); disegna(performance.now()); }, 150);
-  });
+  const rimisura = () => {
+    cancelAnimationFrame(attesa);
+    attesa = requestAnimationFrame(() => {
+      if (!pronto || (canvas.clientWidth === L && canvas.clientHeight === A)) return;
+      misura(); disegna(performance.now());
+    });
+  };
+  if (window.ResizeObserver) new ResizeObserver(rimisura).observe(canvas);
+  window.addEventListener('resize', rimisura);
+  if (window.ScrollTrigger) window.ScrollTrigger.addEventListener('refresh', rimisura);
 
   // Quello che serve a pannelli.js: il pannello si apre dalla voce del menu, dopo il piccolo bling
   window.palco = {

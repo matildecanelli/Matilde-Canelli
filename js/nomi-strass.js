@@ -1,7 +1,7 @@
 /* ==========================================================================
    nomi-strass.js: i nomi dei progetti tempestati di strass
 
-   Nel pannello "Progetti", passando su un nome, la lettera si dipinge nel
+   Nel pannello "Progetti" (e nel pannello Portfolio, con le due versioni), passando su un nome, la lettera si dipinge nel
    colore del progetto e si riempie di strass trasparenti: compaiono uno a uno dal centro verso i
    bordi, come nella stella iniziale. Cliccando, il nome vola con i suoi
    strass e resta tempestato anche nel titolo del progetto.
@@ -20,7 +20,6 @@ import * as THREE from 'three';
 import { casuale, geometriaPietra, materialeGemma, pietre } from './strass.js';
 
 const menoMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const elenco = document.querySelector('.elenco-progetti');
 
 /* ---------- REGOLAZIONI ---------- */
 const REGOLA = {
@@ -31,16 +30,25 @@ const REGOLA = {
   margine: 0.06,                                 // spazio intorno alle lettere nel canvas, in em
 };
 
-// i colori dei progetti: quelli originali dei nomi nella lista (--sopra), così al passaggio la scritta non cambia tinta
-const colori = {};
-document.querySelectorAll('.elenco-progetti__voce[data-strass]').forEach((v) => { colori[v.getAttribute('href').slice(1)] = v.style.getPropertyValue('--sopra').trim() || v.dataset.strass; });
+// i colori dei progetti: quelli dei nomi nella lista, così al passaggio la scritta non cambia tinta.
+// Dipendono dal tema: --sopra sul fondo scuro, --c1 (più scuro, per il contrasto) sul fondo chiaro
+const voci = {};
+// ogni voce ha il suo nome: data-voce (il progetto, o la versione del portfolio)
+const chiaveDi = (v) => v.dataset.voce || v.getAttribute('href').slice(1);
+document.querySelectorAll('.elenco-progetti__voce[data-strass]').forEach((v) => { voci[chiaveDi(v)] = v; });
+function colore(id) {
+  const v = voci[id];
+  if (!v) return null;
+  const stile = getComputedStyle(v), chiaro = document.documentElement.dataset.tema === 'chiaro';
+  return stile.getPropertyValue(chiaro ? '--c1' : '--sopra').trim() || v.dataset.strass;
+}
 
 let motore = null;
 try {
   motore = new THREE.WebGLRenderer({ canvas: document.createElement('canvas'), antialias: true, alpha: true, preserveDrawingBuffer: true });
 } catch (errore) { /* senza WebGL i nomi restano scritti normalmente */ }
 
-if (motore && elenco) avvia();
+if (motore && Object.keys(voci).length) avvia();
 
 function avvia() {
   motore.setClearColor(0x000000, 0);
@@ -66,7 +74,8 @@ function avvia() {
   const RIF = 200;   // la misura della scritta su cui si calcolano le pietre, in pixel
   const disposizioni = new Map();
   function disponi(id, testo) {
-    if (disposizioni.has(id)) return disposizioni.get(id);
+    const quale = `${id} ${colore(id)}`;   // una disposizione per progetto e per tema
+    if (disposizioni.has(quale)) return disposizioni.get(quale);
     const c = document.createElement('canvas'), g = c.getContext('2d', { willReadFrequently: true });
     g.font = `${RIF}px Anton`;
     const m = g.measureText(testo), pad = 10;
@@ -115,7 +124,7 @@ function avvia() {
     const cx = m.width / 2, cy = (giu - su) / 2, lontano = Math.hypot(cx, su + giu);
     // i colori: le pietre sono cristalli trasparenti, come quelli della lattina. Il vetro prende
     // appena il colore della lettera dipinta che c'è sotto (si vede attraverso, vedi il materiale)
-    const base = new THREE.Color(colori[id] || '#ffffff'), bianco = new THREE.Color(1, 1, 1);
+    const base = new THREE.Color(colore(id) || '#ffffff'), bianco = new THREE.Color(1, 1, 1);
     const tinta = new THREE.Color();
     const voci = gemme.map((g) => {
       tinta.copy(base).lerp(bianco, 0.05 + dado() * 0.12);
@@ -127,7 +136,7 @@ function avvia() {
       };
     });
     const d = { voci, su: su / RIF, giu: giu / RIF, largo: m.width / RIF };
-    disposizioni.set(id, d);
+    disposizioni.set(quale, d);
     return d;
   }
 
@@ -138,7 +147,7 @@ function avvia() {
     const F = parseFloat(stile.fontSize);
     if (!F) return null;
     const vecchio = nomi.get(el);
-    if (vecchio && vecchio.F === F) return vecchio;
+    if (vecchio && vecchio.F === F && vecchio.tinta === colore(id)) return vecchio;
     if (vecchio) { vecchio.mesh.geometry.dispose(); vecchio.tela.remove(); }
     const testo = el.textContent.trim().toUpperCase();
     const d = disponi(id, testo);
@@ -157,7 +166,7 @@ function avvia() {
     tela.width = Math.ceil(larghezza * dpr); tela.height = Math.ceil(altezza * dpr);
     Object.assign(tela.style, { left: `${sinistra}px`, top: `${sopra}px`, width: `${larghezza}px`, height: `${altezza}px` });
     el.append(tela);
-    el.style.setProperty('--strass', colori[id] || 'currentColor');
+    el.style.setProperty('--strass', colore(id) || 'currentColor');
     // le pietre, in pixel del canvas (la y di Three.js va verso l'alto)
     const forma = geometriaPietra({ semplice: true });
     forma.setAttribute('aTurno', new THREE.InstancedBufferAttribute(new Float32Array(d.voci.map((v) => v.turno)), 1));
@@ -172,7 +181,7 @@ function avvia() {
     mesh.position.set(-larghezza / 2, altezza / 2, 0);
     gruppo.add(mesh);
     scena.add(gruppo);
-    const n = { el, id, F, tela, ctx: tela.getContext('2d'), mesh, gruppo, scena, larghezza, altezza, giroX: 0, giroY: 0 };
+    const n = { el, id, F, tinta: colore(id), tela, ctx: tela.getContext('2d'), mesh, gruppo, scena, larghezza, altezza, giroX: 0, giroY: 0 };
     nomi.set(el, n);
     return n;
   }
@@ -221,7 +230,7 @@ function avvia() {
   }
   function accendi(voce) {
     const nome = voce.querySelector('.elenco-progetti__nome');
-    const n = prepara(nome, voce.getAttribute('href').slice(1));
+    const n = prepara(nome, chiaveDi(voce));
     if (!n) return;
     attivo = n; inizio = performance.now(); n.giroX = 0; n.giroY = 0;
     nome.classList.add('e-strass');
@@ -233,7 +242,7 @@ function avvia() {
     nome.classList.remove('e-strass');
   }
   window.addEventListener('pointermove', (e) => { puntatore = [e.clientX, e.clientY]; }, { passive: true });
-  elenco.querySelectorAll('.elenco-progetti__voce').forEach((voce) => {
+  Object.values(voci).forEach((voce) => {
     voce.addEventListener('pointerenter', () => accendi(voce));
     voce.addEventListener('pointerleave', () => spegni(voce));
     voce.addEventListener('focus', () => accendi(voce));
@@ -244,24 +253,27 @@ function avvia() {
   const titolo = (id) => document.querySelector(`#${CSS.escape(id)} .pannello__nome`);
   function titoloAperto() {
     const id = location.hash.slice(1);
-    if (colori[id] && titolo(id)) tempesta(titolo(id), id);
+    if (colore(id) && titolo(id)) tempesta(titolo(id), id);
   }
   window.addEventListener('hashchange', titoloAperto);
+  // cambiando misura della finestra o tema, i nomi tempestati si ridisegnano (misure e colori nuovi)
+  const ridisegna = () => { for (const n of [...nomi.values()]) if (n.el.classList.contains('e-strass')) tempesta(n.el, n.id); };
   let attesa;
-  window.addEventListener('resize', () => {
-    clearTimeout(attesa);
-    attesa = setTimeout(() => { for (const n of [...nomi.values()]) if (n.el.classList.contains('e-strass')) tempesta(n.el, n.id); }, 200);
-  });
+  window.addEventListener('resize', () => { clearTimeout(attesa); attesa = setTimeout(ridisegna, 200); });
+  new MutationObserver(ridisegna).observe(document.documentElement, { attributes: true, attributeFilter: ['data-tema'] });
 
   // quello che serve a progetti.js: il titolo del progetto, e la copia che vola con i suoi strass
   window.nomiStrass = {
-    titolo(el) { const id = el.closest('[data-pannello]')?.id; return id && colori[id] ? tempesta(el, id) : null; },
+    titolo(el) { const id = el.closest('[data-pannello]')?.id; return id && colore(id) ? tempesta(el, id) : null; },
     vesti(da, copia) {
       const n = nomi.get(da);
       if (!n || !da.classList.contains('e-strass')) return null;
+      // cliccando a metà comparsa, il nome si completa subito: vola già tutto tempestato
+      if (attivo === n) inizio = -Infinity;
+      disegna(n, 1.3);
       const tela = n.tela.cloneNode();
       tela.getContext('2d').drawImage(n.tela, 0, 0);
-      copia.style.setProperty('--strass', colori[n.id]);
+      copia.style.setProperty('--strass', colore(n.id));
       copia.classList.add('e-strass');
       copia.append(tela);
       return tela;

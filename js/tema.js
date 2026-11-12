@@ -5,6 +5,7 @@
    colori (le variabili di base.css) quando c'è. La scelta si ricorda nel
    browser (localStorage), così tornando sul sito la ritrovi.
    Al clic, dal pulsante parte un piccolo scoppio di stelline.
+   Nel tema chiaro la stella diventa nera (stella.js) e il nome viola (stella.css).
    ========================================================================== */
 
 (function () {
@@ -21,8 +22,9 @@
     if (coloreBarra) coloreBarra.content = getComputedStyle(radice).getPropertyValue('--fondo').trim();
   }
 
-  // Le forme delle stelline: le quattro stelle piene delle costellazioni essenziali
-  const forme = ['01', '02', '03', '04'].map((n) => `url("assets/img/stelle/singole/essenziale-${n}.svg")`);
+  // Le forme delle stelline: le quattro stelle piene delle costellazioni essenziali.
+  // L'indirizzo è completo: dentro una variabile CSS un percorso relativo si leggerebbe dalla cartella css/
+  const forme = ['01', '02', '03', '04'].map((n) => `url("${new URL(`assets/img/stelle/singole/essenziale-${n}.svg`, document.baseURI).href}")`);
 
   // Lo scoppio: 9 stelline partono dal centro del pulsante in direzioni diverse,
   // ruotano un po', rimpiccioliscono e svaniscono

@@ -154,7 +154,8 @@
     if (menoMovimento) return;
     const s = document.createElement('span');
     s.className = 'stellina';
-    s.style.setProperty('--forma', `url("assets/img/stelle/singole/essenziale-0${1 + Math.floor(Math.random() * 4)}.svg")`);
+    // l'indirizzo completo: dentro una variabile CSS un percorso relativo si leggerebbe dalla cartella css/
+    s.style.setProperty('--forma', `url("${new URL(`assets/img/stelle/singole/essenziale-0${1 + Math.floor(Math.random() * 4)}.svg`, document.baseURI).href}")`);
     document.body.append(s);
     const a = Math.random() * Math.PI * 2, dx = Math.cos(a) * lontano * 0.6, dy = -Math.abs(Math.sin(a)) * lontano - 20;
     s.animate([

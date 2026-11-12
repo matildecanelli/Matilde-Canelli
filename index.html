@@ -54,8 +54,9 @@
   <div class="palco" data-palco>
     <!-- In alto a destra: i due download e il cambio di tema -->
     <div class="azioni" data-entra>
-      <a class="link" href="assets/docs/Canelli_Matilde_CV.pdf" download>Scarica il CV</a>
-      <a class="link" href="assets/docs/Canelli_Matilde_portfolio.pdf" download>Scarica il portfolio</a>
+      <a class="link" href="assets/docs/Canelli_Matilde_CV.pdf" download="Matilde-Canelli-CV.pdf">Scarica il CV</a>
+      <!-- apre il pannello Portfolio, dove si sceglie la versione da scaricare -->
+      <a class="link" href="#portfolio">Scarica il portfolio</a>
       <!-- Il cambio di tema: solo il simbolo (luna sul nero, sole sul bianco) dentro un bordo spesso.
            Al clic fa un piccolo scoppio di stelline (js/tema.js). -->
       <button class="tema" type="button" aria-pressed="false" aria-label="Tema chiaro" data-tema-bottone>
@@ -161,7 +162,7 @@
           <div><dt>Obiettivo</dt><dd>Presentare lo studio e il set, accompagnando l'utente dalla scoperta dello spazio fino alla richiesta di prenotazione, con lo stile deciso del brand: font Safiro, fucsia, bianco e nero.</dd></div>
           <div><dt>Processo</dt><dd>Con l'AI e il vibe coding ho fatto una moodboard e tre prime proposte, per capire dove andare. Scelta la direzione, ho sviluppato la pagina in HTML, CSS (Tailwind) e JavaScript e l'ho rifinita sezione per sezione. È il primo progetto in cui ho costruito io quello che avevo disegnato.</dd></div>
         </dl>
-        <p><a class="link" href="https://matildecanelli.github.io/LP-IMAZE-RENT--safiro/">Guarda la landing page</a></p>
+        <p><a class="link" href="https://matildecanelli.github.io/IMAZE-rent/">Guarda la landing page</a></p>
         <!-- Il lato creativo di Matilde: la Madonna che ha tempestato di strass, da girare (js/statua.js).
              Finché le foto del giro non sono arrivate, si vede la foto ferma. -->
         <figure class="oggetto" data-statua>
@@ -301,13 +302,13 @@
           <div><dt>Obiettivo</dt><dd>Un video che rendesse protagonista il processo di produzione dei capi, mettendo in luce sostenibilità e cura dell'ambiente, coerente con tono di voce e brand identity di EnergiaPura.</dd></div>
           <div><dt>Processo</dt><dd>Ho curato moodboard e storyboard, poi ho seguito il set e il montaggio come assistente.</dd></div>
         </dl>
-        <!-- Il lato creativo di Matilde: la borraccia che ha tempestato di strass, da girare (js/borraccia.js).
+        <!-- Il lato creativo di Matilde: la sua Panasonic Lumix rosa tempestata di strass, da girare (js/fotocamera.js).
              Finché il 3D non è pronto, o senza WebGL, si vede la foto. -->
-        <figure class="oggetto" data-borraccia>
-          <div class="oggetto__palco" data-borraccia-palco tabindex="0" role="slider" aria-label="Borraccia tempestata di strass, da girare" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="0 gradi: si vede davanti, con le ciliegie">
+        <figure class="oggetto oggetto--largo" data-fotocamera>
+          <div class="oggetto__palco" data-fotocamera-palco tabindex="0" role="slider" aria-label="Fotocamera Panasonic Lumix rosa tempestata di strass, da girare" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0" aria-valuetext="0 gradi: si vede davanti, con l’obiettivo">
             <canvas aria-hidden="true"></canvas>
           </div>
-          <img class="oggetto__foto" src="assets/img/borraccia-strass.jpg" width="548" height="900" loading="lazy" alt="Borraccia Nicole P tempestata a mano di strass bordeaux, con ciliegie e fiocchi">
+          <img class="oggetto__foto" src="assets/img/fotocamera-strass.jpg" width="900" height="600" loading="lazy" alt="Fotocamera Panasonic Lumix rosa coperta di strass rosa chiaro, con la scritta LUMIX e l’obiettivo d’argento">
           <figcaption><span class="oggetto__etichetta">Non fa parte del progetto: l'ho tempestata&nbsp;io.</span> Trascinala per farla girare.</figcaption>
         </figure>
       </div>
@@ -398,8 +399,8 @@
           <div><dt>Telefono</dt><dd><a class="link" href="tel:+393711970506">+39 371 197 0506</a></dd></div>
           <div><dt>LinkedIn</dt><dd><a class="link" href="https://www.linkedin.com/in/matilde-canelli-91ab14238">matilde-canelli</a></dd></div>
           <div><dt>GitHub</dt><dd><a class="link" href="https://github.com/matildecanelli">matildecanelli</a></dd></div>
-          <div><dt>CV</dt><dd><a class="link" href="assets/docs/Canelli_Matilde_CV.pdf" download>Scarica il PDF</a></dd></div>
-          <div><dt>Portfolio</dt><dd><a class="link" href="assets/docs/Canelli_Matilde_portfolio.pdf" download>Scarica il PDF</a></dd></div>
+          <div><dt>CV</dt><dd><a class="link" href="assets/docs/Canelli_Matilde_CV.pdf" download="Matilde-Canelli-CV.pdf">Scarica il PDF</a></dd></div>
+          <div><dt>Portfolio</dt><dd><a class="link" href="#portfolio">Scegli la versione</a></dd></div>
         </dl>
         <!-- Quando il repository del sito avrà il suo nome definitivo, qui va il link diretto -->
         <p class="contatti__codice">Questo sito l'ho progettato e sviluppato io, in HTML, CSS e JavaScript, lavorando anche con l'AI. Il codice sarà pubblicato sul mio <a class="link" href="https://github.com/matildecanelli">profilo GitHub</a>.</p>
@@ -455,6 +456,24 @@
         </div>
       </div>
     </section>
+
+    <!-- Il portfolio da scaricare, in due versioni: due nomi come in Progetti, con gli strass al passaggio.
+         È un pannello piccolo, al centro; si apre con la falena (js/pannelli.js). I PDF sono quelli di Matilde, così come li ha dati:
+         non vanno cambiati senza chiederle. -->
+    <section class="pannello pannello--progetti pannello--piccolo" id="portfolio" aria-labelledby="portfolio-titolo" data-pannello data-piccolo style="--c1:var(--colore-testo); --c2:var(--colore-fondo); --titolo:var(--colore-testo)">
+      <button class="pannello__chiudi" type="button" data-chiudi>Chiudi</button>
+      <h2 class="pannello__titolo solo-lettori" id="portfolio-titolo" tabindex="-1">Scarica il portfolio</h2>
+      <ol class="elenco-progetti">
+        <li><a class="elenco-progetti__voce" href="assets/docs/Canelli_Matilde_portfolio_completo.pdf" download="Canelli_Matilde_portfolio_alta_qualità.pdf" data-scarica data-voce="completo" data-strass="#B9A2D2" style="--sopra:#B9A2D2; --c1:#705094">
+          <span class="elenco-progetti__nome">Completo</span>
+          <span class="elenco-progetti__tipo">alta qualità · PDF, 52 MB</span>
+        </a></li>
+        <li><a class="elenco-progetti__voce" href="assets/docs/Canelli_Matilde_portfolio_leggero.pdf" download="Canelli_Matilde_portfolio_light.pdf" data-scarica data-voce="leggero" data-strass="#a9c4a9" style="--sopra:#a9c4a9; --c1:#5e7d5e">
+          <span class="elenco-progetti__nome">Leggero</span>
+          <span class="elenco-progetti__tipo">più veloce da scaricare · PDF, 13 MB</span>
+        </a></li>
+      </ol>
+    </section>
   </main>
 
   <!-- Il riflesso a stella e il lampo che abbagliano prima di aprire un progetto -->
@@ -466,7 +485,7 @@
   <script src="js/statua.js" type="module"></script>
   <script src="js/occhiali.js" type="module"></script>
   <script src="js/barattolo.js" type="module"></script>
-  <script src="js/borraccia.js" type="module"></script>
+  <script src="js/fotocamera.js" type="module"></script>
   <script src="js/nomi-strass.js" type="module"></script>
   <script src="js/pannelli.js" defer></script>
   <script src="js/tema.js" defer></script>

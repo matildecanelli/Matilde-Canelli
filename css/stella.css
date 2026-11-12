@@ -70,6 +70,24 @@ html { overflow-x: hidden; }
   pointer-events: none;
 }
 
+/* Il disegno di stelle che si forma prima del pop dei pannelli (js/pannelli.js):
+   Saturno, il Capricorno o la Luna. Linee sottili e stelle delle costellazioni */
+.firmamento { position: fixed; inset: 0; z-index: 42; pointer-events: none; --velo: color-mix(in srgb, var(--fondo) 78%, transparent); }
+.firmamento svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.firmamento path { fill: none; stroke: var(--stella-pieno); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+/* la sfera di cristallo è ingrandita di --k: il tratto si divide per --k, così sullo schermo è spesso come gli altri */
+.firmamento .scalato path { stroke-width: calc(2.5px / var(--k)); }
+.firmamento .scalato path.sottile { stroke-width: calc(1.5px / var(--k)); }   /* il riflesso, la nebbia, le stelline */
+.firmamento .scalato path.spesso { stroke-width: calc(7px / var(--k)); }      /* i bordi esterni della falena, come nel tatuaggio */
+.firmamento .scalato path.punto { stroke-width: calc(3px / var(--k)); }       /* la scia di puntini pieni */
+.firmamento .scalato path.pieno-corpo { fill: var(--stella-pieno); }            /* il corpo della falena, pieno */
+.firmamento__stella {
+  position: absolute; transform: translate(-50%, -50%);
+  background: var(--stella-pieno);
+  -webkit-mask: var(--forma) center / contain no-repeat;
+          mask: var(--forma) center / contain no-repeat;
+}
+
 /* Il menu: voci un po' più grandi */
 .menu a { font-size: 1.0625rem; }
 @media (max-width: 40rem) { .menu a { font-size: 1rem; } }
@@ -86,6 +104,8 @@ html { overflow-x: hidden; }
    I colori sono tutti in fondo al file, nel blocco PALETTE. */
 html, body { transition: background-color 400ms ease, color 400ms ease; }
 .nome { transition: color 400ms ease; }
+/* nel tema chiaro il nome è viola pieno (nel tema scuro resta avorio) */
+[data-tema="chiaro"] .nome__riga { color: var(--palette-viola); }
 /* nel tema chiaro l'alone scuro dietro le scritte non serve */
 [data-tema="chiaro"] .menu a,
 [data-tema="chiaro"] .palco__etichetta { text-shadow: none; }
@@ -300,7 +320,7 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
    Contrasti verificati (WCAG AA):
    - scuro: testo avorio su quasi nero 14,6:1; lilla (link, accento) 7,3:1;
      testo secondario 7,4:1; quasi nero sui pulsanti lilla 7,3:1.
-   - chiaro: testo quasi nero su avorio 14,6:1; viola (link, accento) 5,7:1;
+   - chiaro: testo quasi nero sulla lavanda 15,5:1; viola (link, accento) 5,7:1;
      testo secondario 6,2:1; bianco sui pulsanti viola 6,4:1.
    - il salvia (2,9:1 su avorio) e il lilla nel tema chiaro (2:1) sono solo
      decorativi: stelle, contorni, intrecci. Mai per testo o controlli.
@@ -312,6 +332,8 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
   --palette-viola: #705094;       /* il colore identitario */
   --palette-lilla: #B9A2D2;
   --palette-salvia: #7D927D;      /* accento occasionale */
+  --palette-lavanda: #F9F6FD;     /* tema chiaro: i pannelli, lavanda latte schiarita (il viola del nome, appena accennato) */
+  --palette-lavanda-scura: #E6DDF0; /* tema chiaro: il fondo della pagina, un tono sotto i pannelli */
 
   /* tema scuro (di base) */
   --colore-fondo: var(--palette-nero);
@@ -341,8 +363,8 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
   --bling: var(--colore-accento);
 }
 :root[data-tema="chiaro"] {
-  --colore-fondo: var(--palette-avorio);
-  --colore-superficie: var(--palette-bianco);       /* il bianco per le superfici: i pannelli */
+  --colore-fondo: var(--palette-lavanda-scura);
+  --colore-superficie: var(--palette-lavanda);      /* i pannelli: lavanda latte, non bianco */
   --colore-testo: var(--palette-nero);
   --colore-testo-tenue: color-mix(in srgb, var(--palette-nero) 72%, var(--palette-avorio));
   --colore-accento: var(--palette-viola);
@@ -371,9 +393,14 @@ html { scrollbar-color: var(--separatore) var(--fondo); }
 .lampo { display: none; }
 [data-tema="chiaro"] .testa, [data-tema="chiaro"] .palco__cv, [data-tema="chiaro"] .azioni, [data-tema="chiaro"] .ruolo { text-shadow: none; }
 
-/* i colori dei progetti nel tema chiaro: il giallo e l'azzurro scuriti per reggere il contrasto sul calce */
-[data-tema="chiaro"] #synapses, [data-tema="chiaro"] .elenco-progetti__voce[href="#synapses"] { --c1: #7a5f00 !important; }
-[data-tema="chiaro"] #energiapura, [data-tema="chiaro"] .elenco-progetti__voce[href="#energiapura"] { --c1: #2c6f78 !important; }
+/* i colori dei progetti nel tema chiaro: pastello, nella tinta dei nomi del tema scuro (--sopra).
+   Sono testi grandissimi e decorativi; sulla lavanda il contrasto è tra 2,5 e 2,8 (sotto il 3:1
+   dei testi grandi), scelto da Matilde per la morbidezza: chi li legge li ha anche nell'elenco del menu */
+[data-tema="chiaro"] #imaze .pannello__nome, [data-tema="chiaro"] .elenco-progetti__voce[href="#imaze"] { --c1: #f0758e !important; }
+[data-tema="chiaro"] #synapses, [data-tema="chiaro"] .elenco-progetti__voce[href="#synapses"] { --c1: #c9963a !important; }
+[data-tema="chiaro"] #ju1ce .pannello__nome, [data-tema="chiaro"] .elenco-progetti__voce[href="#ju1ce"] { --c1: #9b85f2 !important; }
+[data-tema="chiaro"] #energiapura, [data-tema="chiaro"] .elenco-progetti__voce[href="#energiapura"] { --c1: #4fa3a5 !important; }
+[data-tema="chiaro"] #virtuoso .pannello__nome, [data-tema="chiaro"] .elenco-progetti__voce[href="#virtuoso"] { --c1: #c58f80 !important; }
 
 /* ==========================================================================
    LE COSTELLAZIONI: le 12 composizioni di stelle di Matilde
@@ -554,6 +581,10 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
 @media (max-width: 52rem) {
   .bijou { grid-column: 1 / -1; grid-row: auto; margin-top: 1rem; }
 }
+/* sul desktop Bijou sta in alto a destra, proprio dove c'è il pulsante Chiudi: scende quanto il pulsante più un po' d'aria */
+@media (min-width: 52.01rem) {
+  .js .bijou { padding-top: 3.25rem; }
+}
 /* telefono: i quattro strumenti su una riga sola (restano grandi abbastanza per il dito) */
 @media (max-width: 26rem) {
   .bijou__strumenti { gap: 0.35rem; flex-wrap: nowrap; }
@@ -622,3 +653,12 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
 .oggetto figcaption { margin-top: 0.5rem; font-size: var(--t-piccolo); color: var(--tenue); }
 /* l'etichetta "non fa parte del progetto" sta sulla sua riga, sopra l'istruzione */
 .oggetto__etichetta { display: block; }
+
+
+/* ---------- Il pannello piccolo (Portfolio): un riquadro al centro, grande quanto i due nomi ----------
+   Il ritaglio lo calcola pannelli.js; qui il contenuto si mette al centro dello schermo
+   e il pulsante Chiudi va nell'angolo del riquadro */
+.js .pannello--piccolo { align-content: center; justify-items: center; }
+.pannello--piccolo .elenco-progetti { grid-column: 1 / -1; justify-self: center; width: max-content; max-width: 100%; }
+.pannello--piccolo .elenco-progetti__nome { font-size: clamp(2.6rem, 1rem + 5vw, 5.5rem); }
+.js .pannello--piccolo .pannello__chiudi { top: calc(var(--riquadro-sopra, 0px) + 0.75rem); right: calc(var(--riquadro-lato, 0px) + 0.75rem); }
