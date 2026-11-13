@@ -547,15 +547,16 @@ html:not(.js) .giu { display: none; }
 
 .cielo-tel__invito { flex: none; margin: 0.5rem 0 0; text-align: center; font-size: 0.8125rem; color: var(--tenue); }
 html:not([data-tema="chiaro"]) .cielo-tel__invito { color: var(--palette-salvia-chiaro); }
-/* il suggerimento "trascina il cielo": c'è solo se il cielo si trascina, e sparisce presto */
+/* il suggerimento "trascina il cielo": sotto il cielo, centrato, sempre visibile quando il cielo
+   è più largo dello schermo (ci sono altre stelle da scoprire). Sul computer grande non c'è */
 .cielo-tel__mano {
-  position: absolute; left: 50%; bottom: 0.75rem; translate: -50% 0; z-index: 1; pointer-events: none;
+  flex: none; width: max-content; margin: 0.75rem auto 0;
   padding: 0.45rem 0.9rem; border-radius: 999px; white-space: nowrap;
   font-size: 0.8125rem; font-weight: 700; color: var(--chiaro);
-  background: color-mix(in srgb, var(--fondo) 85%, transparent); border: 2px solid var(--palette-salvia-chiaro);
-  transition: opacity 400ms ease;
+  border: 2px solid var(--palette-salvia-chiaro);
 }
-.cielo-tel:not(.si-trascina) .cielo-tel__mano, .cielo-tel__mano.e-via { opacity: 0; }
+[data-tema="chiaro"] .cielo-tel__mano { border-color: var(--palette-salvia); }
+.cielo-tel:not(.si-trascina) + .cielo-tel__mano { display: none; }
 
 /* telefono e schermi in verticale: il cielo sta nella scena, tra il nome e il menu.
    Titolo e testo restano nella fascia sotto, e arrivano scorrendo */

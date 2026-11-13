@@ -19,7 +19,7 @@
   const cielo = document.querySelector('[data-cielo]');
   if (!quiz || !cielo) return;
   const tela = cielo.querySelector('[data-tela]');
-  const mano = cielo.querySelector('[data-mano]');
+  const mano = document.querySelector('[data-mano]');
   const invito = document.querySelector('[data-invito]');
   const stelle = [...cielo.querySelectorAll('[data-stella]')];
   const risposte = [...document.querySelectorAll('[data-risposta]')];
@@ -107,7 +107,6 @@
       spostato = true;
       cielo.setPointerCapture(e.pointerId);
       cielo.classList.add('e-preso');
-      if (mano) mano.classList.add('e-via');
     }
     if (!spostato) return;
     const t = performance.now();
@@ -134,10 +133,6 @@
     if (li) muovi(li.offsetLeft - (largo - li.offsetWidth) / 2);
     cielo.scrollLeft = 0;   // il browser non deve scorrere il cielo da sé
   });
-  // il suggerimento "trascina il cielo" sparisce da solo qualche secondo dopo che il cielo si vede
-  if (mano) new IntersectionObserver(([v], o) => {
-    if (v.isIntersecting) { setTimeout(() => mano.classList.add('e-via'), 4000); o.disconnect(); }
-  }).observe(cielo);
 
   /* ---------- Dove sta il cielo ----------
      Sul telefono (e sugli schermi in verticale) va nella scena, tra il nome e il menu;
@@ -146,8 +141,8 @@
   const testa = quiz.querySelector('.quiz__testa');
   const stretto = window.matchMedia('(max-width: 40rem), (max-aspect-ratio: 1/1)');
   function colloca() {
-    if (posto && stretto.matches) { if (cielo.parentElement !== posto) posto.append(cielo, invito); }
-    else if (cielo.previousElementSibling !== testa) testa.after(cielo, invito);
+    if (posto && stretto.matches) { if (cielo.parentElement !== posto) posto.append(cielo, mano, invito); }
+    else if (cielo.previousElementSibling !== testa) testa.after(cielo, mano, invito);
     disponi();
   }
   colloca();
