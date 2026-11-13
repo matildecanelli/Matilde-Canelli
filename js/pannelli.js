@@ -10,7 +10,7 @@
    Intanto il colore della bolla svanisce e compare il contenuto.
    Prima del pop, sullo schermo si forma un disegno di stelle: Saturno per
    Progetti, il Capricorno per Chi sono, la sfera di cristallo per Contatti,
-   la falena per Portfolio.
+   la falena per Portfolio. La stella del quiz si apre dalla stella cliccata.
    Da un suo punto parte uno scoppio di stelline, e il pannello esce da lì.
    L'indirizzo cambia (#imaze, #contatti…): si può mandare il link a un pannello.
    ========================================================================== */
@@ -59,6 +59,7 @@
       ], { duration: 700 + Math.random() * 250, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' }).onfinish = () => s.remove();
     }
   }
+  window.scoppioStelline = scoppioStelline;   // lo usa anche il quiz delle stelle (js/quiz.js)
 
   // il cielo: un velo sulla scena, un svg per le linee e un posto per le stelle
   function cielo() {
@@ -265,10 +266,19 @@
     return finale(c, { x: ox + x * k, y: oy + y * k, raggio: 30 * k }, 1300);
   }
 
+  /* La stella del quiz: il disegno è la stella stessa, che l'utente ha appena cliccato nel nastro
+     (js/quiz.js ha già fatto lo scoppio di stelline e ha lasciato in window.partenzaStella da dove
+     partire). Il pannello esce proprio da lì; se si arriva con il link #stella, esce dal centro */
+  function stellaScelta() {
+    const punto = window.partenzaStella || null;
+    window.partenzaStella = null;
+    return new Promise((fatto) => setTimeout(() => fatto(punto), punto ? 260 : 0));
+  }
+
   // quale disegno per quale voce (i progetti aperti da un link diretto prendono Saturno)
-  const DISEGNI = { 'chi-sono': capricorno, contatti: sfera, progetti: saturno, portfolio: falena };
+  const DISEGNI = { 'chi-sono': capricorno, contatti: sfera, progetti: saturno, portfolio: falena, stella: stellaScelta };
   function disegno(id) {
-    if (menoMovimento) return Promise.resolve(null);
+    if (menoMovimento) { window.partenzaStella = null; return Promise.resolve(null); }
     return (DISEGNI[id] || saturno)();
   }
 
@@ -280,14 +290,16 @@
   function ritaglio(pannello, piu = 0) {
     const m = margine();
     if (!pannello.hasAttribute('data-piccolo')) return `inset(${m}px ${m}px ${m}px ${m}px round 28px)`;
-    const L = window.innerWidth, A = window.innerHeight, dentro = pannello.querySelector('.elenco-progetti').getBoundingClientRect();
-    const aria = Math.min(72, L * 0.06);
-    const w = Math.min(L - 2 * m, dentro.width + 2 * aria), h = Math.min(A - 2 * m, dentro.height + 2 * aria);
-    const sopra = (A - h) / 2 - piu, lato = (L - w) / 2 - piu;
-    // il pulsante Chiudi va nell'angolo del riquadro, non dello schermo
-    pannello.style.setProperty('--riquadro-sopra', `${(A - h) / 2}px`);
-    pannello.style.setProperty('--riquadro-lato', `${(L - w) / 2}px`);
-    return `inset(${sopra}px ${lato}px ${sopra}px ${lato}px round 28px)`;
+    // il riquadro si costruisce attorno al contenuto, con lo stesso margine su ogni lato:
+    // così il testo sta sempre al centro del riquadro, ovunque la griglia lo abbia messo
+    const L = window.innerWidth, A = window.innerHeight, dentro = pannello.querySelector('[data-riquadro]').getBoundingClientRect();
+    const aria = pannello.id === 'stella' ? 56 : Math.min(72, L * 0.06);   // 56: in alto ci sta giusto Chiudi
+    const sopra = Math.max(m, dentro.top - aria) - piu, sotto = Math.max(m, A - dentro.bottom - aria) - piu;
+    const sx = Math.max(m, dentro.left - aria) - piu, dx = Math.max(m, L - dentro.right - aria) - piu;
+    // il pulsante Chiudi va nell'angolo in alto a destra del riquadro, non dello schermo
+    pannello.style.setProperty('--riquadro-sopra', `${sopra + piu}px`);
+    pannello.style.setProperty('--riquadro-lato', `${dx + piu}px`);
+    return `inset(${sopra}px ${dx}px ${sotto}px ${sx}px round 28px)`;
   }
 
   function apri(pannello) {

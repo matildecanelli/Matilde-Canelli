@@ -67,27 +67,6 @@
 
     <!-- Il ruolo, sopra il nome: entra con lo scroll insieme al resto -->
     <p class="ruolo" data-entra>Digital designer, wannabe web designer. <svg class="costellazione costellazione--ruolo" viewBox="0 0 341 337" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-02" width="341" height="337"/></svg></p>
-    <!-- Sul telefono (e sugli schermi in verticale), sotto il nome: una costellazione vera
-         con tutte e 12 le composizioni, unite da linee sottili come nelle mappe del cielo.
-         In alto le prime cinque stelle disegnano una M, come Cassiopea (e come Matilde);
-         poi la costellazione scende. È un solo disegno: si adatta allo spazio senza deformarsi. -->
-    <div class="cielo" aria-hidden="true" data-entra>
-      <svg class="cielo__mappa" viewBox="0 0 300 400" preserveAspectRatio="xMidYMid meet" focusable="false">
-        <g class="cielo__linee"><line x1="59.4" y1="92.1" x2="100.6" y2="139.3"/><line x1="115.8" y1="137.0" x2="140.4" y2="81.5"/><line x1="160.5" y1="81.0" x2="189.4" y2="138.7"/><line x1="202.4" y1="139.8" x2="243.8" y2="82.5"/><line x1="257.0" y1="87.6" x2="247.2" y2="179.1"/><line x1="242.9" y1="220.9" x2="237.4" y2="275.8"/><line x1="245.3" y1="322.1" x2="262.9" y2="359.8"/><line x1="227.0" y1="210.8" x2="181.5" y2="238.1"/><line x1="164.3" y1="257.2" x2="138.2" y2="312.5"/><line x1="115.9" y1="316.8" x2="71.0" y2="274.9"/><line x1="112.7" y1="338.6" x2="71.3" y2="359.4"/></g>
-        <use href="assets/img/stelle/costellazione.svg#espressiva-05" x="5.0" y="33.1" width="70" height="73.7"/>
-        <use href="assets/img/stelle/costellazione.svg#essenziale-02" x="93.0" y="133.2" width="34" height="33.6"/>
-        <use href="assets/img/stelle/costellazione.svg#essenziale-01" x="122.0" y="34.6" width="56" height="50.8"/>
-        <use href="assets/img/stelle/costellazione.svg#essenziale-05" x="180.0" y="134.1" width="30" height="31.7"/>
-        <use href="assets/img/stelle/costellazione.svg#espressiva-01" x="227.0" y="31.4" width="66" height="57.1"/>
-        <use href="assets/img/stelle/costellazione.svg#espressiva-04" x="220.0" y="178.8" width="50" height="42.4"/>
-        <use href="assets/img/stelle/costellazione.svg#essenziale-03" x="154.0" y="230.7" width="32" height="28.6"/>
-        <use href="assets/img/stelle/costellazione.svg#espressiva-06" x="206.0" y="269.8" width="58" height="60.3"/>
-        <use href="assets/img/stelle/costellazione.svg#espressiva-03" x="250.0" y="355.5" width="40" height="39.0"/>
-        <use href="assets/img/stelle/costellazione.svg#essenziale-04" x="107.0" y="309.8" width="46" height="40.3"/>
-        <use href="assets/img/stelle/costellazione.svg#espressiva-02" x="29.0" y="240.4" width="52" height="39.3"/>
-        <use href="assets/img/stelle/costellazione.svg#essenziale-06" x="45.0" y="352.8" width="30" height="24.4"/>
-      </svg>
-    </div>
 
     <!-- Il nome è il titolo della pagina: testo vero, nitido, due righe che entrano separate -->
     <h1 class="nome">
@@ -100,7 +79,7 @@
     <!-- La stella di riserva: si vede se WebGL o Three.js non partono -->
     <svg class="costellazione stella-riserva" viewBox="0 0 450 468" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-06" width="450" height="468"/></svg>
     <!-- Un invito discreto a scorrere: sparisce appena lo scroll comincia -->
-    <p class="scorri" data-scorri aria-hidden="true">Scorri</p>
+    <p class="scorri" data-scorri aria-hidden="true">Scorri verso il basso</p>
 
     <!-- Il menu: tre voci. I progetti si scelgono dal pannello "Progetti" -->
     <nav class="menu" id="menu" aria-label="Progetti e pagine">
@@ -110,7 +89,63 @@
         <li><a href="#contatti" data-voce="contatti">Contatti</a></li>
       </ul>
     </nav>
+
+    <!-- Sul telefono (e sugli schermi in verticale) il nastro delle stelle viene messo qui, tra il nome
+         e il menu, centrato in altezza (js/quiz.js lo sposta; sul computer torna nella sua fascia) -->
+    <div class="posto-nastro" data-posto-nastro data-entra></div>
+
+    <!-- Sul computer la fascia delle stelle è chiusa: si apre solo da questa freccia, che porta giù al quiz.
+         (Sul telefono il nastro sta già sotto il nome e la freccia non c'è.) -->
+    <button class="giu" type="button" aria-controls="quiz" aria-expanded="false" aria-label="Scendi al quiz: scegli la tua stella" data-giu data-entra>
+      <span class="giu__testo" aria-hidden="true" data-giu-testo>Vai al firmamento e scegli la tua stella</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg>
+    </button>
   </div>
+
+  <!-- ===== La fascia delle stelle: il quiz "Scegli la tua stella" =====
+     Le 12 stelle sono quelle disegnate da Matilde, ognuna da un tratto del suo carattere:
+     scorrono in un nastro largo quanto lo schermo, si sceglie una stella e si apre il pannello
+     piccolo #stella con chi sei e un progetto o una scheda del sito da guardare.
+     Sul computer la fascia sta subito sotto la scena (la scena ha solo nome, stella e menu);
+     sul telefono il nastro sale sotto il nome, e titolo e testo arrivano scorrendo.
+     I testi sono di Matilde. La logica è in js/quiz.js -->
+  <section class="quiz" id="quiz" aria-labelledby="quiz-domanda" data-quiz>
+    <div class="quiz__testa">
+      <div class="quiz__titoli">
+        <h2 class="quiz__domanda" id="quiz-domanda">Scegli la tua stella.</h2>
+        <p class="quiz__sotto">Ti dico chi sei. Senza impegno.</p>
+      </div>
+      <div class="quiz__nota" id="quiz-nota">
+        <p>Ognuna di queste stelle, in realtà, rappresenta un mio tratto distintivo: tra pregi, difetti e altri dettagli assolutamente irrilevanti al vostro personal knowledge, ma resi estremamente gradevoli dalla mia superba capacità di romanzare le supercazzole.</p>
+        <p>E soprattutto, dalla mia innata tendenza a complicarmi la vita pur di creare un giochino interattivo con cui coinvolgerti e ingannarti con un sotterfugio per parlare, ancora una volta, di me. Quando avrei potuto semplicemente raccontare tutti questi fun facts nella sezione "chi sono" e annoiarti a morte.</p>
+        <p>Quindi non c’è di che.</p>
+      </div>
+    </div>
+    <!-- Il firmamento: puntini come stelle lontane (li aggiunge js/quiz.js) e le 12 stelle sparse.
+         Sul computer si vedono tutte; più lo schermo è stretto, meno se ne vedono (fino a 6 sul telefono)
+         e il cielo si trascina per scoprire le altre. Sul telefono sta sotto il nome (js/quiz.js lo sposta). -->
+    <div class="cielo-tel" data-cielo>
+      <div class="cielo-tel__tela" data-tela>
+        <div class="cielo-tel__puntini" aria-hidden="true" data-puntini></div>
+        <ol class="cielo-tel__stelle">
+          <li><button class="quiz__stella" type="button" data-stella="1" aria-label="La stella polare"><svg class="costellazione quiz__disegno" viewBox="0 0 474 430" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-01" width="474" height="430"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="2" aria-label="La stella morbida"><svg class="costellazione quiz__disegno" viewBox="0 0 341 337" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-02" width="341" height="337"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="3" aria-label="La stella spettinata"><svg class="costellazione quiz__disegno" viewBox="0 0 458 409" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-03" width="458" height="409"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="4" aria-label="La stella minimal"><svg class="costellazione quiz__disegno" viewBox="0 0 420 368" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-04" width="420" height="368"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="5" aria-label="La stella a contorno"><svg class="costellazione quiz__disegno" viewBox="0 0 381 403" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-05" width="381" height="403"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="6" aria-label="La stella in coppia"><svg class="costellazione quiz__disegno" viewBox="0 0 454 369" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-06" width="454" height="369"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="7" aria-label="La stella con l’assistente"><svg class="costellazione quiz__disegno" viewBox="0 0 521 451" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-01" width="521" height="451"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="8" aria-label="La stella cometa"><svg class="costellazione quiz__disegno" viewBox="0 0 499 377" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-02" width="499" height="377"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="9" aria-label="La stella doppia"><svg class="costellazione quiz__disegno" viewBox="0 0 453 442" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-03" width="453" height="442"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="10" aria-label="La stella che si è persa"><svg class="costellazione quiz__disegno" viewBox="0 0 498 422" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-04" width="498" height="422"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="11" aria-label="La stella timida"><svg class="costellazione quiz__disegno" viewBox="0 0 489 515" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-05" width="489" height="515"/></svg></button></li>
+          <li><button class="quiz__stella" type="button" data-stella="12" aria-label="La stella esplosiva"><svg class="costellazione quiz__disegno" viewBox="0 0 450 468" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-06" width="450" height="468"/></svg></button></li>
+        </ol>
+      </div>
+      <div class="cielo-tel__mano" aria-hidden="true" data-mano>← trascina il cielo →</div>
+    </div>
+    <p class="cielo-tel__invito" data-invito>Tocca una stella: ti dico chi sei.</p>
+  </section>
 
   <!-- ===== I pannelli =====
        Con JavaScript ognuno si apre sopra la scena, uscendo dalla sua bolla.
@@ -463,7 +498,7 @@
     <section class="pannello pannello--progetti pannello--piccolo" id="portfolio" aria-labelledby="portfolio-titolo" data-pannello data-piccolo style="--c1:var(--colore-testo); --c2:var(--colore-fondo); --titolo:var(--colore-testo)">
       <button class="pannello__chiudi" type="button" data-chiudi>Chiudi</button>
       <h2 class="pannello__titolo solo-lettori" id="portfolio-titolo" tabindex="-1">Scarica il portfolio</h2>
-      <ol class="elenco-progetti">
+      <ol class="elenco-progetti" data-riquadro>
         <li><a class="elenco-progetti__voce" href="assets/docs/Matilde-Canelli_Portfolio_2026_Alta-Qualita.pdf" download data-scarica data-voce="completo" data-strass="#B9A2D2" style="--sopra:#B9A2D2; --c1:#705094">
           <span class="elenco-progetti__nome">Alta qualità</span>
           <span class="elenco-progetti__tipo">la versione più nitida · PDF, 52 MB</span>
@@ -473,6 +508,87 @@
           <span class="elenco-progetti__tipo">più veloce da scaricare · PDF, 13 MB</span>
         </a></li>
       </ol>
+    </section>
+
+    <!-- Il pannello della stella scelta nel quiz (js/quiz.js mostra la risposta giusta).
+         È piccolo, al centro, come quello del portfolio; si apre dalla stella cliccata -->
+    <section class="pannello pannello--piccolo pannello--stella" id="stella" aria-labelledby="stella-titolo" data-pannello data-piccolo style="--c1:var(--colore-testo); --c2:var(--colore-fondo); --titolo:var(--colore-testo)">
+      <button class="pannello__chiudi" type="button" data-chiudi>Chiudi</button>
+      <h2 class="pannello__titolo solo-lettori" id="stella-titolo" tabindex="-1">La tua stella</h2>
+      <div class="quiz__risposte" data-riquadro>
+        <article class="quiz__risposta" data-risposta="1" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 474 430" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-01" width="474" height="430"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella polare</h3>
+          <p class="quiz__testo">La tua camminata sicura attira immancabilmente le domande disperate di turisti innocenti in cerca di indicazioni. Peccato che tu non sappia nemmeno perché ti trovi fuori casa. Ogni tanto, nel corso della giornata, ti chiedi dove tu abbia mandato quei poveretti e se siano effettivamente arrivati a destinazione.</p>
+          <p class="quiz__vai"><a class="link" href="#imaze">Allora guarda Imaze: lì almeno le indicazioni sono chiarissime.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="2" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 341 337" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-02" width="341" height="337"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella morbida</h3>
+          <p class="quiz__testo">Se incontri un gatto per strada, lo coccolerai anche se quella piccola palla di pelo sarebbe perfettamente in grado di staccarti una mano a morsi. Ma ehi, faresti di tutto pur di offrirgli quei croccantini che ti porti sempre dietro per ogni evenienza. Non si sa mai.</p>
+          <p class="quiz__vai"><a class="link" href="#contatti">Allora vai a giocare con Bijou: è sullo schermo e almeno non ti azzannerà la mano.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="3" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 458 409" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-03" width="458" height="409"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella spettinata</h3>
+          <p class="quiz__testo">Sei un agente del caos di primo livello. Sul desktop convivono almeno 47 file chiamati «definitivo_perdavverostavolta». Eppure, nonostante la baraonda, il sistema funziona. Non chiedere come: non abbiamo tempo per queste domande.</p>
+          <p class="quiz__vai"><a class="link" href="#synapses">Allora guarda Synapses: un lavoro di gruppo dove il caos è diventato un’identità ufficiale.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="4" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 420 368" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-04" width="420" height="368"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella minimal</h3>
+          <p class="quiz__testo">Perché complicarsi la vita quando puoi essere minimal? Il tuo armadio ha tre colori: bianco, nero e un nero ancora più scuro. Merito della lavatrice e dei fogli acchiappacolore, che evidentemente hanno deciso di tradirti ancora una volta.</p>
+          <p class="quiz__vai"><a class="link" href="#virtuoso">Allora guarda Virtuoso: una palette scelta con molta più cura del tuo bucato.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="5" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 381 403" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-05" width="381" height="403"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella a contorno</h3>
+          <p class="quiz__testo">Ci sei, ma rigorosamente coi tuoi tempi. Il messaggio lo hai visualizzato, certo, ma la risposta arriverà tra tre giorni lavorativi. Festivi esclusi. E non è ghosting, è semplicemente una gestione delle priorità discutibile.</p>
+          <p class="quiz__vai"><a class="link" href="#contatti">Allora scrivimi tu: prometto che risponderò prima di tre giorni lavorativi.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="6" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 454 369" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-06" width="454" height="369"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella in coppia</h3>
+          <p class="quiz__testo">Hai delle doti da PR decisamente invidiabili. Tipo quelle due sconosciute che entrano in discoteca, si incontrano in bagno e nel giro di sette minuti diventano migliori amiche da una vita. Piangono insieme, si tengono i capelli e si impediscono a vicenda di svenire sul pavimento. Un’amicizia più solida di certi matrimoni.</p>
+          <p class="quiz__vai"><a class="link" href="#ju1ce">Allora guarda JU1CE: un format nato per le serate, bagno compreso.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="7" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 521 451" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-01" width="521" height="451"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella con l’assistente</h3>
+          <p class="quiz__testo">Dietro ai tuoi progetti migliori c’è sempre una piccola stellina che ti ha dato una mano. Sì, parliamo proprio dell’AI. Puoi anche prenderti tutti i meriti, ma almeno un ringraziamento nei titoli di coda sarebbe gradito. Ammettilo.</p>
+          <p class="quiz__vai"><a class="link" href="#contatti">Allora scrivimi: rispondo io, giuro, non l’AI.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="8" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 499 377" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-02" width="499" height="377"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella cometa</h3>
+          <p class="quiz__testo">Perennemente in ritardo, ma almeno arrivi con grande stile. Lasci una scia ovunque tu passi: profumo, glitter e probabilmente qualche problema organizzativo. La puntualità non sarà il tuo forte, ma l’ingresso in scena decisamente sì.</p>
+          <p class="quiz__vai"><a class="link" href="#energiapura">Allora guarda EnergiaPura: un video che sull’ingresso in scena ha vinto Miglior Soggetto.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="9" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 453 442" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-03" width="453" height="442"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella doppia</h3>
+          <p class="quiz__testo">Perché scattare una sola foto quando puoi scattarne ventisette? Una frontale, una laterale, una con il sorriso, una senza, una per sicurezza e altre ventidue per assicurarti che almeno una sia venuta decentemente. Tanto nella galleria un doppione in più non ha mai fatto male a nessuno. Tranne alla memoria del telefono.</p>
+          <p class="quiz__vai"><a class="link" href="#imaze">Allora guarda Imaze: uno studio fotografico dove puoi scattarne anche ventisettemila.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="10" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 498 422" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-04" width="498" height="422"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella che si è persa</h3>
+          <p class="quiz__testo">Dovevi uscire per comprare due cose. La lista? Nah, non serve, hai tutto sotto controllo. Peccato che tornerai a casa con una pianta, tre oggetti di dubbia utilità e una nuova ossessione. Di quello che dovevi comprare, ovviamente, nemmeno l’ombra.</p>
+          <p class="quiz__vai"><a class="link" href="#chi-sono">Allora leggi chi sono: anch’io sono partita con l'idea di fare la commercialista e sono arrivata al web.</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="11" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 489 515" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-05" width="489" height="515"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella timida</h3>
+          <p class="quiz__testo">Un esterno apparentemente duro nasconde un cuore di panna. Basta un video di animali nei rifugi in cerca di casa per mandarti in crisi: ti commuovi, piangi per tutta la notte e scegli accuratamente la tua canzone triste preferita come colonna sonora del dramma. Domani probabilmente farai finta di niente.</p>
+          <p class="quiz__vai"><a class="link" href="#virtuoso">Allora guarda Virtuoso: skincare e musica, dove non sai se sono le lacrime o è il siero che scende sulla tua guancia</a></p>
+        </article>
+        <article class="quiz__risposta" data-risposta="12" hidden>
+          <svg class="costellazione quiz__scelta" viewBox="0 0 450 468" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-06" width="450" height="468"/></svg>
+          <h3 class="quiz__titolo" tabindex="-1">La stella esplosiva</h3>
+          <p class="quiz__testo">Cinque caffè, troppe idee in testa, sedici schede del browser aperte contemporaneamente e tutti i programmi Adobe avviati. Zero pazienza e una soglia di tolleranza ai problemi tecnici praticamente inesistente. Ovviamente ti arrabbi perché nulla funziona, senza contemplare minimamente la possibilità che il problema possa essere proprio il tuo computer ormai prossimo al collasso.</p>
+          <p class="quiz__vai"><a class="link" href="#synapses">Allora guarda Synapses: dove per il sito, locandine, merch, e tanto altro sono stati avviati tutti i programmi Adobe insieme e, nonostante ciò, il computer è pure sopravvissuto.</a></p>
+        </article>
+      </div>
     </section>
   </main>
 
@@ -488,6 +604,7 @@
   <script src="js/fotocamera.js" type="module"></script>
   <script src="js/nomi-strass.js" type="module"></script>
   <script src="js/pannelli.js" defer></script>
+  <script src="js/quiz.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>
   <script src="js/bijou-asset.js" defer></script>

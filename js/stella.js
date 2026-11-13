@@ -644,6 +644,12 @@ function avvia() {
   });
 
   /* ---------- 6. Lo scroll: GSAP muove la stella, il nome, il ruolo e il menu ---------- */
+  // finché un comando non è comparso (menu, CV, tema, freccia, stelle) non risponde ai clic:
+  // si tocca solo quello che si vede. Con la tastiera invece ci si arriva lo stesso (vedi sotto)
+  const daAccendere = [...document.querySelectorAll('[data-entra]')];
+  function accendiClic() {
+    daAccendere.forEach((el) => el.classList.toggle('e-spento', parseFloat(getComputedStyle(el).opacity) < 0.6));
+  }
   function preparaScroll() {
     const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
     // senza GSAP o con "riduci movimento": composizione finale, ferma, senza pin
@@ -661,6 +667,7 @@ function avvia() {
       const tel = ctx.conditions.telefono;
       tl = gsap.timeline({
         defaults: { ease: 'none' },
+        onUpdate: accendiClic,
         scrollTrigger: {
           trigger: palcoEl,
           start: 'top top',
@@ -677,6 +684,7 @@ function avvia() {
         .fromTo('[data-entra]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out' }, 0.6);
       // sul telefono la stella lascia il posto al nome: svanisce mentre il nome entra
       if (tel) tl.to(canvas, { autoAlpha: 0, duration: 0.45, ease: 'power1.in' }, 0.05);
+      accendiClic();
     });
     document.documentElement.classList.add('con-scroll');
     // chi usa la tastiera e arriva su un link ancora nascosto: saltiamo alla fine dell'animazione
