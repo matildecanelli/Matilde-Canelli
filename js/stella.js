@@ -40,7 +40,7 @@ const REGOLA = {
     // telefono: la stella resta, appoggiata alla fine di MATILDE come sul computer
     // (stesso rapporto tra stella e nome: circa una volta e mezza l'altezza delle lettere)
     telefono: { x: 0.72, y: 0.44, scala: 0.5 },
-    verticale: { x: 0.5, y: 0.5, scala: 0.55 },   // tablet in verticale: si rimpicciolisce sul posto e svanisce
+    verticale: { x: 0.76, y: 0.33, scala: 0.42 },   // tablet in verticale: resta appoggiata alla fine di MATILDE, come sugli altri schermi
   },
   scroll: { computer: 0.9, telefono: 0.7 },   // quanto si scorre per tutta l'animazione (in schermi)
   fluidita: 0.8,                              // quanto il movimento "insegue" lo scroll (secondi; 0 = rigido)
@@ -686,9 +686,6 @@ function avvia() {
         .fromTo('.nome__riga--1', { yPercent: -40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.25)
         .fromTo('.nome__riga--2', { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.32)
         .fromTo('[data-entra]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out' }, 0.6);
-      // sul tablet in verticale la stella lascia il posto al nome: svanisce mentre il nome entra
-      // (sul telefono resta, appoggiata al nome come sul computer)
-      if (tel && !ctx.conditions.piccolo) tl.to(canvas, { autoAlpha: 0, duration: 0.45, ease: 'power1.in' }, 0.05);
       accendiClic();
     });
     document.documentElement.classList.add('con-scroll');
@@ -704,7 +701,7 @@ function avvia() {
   const lampo = document.querySelector('[data-lampo]');
   // dove sta il diamantino centrale sullo schermo (null se la stella non si vede, come sul telefono)
   function dalDiamante() {
-    if (!centrale || (stretto() && !piccolo()) || getComputedStyle(canvas).visibility === 'hidden' || +getComputedStyle(canvas).opacity < 0.5) return null;
+    if (!centrale || getComputedStyle(canvas).visibility === 'hidden' || +getComputedStyle(canvas).opacity < 0.5) return null;
     const box = canvas.getBoundingClientRect();
     const k = stella.scale.x;
     return { x: box.left + L / 2 + stella.position.x + centrale.x * k, y: box.top + A / 2 - (stella.position.y + centrale.y * k), r: Math.max(centrale.r * k, 10) };

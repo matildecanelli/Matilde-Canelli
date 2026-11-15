@@ -7,9 +7,8 @@
    - Più lo schermo è stretto, meno stelle si vedono (gradualmente, fino a 6 sul
      telefono): il cielo diventa più largo dello schermo e si trascina col pollice
      o col mouse per scoprire le altre.
-   - Sul telefono (e sugli schermi in verticale) il cielo sta nella scena, sotto il
-     nome; sul computer sta nella fascia che si apre con la freccia.
-   Si tocca una stella: si solleva col bagliore, le altre si attenuano, fa lo scoppio
+   - Il firmamento è un foglio che si apre e si chiude solo con la freccia, su ogni schermo.
+   Si tocca una stella: si solleva col bagliore, fa lo scoppio
    di stelline e da lì si apre il pannello piccolo #stella con la risposta (i testi
    sono nell'HTML), che porta a un progetto o a una scheda del sito.
    ========================================================================== */
@@ -134,23 +133,9 @@
     cielo.scrollLeft = 0;   // il browser non deve scorrere il cielo da sé
   });
 
-  /* ---------- Dove sta il cielo ----------
-     Sul telefono (e sugli schermi in verticale) va nella scena, tra il nome e il menu;
-     sul computer torna nella sua fascia, sotto il titolo. Si sposta quando cambia la finestra. */
-  const posto = document.querySelector('[data-posto-nastro]');
-  const testa = quiz.querySelector('.quiz__testa');
-  // solo i tablet in verticale: sul telefono il cielo resta nella sua fascia, come sul computer,
-  // e la freccia ci porta giù
-  const stretto = window.matchMedia('(min-width: 40.01rem) and (max-aspect-ratio: 1/1)');
-  function colloca() {
-    if (posto && stretto.matches) { if (cielo.parentElement !== posto) posto.append(cielo, mano, invito); }
-    else if (cielo.previousElementSibling !== testa) testa.after(cielo, mano, invito);
-    disponi();
-  }
-  colloca();
-  stretto.addEventListener('change', colloca);
-
-  /* ---------- Sul computer: la freccia apre la fascia e ci porta giù ---------- */
+  /* ---------- La freccia apre e chiude il firmamento (su ogni schermo) ----------
+     Il firmamento è un foglio che sale sopra la home e la copre: la pagina sotto resta ferma
+     e si esce solo ripremendo la freccia, che intanto sta in fondo girata verso l'alto. */
   const giu = document.querySelector('[data-giu]');
   if (giu) {
     // al passaggio sulla freccia compare la scritta, con uno scoppio di stelline
@@ -159,82 +144,86 @@
       const b = giu.getBoundingClientRect();
       window.scoppioStelline(b.left + b.width / 2, b.top + b.height / 2);
     });
-    // la freccia apre e chiude la fascia: aperta punta in su, chiusa punta in giù.
-    // Lo stato si ricorda per la scheda del browser: ricaricando, la fascia resta aperta
+    // lo stato si ricorda per la scheda del browser: ricaricando, il firmamento resta aperto
     const RICORDA = 'quiz-aperto';
     const giuTesto = giu.querySelector('[data-giu-testo]');
     const ricorda = (si) => { try { si ? sessionStorage.setItem(RICORDA, '1') : sessionStorage.removeItem(RICORDA); } catch (errore) { /* senza memoria, pazienza */ } };
-    // sul telefono il firmamento è un foglio sopra la home: niente scorrimento, la pagina sotto resta ferma
-    const telefono = window.matchMedia('(max-width: 40rem)');
     // la freccia vive nella scena: col foglio aperto passa sopra il foglio, chiuso torna al suo posto
     const casaGiu = giu.parentElement, dopoGiu = giu.nextSibling;
     const giuSopra = (si) => { if (si) document.body.append(giu); else casaGiu.insertBefore(giu, dopoGiu); };
-    function apri(scendi, conTastiera) {
+    // sul telefono e sugli schermi in verticale il firmamento è un foglio che sale sopra la home;
+    // sul computer è la fascia sotto la home: la pagina ci scende e lì si blocca
+    const foglio = window.matchMedia('(max-width: 40rem), (max-aspect-ratio: 1/1)');
+    const radice = document.documentElement;
+    const dopoLoScorrimento = (fatto) => {
+      let una = false;
+      const fine = () => { if (una) return; una = true; fatto(); };
+      window.addEventListener('scrollend', fine, { once: true });
+      setTimeout(fine, 1200);   // se il browser non conosce "scrollend" (o non c'era niente da scorrere)
+    };
+    function apri(conTastiera, subito) {
       quiz.classList.remove('e-chiude');
       quiz.classList.add('e-aperto');
-      if (telefono.matches) {
-        document.documentElement.classList.add('firmamento-aperto');
-        giuSopra(true);
-        giu.focus({ preventScroll: true });
-        quiz.scrollTop = 0;
-        giu.setAttribute('aria-expanded', 'true');
-        giu.setAttribute('aria-label', 'Chiudi il firmamento');
-        ricorda(true);
-        disponi();
-        if (conTastiera) requestAnimationFrame(() => stelle[0].focus({ preventScroll: true }));
+      giuSopra(true);
+      giu.focus({ preventScroll: true });
+      quiz.scrollTop = 0;
+      giu.setAttribute('aria-expanded', 'true');
+      giu.setAttribute('aria-label', 'Chiudi il firmamento');
+      if (giuTesto) giuTesto.textContent = 'Chiudi il firmamento';
+      ricorda(true);
+      disponi();
+      const alleStelle = () => { if (conTastiera) stelle[0].focus({ preventScroll: true }); };   // con la tastiera si continua dalle stelle
+      if (foglio.matches) {
+        radice.classList.add('firmamento-aperto');
+        requestAnimationFrame(alleStelle);
         return;
       }
-      giu.setAttribute('aria-expanded', 'true');
-      giu.setAttribute('aria-label', 'Chiudi il quiz e torna su');
-      if (giuTesto) giuTesto.textContent = 'Torna al nome e chiudi il firmamento';
-      ricorda(true);
-      if (window.ScrollTrigger) window.ScrollTrigger.refresh();   // la pagina adesso è più lunga
-      disponi();
-      if (!scendi) return;
+      // la fascia: la pagina si allunga, si scende fin lì e poi lo scorrimento si blocca
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
       requestAnimationFrame(() => {
-        quiz.scrollIntoView({ behavior: meno ? 'auto' : 'smooth', block: 'start' });
-        if (conTastiera) stelle[0].focus({ preventScroll: true });   // con la tastiera si continua dalle stelle
+        const blocca = () => { radice.classList.add('firmamento-aperto'); alleStelle(); };
+        if (subito || meno) { quiz.scrollIntoView({ block: 'start' }); blocca(); return; }
+        quiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        dopoLoScorrimento(blocca);
       });
     }
     function chiudi() {
       giu.setAttribute('aria-expanded', 'false');
-      giu.setAttribute('aria-label', 'Scendi al quiz: scegli la tua stella');
+      giu.setAttribute('aria-label', 'Apri il firmamento: scegli la tua stella');
       if (giuTesto) giuTesto.textContent = 'Vai al firmamento e scegli la tua stella';
       ricorda(false);
-      if (telefono.matches || document.documentElement.classList.contains('firmamento-aperto')) {
+      const rimettiFreccia = () => {
+        const aFuoco = document.activeElement === giu;
+        giuSopra(false);
+        if (aFuoco) giu.focus({ preventScroll: true });
+      };
+      if (!quiz.classList.contains('e-aperto')) return;
+      if (foglio.matches || getComputedStyle(quiz).position === 'fixed') {
         // il foglio scende e sparisce; la home è rimasta dov'era
-        const togli = () => {
-          quiz.classList.remove('e-aperto', 'e-chiude');
-          document.documentElement.classList.remove('firmamento-aperto');
-          const aFuoco = document.activeElement === giu;
-          giuSopra(false);
-          if (aFuoco) giu.focus({ preventScroll: true });
-        };
+        const togli = () => { quiz.classList.remove('e-aperto', 'e-chiude'); radice.classList.remove('firmamento-aperto'); rimettiFreccia(); };
         if (meno) { togli(); return; }
         quiz.classList.add('e-chiude');
         quiz.addEventListener('animationend', togli, { once: true });
         setTimeout(() => { if (quiz.classList.contains('e-chiude')) togli(); }, 600);
         return;
       }
-      // prima si torna su (alla scena finita), poi la fascia sparisce: niente salti
+      // la fascia: si sblocca, si torna su alla scena finita e solo dopo la fascia sparisce (niente salti)
+      radice.classList.remove('firmamento-aperto');
       const st = window.ScrollTrigger && window.ScrollTrigger.getAll()[0];
       const su = st ? st.end : 0;
-      const togli = () => { quiz.classList.remove('e-aperto'); if (window.ScrollTrigger) window.ScrollTrigger.refresh(); };
+      const togli = () => { quiz.classList.remove('e-aperto'); rimettiFreccia(); if (window.ScrollTrigger) window.ScrollTrigger.refresh(); };
       if (window.scrollY <= su + 2) { togli(); return; }
       window.scrollTo({ top: su, behavior: meno ? 'auto' : 'smooth' });
-      let fatto = false;
-      const fine = () => { if (fatto) return; fatto = true; togli(); };
-      window.addEventListener('scrollend', fine, { once: true });
-      setTimeout(fine, 1200);   // se il browser non conosce "scrollend"
+      dopoLoScorrimento(togli);
     }
     giu.addEventListener('click', (e) => {
       if (giu.getAttribute('aria-expanded') === 'true') chiudi();
-      else apri(true, e.detail === 0);
+      else apri(e.detail === 0);
     });
     // ricaricando la pagina: se era aperta, resta aperta (e il browser può tornare dov'eri)
     let eraAperto = false;
     try { eraAperto = sessionStorage.getItem(RICORDA) === '1'; } catch (errore) { /* niente */ }
-    if (eraAperto) apri(false);
+    if (eraAperto) apri(false, true);
   }
 
   /* ---------- La scelta: la stella si solleva, scoppia e da lì si apre il pannello ---------- */

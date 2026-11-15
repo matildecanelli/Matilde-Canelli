@@ -90,13 +90,9 @@
       </ul>
     </nav>
 
-    <!-- Sul telefono (e sugli schermi in verticale) il nastro delle stelle viene messo qui, tra il nome
-         e il menu, centrato in altezza (js/quiz.js lo sposta; sul computer torna nella sua fascia) -->
-    <div class="posto-nastro" data-posto-nastro data-entra></div>
-
-    <!-- Sul computer la fascia delle stelle è chiusa: si apre solo da questa freccia, che porta giù al quiz.
-         (Sul telefono il nastro sta già sotto il nome e la freccia non c'è.) -->
-    <button class="giu" type="button" aria-controls="quiz" aria-expanded="false" aria-label="Scendi al quiz: scegli la tua stella" data-giu data-entra>
+    <!-- Il firmamento è chiuso: si apre solo da questa freccia, come un foglio sopra la home,
+         e si chiude solo ripremendola (js/quiz.js). Vale su ogni schermo. -->
+    <button class="giu" type="button" aria-controls="quiz" aria-expanded="false" aria-label="Apri il firmamento: scegli la tua stella" data-giu data-entra>
       <span class="giu__testo" aria-hidden="true" data-giu-testo>Vai al firmamento e scegli la tua stella</span>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg>
     </button>

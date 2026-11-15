@@ -460,14 +460,53 @@ html:not([data-tema="chiaro"]) .menu a:hover, html:not([data-tema="chiaro"]) .me
   @keyframes giu-scende { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
 }
 html:not(.js) .giu { display: none; }
-/* telefono e schermi in verticale: il nastro c'è già sotto il nome, la freccia non serve */
-@media (max-width: 40rem), (max-aspect-ratio: 1/1) { .giu { display: none; } }
-/* sul computer la fascia resta chiusa finché non si preme la freccia */
-@media (min-width: 40.01rem) and (min-aspect-ratio: 1/1) {
-  .js .quiz:not(.e-aperto) { display: none; }
-  /* aperta, la fascia è alta uno schermo e il contenuto sta al centro: la freccia ci porta proprio lì */
-  .quiz { min-height: 100svh; justify-content: center; padding-block: var(--margine); }
+
+/* sugli schermi touch (e in verticale) non c'è il passaggio del mouse: la scritta sopra la freccia
+   si vede sempre, e sparisce quando il firmamento è aperto */
+@media (max-width: 40rem), (max-aspect-ratio: 1/1), (hover: none) {
+  .giu__testo { opacity: 1; translate: -50% 0; font-size: 0.95rem; }
+  .giu[aria-expanded="true"] .giu__testo { opacity: 0; }
 }
+
+/* ---------- Il firmamento: si entra e si esce solo con la freccia (su ogni schermo) ----------
+   Chiuso non c'è. Sul telefono e sugli schermi in verticale la freccia lo fa salire come un
+   foglio sopra la home; sul computer apre la fascia sotto la home e la pagina ci scende.
+   In tutti e due i casi poi la pagina non scorre più e si esce solo ripremendo la freccia,
+   che resta ferma in fondo girata verso l'alto (js/quiz.js). Se il contenuto è più alto
+   dello schermo, si scorre dentro il firmamento. */
+.js .quiz:not(.e-aperto) { display: none; }
+.js .quiz {
+  overflow-y: auto; overscroll-behavior: contain;
+  background: var(--fondo);
+  padding-bottom: calc(var(--margine) + 5rem);   /* il testo non finisce sotto la freccia */
+}
+/* sul computer è la fascia sotto la home, alta uno schermo: la pagina ci scende e lì si blocca */
+@media (min-width: 40.01rem) and (min-aspect-ratio: 1/1) {
+  .js .quiz { height: 100svh; }
+}
+/* telefono e schermi in verticale: un foglio che sale sopra la home */
+@media (max-width: 40rem), (max-aspect-ratio: 1/1) {
+  .js .quiz { position: fixed; inset: 0; z-index: 15; }
+}
+/* il contenuto al centro quando ci sta, dall'alto quando è più lungo (niente tagliato sopra) */
+.js .quiz > :first-child { margin-top: auto; }
+.js .quiz > :last-child { margin-bottom: auto; }
+.quiz > *, .quiz__testa > * { flex-shrink: 0; }   /* niente si schiaccia: se lo schermo è basso, si scorre */
+@media (prefers-reduced-motion: no-preference) and (max-width: 40rem), (prefers-reduced-motion: no-preference) and (max-aspect-ratio: 1/1) {
+  .js .quiz.e-aperto { animation: foglio-sale 550ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .js .quiz.e-chiude { animation: foglio-scende 400ms cubic-bezier(0.55, 0, 0.75, 0.2) forwards; }
+  @keyframes foglio-sale { from { translate: 0 100%; } }
+  @keyframes foglio-scende { to { translate: 0 100%; } }
+}
+html.firmamento-aperto, html.firmamento-aperto body { overflow: hidden; }
+/* una sfumatura in fondo: il testo che scorre sfuma prima di arrivare alla freccia */
+html.firmamento-aperto body::after {
+  content: ""; position: fixed; left: 0; right: 0; bottom: 0; z-index: 16; height: calc(var(--margine) + 5rem);
+  background: linear-gradient(transparent, var(--fondo) 55%); pointer-events: none;
+}
+/* aperto il foglio, la freccia resta ferma in fondo, sopra il foglio (visibile anche se l'ingresso non è finito) */
+.js .giu[aria-expanded="true"] { position: fixed; z-index: 17; background: var(--fondo); opacity: 1 !important; }
+.js .giu[aria-expanded="true"]:hover, .js .giu[aria-expanded="true"]:focus-visible { background: var(--colore-tema); }
 /* la fascia è aperta: la freccia non serve più */
 /* aperta la fascia, la freccia resta e si gira verso l'alto: premendola si torna su e la fascia si chiude */
 .giu svg { transition: rotate 450ms cubic-bezier(0.22, 1, 0.36, 1); }
@@ -558,23 +597,10 @@ html:not([data-tema="chiaro"]) .cielo-tel__invito { color: var(--palette-salvia-
 [data-tema="chiaro"] .cielo-tel__mano { border-color: var(--palette-salvia); }
 .cielo-tel:not(.si-trascina) + .cielo-tel__mano { display: none; }
 
-/* telefono e schermi in verticale: il cielo sta nella scena, tra il nome e il menu.
-   Titolo e testo restano nella fascia sotto, e arrivano scorrendo */
-.posto-nastro { display: none; }
+/* telefono e schermi in verticale: nel foglio titolo e testo in una colonna sola */
 @media (max-width: 40rem), (max-aspect-ratio: 1/1) {
-  .posto-nastro {
-    display: flex; flex-direction: column;
-    position: absolute; z-index: 2; left: 0; right: calc(var(--margine) + 8rem);
-    top: calc(var(--margine) + 3.5rem + 1.8 * min(21vw, 37svh) + 1rem);   /* sotto il nome */
-    bottom: var(--margine);
-  }
-  .posto-nastro .cielo-tel { flex: 1; min-height: 0; height: auto; margin: 0; }
   .quiz { padding-top: clamp(2.5rem, 8vh, 4rem); }
   .quiz__testa { grid-template-columns: minmax(0, 34rem); gap: 1rem; }
-}
-@media (max-width: 40rem) {
-  /* telefono: il nome è 25vw su due righe e il menu sta in fondo, su una riga */
-  .posto-nastro { right: 0; top: calc(var(--margine) + 5.5rem + 45vw); bottom: calc(var(--margine) + 3rem); }
 }
 
 /* il pannello piccolo con la risposta */
@@ -821,38 +847,11 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
 
   /* la freccia: in fondo alla scena, con la scritta sempre visibile (sul telefono non c'è il passaggio del mouse) */
   .giu { display: grid; }
-  .giu__testo { opacity: 1; translate: -50% 0; font-size: 0.95rem; }
-  .giu[aria-expanded="true"] .giu__testo { opacity: 0; }
-  .posto-nastro { display: none; }
 
-  /* il firmamento è un foglio che sale sopra la home: chiuso non c'è, aperto copre lo schermo,
-     la pagina sotto non scorre e si chiude solo con la freccia (js/quiz.js) */
-  .js .quiz:not(.e-aperto) { display: none; }
-  .js .quiz {
-    position: fixed; inset: 0; z-index: 15;
-    overflow-y: auto; overscroll-behavior: contain;
-    background: var(--fondo);
-    padding-bottom: calc(var(--margine) + 5rem);   /* il testo non finisce sotto la freccia */
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .js .quiz.e-aperto { animation: foglio-sale 550ms cubic-bezier(0.22, 1, 0.36, 1); }
-    .js .quiz.e-chiude { animation: foglio-scende 400ms cubic-bezier(0.55, 0, 0.75, 0.2) forwards; }
-    @keyframes foglio-sale { from { translate: 0 100%; } }
-    @keyframes foglio-scende { to { translate: 0 100%; } }
-  }
-  html.firmamento-aperto, html.firmamento-aperto body { overflow: hidden; }
-  /* aperto il foglio, la freccia resta ferma in fondo, sopra il foglio, girata verso l'alto */
-  /* una sfumatura in fondo: il testo che scorre sfuma prima di arrivare alla freccia */
-  html.firmamento-aperto body::after {
-    content: ""; position: fixed; left: 0; right: 0; bottom: 0; z-index: 16; height: calc(var(--margine) + 5rem);
-    background: linear-gradient(transparent, var(--fondo) 55%); pointer-events: none;
-  }
-  .js .giu[aria-expanded="true"] { position: fixed; z-index: 17; background: var(--fondo); opacity: 1 !important; }   /* visibile anche se l'animazione d'ingresso non è finita */
-
-  /* il firmamento: titolo, poi subito le stelle; il testo lungo dopo */
+  /* il firmamento: titolo, poi subito le stelle; il testo lungo dopo (dall'alto, non al centro) */
   .quiz { padding-top: calc(var(--margine) + 1rem); }
-  /* nel foglio niente si schiaccia: se lo schermo è basso, si scorre */
-  .quiz > *, .quiz__testa > * { flex-shrink: 0; }
+  .js .quiz > :first-child { margin-top: 0; }
+  .js .quiz > :last-child { margin-bottom: 0; }
   .quiz__testa { display: contents; }
   .quiz__titoli { order: 1; }
   .cielo-tel { order: 2; }
