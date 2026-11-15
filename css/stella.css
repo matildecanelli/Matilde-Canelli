@@ -841,10 +841,17 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
   }
   html.firmamento-aperto, html.firmamento-aperto body { overflow: hidden; }
   /* aperto il foglio, la freccia resta ferma in fondo, sopra il foglio, girata verso l'alto */
-  .js .giu[aria-expanded="true"] { position: fixed; z-index: 16; background: var(--fondo); opacity: 1 !important; }   /* visibile anche se l'animazione d'ingresso non è finita */
+  /* una sfumatura in fondo: il testo che scorre sfuma prima di arrivare alla freccia */
+  html.firmamento-aperto body::after {
+    content: ""; position: fixed; left: 0; right: 0; bottom: 0; z-index: 16; height: calc(var(--margine) + 5rem);
+    background: linear-gradient(transparent, var(--fondo) 55%); pointer-events: none;
+  }
+  .js .giu[aria-expanded="true"] { position: fixed; z-index: 17; background: var(--fondo); opacity: 1 !important; }   /* visibile anche se l'animazione d'ingresso non è finita */
 
   /* il firmamento: titolo, poi subito le stelle; il testo lungo dopo */
   .quiz { padding-top: calc(var(--margine) + 1rem); }
+  /* nel foglio niente si schiaccia: se lo schermo è basso, si scorre */
+  .quiz > *, .quiz__testa > * { flex-shrink: 0; }
   .quiz__testa { display: contents; }
   .quiz__titoli { order: 1; }
   .cielo-tel { order: 2; }
