@@ -160,7 +160,7 @@
 .pannello__testo { grid-column: 1 / 6; grid-row: 1 / span 2; display: grid; gap: 1.5rem; align-content: start; }
 .pannello__testo--largo { grid-column: 1 / 9; max-width: 44rem; }
 .pannello__titolo {
-  font-weight: 900; font-size: var(--t-titolo);
+  font-weight: 800; font-size: var(--t-titolo);
   line-height: 1; letter-spacing: -0.04em;
   text-wrap: balance;
   outline: none;
@@ -168,7 +168,7 @@
 .pannello__titolo span { display: block; }
 .pannello__nome { color: var(--titolo); margin-top: 0.06em; }
 .pannello__frase { font-size: var(--t-frase); font-weight: 700; line-height: 1.3; }
-.pannello__sotto { font-size: var(--t-frase); font-weight: 900; letter-spacing: -0.02em; margin-top: 1rem; }
+.pannello__sotto { font-size: var(--t-frase); font-weight: 800; letter-spacing: -0.02em; margin-top: 1rem; }
 
 .scheda { display: grid; gap: 1rem; }
 .scheda div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 1rem; }

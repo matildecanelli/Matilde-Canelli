@@ -25,7 +25,7 @@ function fioritura(tela, dati, opzioni) {
   const L = dati.colonne * CW, A = dati.righe * CH;
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   tela.width = Math.round(L * dpr); tela.height = Math.round(A * dpr);
-  const FONDO = dati.fondo || '#201D24';
+  const FONDO = dati.fondo || '#161514';
   const meno = opzioni.menoMovimento != null ? opzioni.menoMovimento : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // le celle: quelle ferme (steli, foglie, boccioli, fiorellini) e quelle dei gigli che si aprono
@@ -99,7 +99,7 @@ function paginaBouquet(dati) {
   const descr = 'Un bouquet di gigli bianchi disegnato con caratteri monospace colorati: petali bianchi e avorio, boccioli verdi chiari, foglie e steli verdi, piccoli fiori bianchi. All\'apertura i gigli fioriscono uno dopo l\'altro.';
   return '<!doctype html>\n<html lang="it">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
     + '<title>Il bouquet di Bijou</title>\n<style>\n'
-    + 'html,body{margin:0;min-height:100%;background:#201D24;color:#F4F0E7;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}\n'
+    + 'html,body{margin:0;min-height:100%;background:#161514;color:#F4F0E7;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}\n'
     + 'main{min-height:100vh;display:grid;place-items:center;align-content:center;gap:1.25rem;padding:1.5rem;box-sizing:border-box;text-align:center}\n'
     + 'h1{margin:0;font-size:1.25rem;font-weight:700}\n'
     + 'canvas{display:block;width:min(92vw,60vh,640px);height:auto}\n'

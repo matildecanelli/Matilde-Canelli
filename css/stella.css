@@ -321,8 +321,8 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
    3. --fondo, --chiaro, --viola...: i nomi che il resto del CSS usava già,
       ora collegati ai token (così non serve riscrivere tutto il resto).
    Contrasti verificati (WCAG AA):
-   - scuro: testo avorio su quasi nero 14,6:1; lilla (link, accento) 7,3:1;
-     testo secondario 7,4:1; quasi nero sui pulsanti lilla 7,3:1.
+   - scuro (fondo #161514): testo avorio 16:1 (17,5:1 sui pannelli); lilla (link, accento) 8:1;
+     testo secondario 12:1; verde salvia chiaro 9,7:1; quasi nero sui pulsanti lilla 7,3:1.
    - chiaro: testo quasi nero sulla lavanda 15,5:1; viola (link, accento) 5,7:1;
      testo secondario 6,2:1; bianco sui pulsanti viola 6,4:1.
    - il salvia (2,9:1 su avorio) e il lilla nel tema chiaro (2:1) sono solo
@@ -331,7 +331,8 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
 :root {
   --palette-bianco: #FFFFFF;
   --palette-avorio: #F4F0E7;
-  --palette-nero: #201D24;        /* quasi nero violaceo */
+  --palette-nero: #201D24;        /* quasi nero violaceo: il testo del tema chiaro e il testo sui pulsanti */
+  --palette-notte: #161514;       /* tema scuro: il fondo, un quasi nero neutro appena caldo (va con l'avorio) */
   --palette-viola: #705094;       /* il colore identitario */
   --palette-lilla: #B9A2D2;
   --palette-salvia: #7D927D;      /* accento occasionale */
@@ -340,13 +341,13 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
   --palette-lavanda-scura: #E6DDF0; /* tema chiaro: il fondo della pagina, un tono sotto i pannelli */
 
   /* tema scuro (di base) */
-  --colore-fondo: var(--palette-nero);
-  --colore-superficie: color-mix(in srgb, var(--palette-viola) 14%, var(--palette-nero));   /* i pannelli: il quasi nero appena velato di viola */
+  --colore-fondo: var(--palette-notte);
+  --colore-superficie: #0D0D0C;                     /* i pannelli: un tono sotto il fondo, nero quasi pieno e senza tinta (schiarire col l'avorio lo rendeva fangoso) */
   --colore-testo: var(--palette-avorio);
-  --colore-testo-tenue: color-mix(in srgb, var(--palette-avorio) 68%, var(--palette-nero));
+  --colore-testo-tenue: color-mix(in srgb, var(--palette-avorio) 86%, var(--palette-notte));   /* secondario, ma ben leggibile */
   --colore-accento: var(--palette-lilla);           /* sul fondo scuro il viola pieno si perde: l'accento è il lilla */
   --colore-su-accento: var(--palette-nero);         /* il testo sopra l'accento (pulsanti) */
-  --colore-separatore: color-mix(in srgb, var(--palette-avorio) 18%, var(--palette-nero));
+  --colore-separatore: color-mix(in srgb, var(--palette-avorio) 18%, var(--palette-notte));
   /* le costellazioni: pieni, contorni e intrecci */
   --stella-pieno: var(--palette-lilla);
   --stella-contorno: var(--palette-salvia);
@@ -738,7 +739,7 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
 
 /* il bouquet in ASCII: sul suo fondo scuro in tutti e due i temi, così i petali bianchi si leggono.
    È un canvas: le celle monospace restano nelle loro proporzioni e non vanno mai a capo */
-.bijou__bouquet { display: block; width: min(100%, 24rem); height: auto; border-radius: 1.25rem; background: #201D24; }
+.bijou__bouquet { display: block; width: min(100%, 24rem); height: auto; border-radius: 1.25rem; background: var(--palette-notte); }
 .bijou__azioni { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
 .bijou__bottone--secondario { background: transparent; color: var(--chiaro); border-color: var(--tenue); }
 
