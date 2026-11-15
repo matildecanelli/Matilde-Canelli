@@ -139,7 +139,9 @@
      sul computer torna nella sua fascia, sotto il titolo. Si sposta quando cambia la finestra. */
   const posto = document.querySelector('[data-posto-nastro]');
   const testa = quiz.querySelector('.quiz__testa');
-  const stretto = window.matchMedia('(max-width: 40rem), (max-aspect-ratio: 1/1)');
+  // solo i tablet in verticale: sul telefono il cielo resta nella sua fascia, come sul computer,
+  // e la freccia ci porta giù
+  const stretto = window.matchMedia('(min-width: 40.01rem) and (max-aspect-ratio: 1/1)');
   function colloca() {
     if (posto && stretto.matches) { if (cielo.parentElement !== posto) posto.append(cielo, mano, invito); }
     else if (cielo.previousElementSibling !== testa) testa.after(cielo, mano, invito);

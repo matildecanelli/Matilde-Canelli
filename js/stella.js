@@ -37,7 +37,10 @@ const REGOLA = {
   // e quanto rimpicciolisce (1 = uguale)
   stellaFine: {
     computer: { x: 0.74, y: 0.7, scala: 0.6 },
-    telefono: { x: 0.5, y: 0.5, scala: 0.55 },   // sul telefono si rimpicciolisce sul posto e svanisce
+    // telefono: la stella resta, appoggiata alla fine di MATILDE come sul computer
+    // (stesso rapporto tra stella e nome: circa una volta e mezza l'altezza delle lettere)
+    telefono: { x: 0.72, y: 0.44, scala: 0.5 },
+    verticale: { x: 0.5, y: 0.5, scala: 0.55 },   // tablet in verticale: si rimpicciolisce sul posto e svanisce
   },
   scroll: { computer: 0.9, telefono: 0.7 },   // quanto si scorre per tutta l'animazione (in schermi)
   fluidita: 0.8,                              // quanto il movimento "insegue" lo scroll (secondi; 0 = rigido)
@@ -76,6 +79,7 @@ function avvia() {
   motore.setClearColor(0x000000, 0);           // trasparente: dietro c'è il nero della pagina e il nome
   motore.outputColorSpace = THREE.SRGBColorSpace;
   const stretto = () => window.innerWidth < 640 || window.innerWidth / window.innerHeight < 1;
+  const piccolo = () => window.innerWidth < 640;   // il telefono vero e proprio
 
   // Camera ortografica in pixel: un pixel dello schermo è un'unità della scena
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -3000, 3000);   // profonda: la stella ora è in 3D
@@ -532,7 +536,7 @@ function avvia() {
   let L = 0, A = 0, altaStella = 0;
   function piazzaStella() {
     const tel = stretto();
-    const fine = tel ? REGOLA.stellaFine.telefono : REGOLA.stellaFine.computer;
+    const fine = tel ? (piccolo() ? REGOLA.stellaFine.telefono : REGOLA.stellaFine.verticale) : REGOLA.stellaFine.computer;
     const k = stato.avanzamento;
     const x = THREE.MathUtils.lerp(0, (fine.x - 0.5) * L, k);
     const y = THREE.MathUtils.lerp(0, (0.5 - fine.y) * A, k);
@@ -663,7 +667,7 @@ function avvia() {
     // quando cambia la finestra o si ruota il telefono, e pulisce quella vecchia.
     const mm = gsap.matchMedia();
     let tl = null;
-    mm.add({ telefono: '(max-width: 639px), (max-aspect-ratio: 1/1)', computer: '(min-width: 640px) and (min-aspect-ratio: 1/1)' }, (ctx) => {
+    mm.add({ telefono: '(max-width: 639px), (max-aspect-ratio: 1/1)', computer: '(min-width: 640px) and (min-aspect-ratio: 1/1)', piccolo: '(max-width: 639px)' }, (ctx) => {
       const tel = ctx.conditions.telefono;
       tl = gsap.timeline({
         defaults: { ease: 'none' },
@@ -682,8 +686,9 @@ function avvia() {
         .fromTo('.nome__riga--1', { yPercent: -40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.25)
         .fromTo('.nome__riga--2', { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.32)
         .fromTo('[data-entra]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out' }, 0.6);
-      // sul telefono la stella lascia il posto al nome: svanisce mentre il nome entra
-      if (tel) tl.to(canvas, { autoAlpha: 0, duration: 0.45, ease: 'power1.in' }, 0.05);
+      // sul tablet in verticale la stella lascia il posto al nome: svanisce mentre il nome entra
+      // (sul telefono resta, appoggiata al nome come sul computer)
+      if (tel && !ctx.conditions.piccolo) tl.to(canvas, { autoAlpha: 0, duration: 0.45, ease: 'power1.in' }, 0.05);
       accendiClic();
     });
     document.documentElement.classList.add('con-scroll');
@@ -699,7 +704,7 @@ function avvia() {
   const lampo = document.querySelector('[data-lampo]');
   // dove sta il diamantino centrale sullo schermo (null se la stella non si vede, come sul telefono)
   function dalDiamante() {
-    if (!centrale || stretto() || getComputedStyle(canvas).visibility === 'hidden' || +getComputedStyle(canvas).opacity < 0.5) return null;
+    if (!centrale || (stretto() && !piccolo()) || getComputedStyle(canvas).visibility === 'hidden' || +getComputedStyle(canvas).opacity < 0.5) return null;
     const box = canvas.getBoundingClientRect();
     const k = stella.scale.x;
     return { x: box.left + L / 2 + stella.position.x + centrale.x * k, y: box.top + A / 2 - (stella.position.y + centrale.y * k), r: Math.max(centrale.r * k, 10) };

@@ -541,7 +541,6 @@ html:not(.js) .giu { display: none; }
 [data-tema="chiaro"] .quiz__stella:hover svg, [data-tema="chiaro"] .quiz__stella:focus-visible svg, [data-tema="chiaro"] .quiz__stella.scelta svg {
   filter: drop-shadow(0 0 0.9rem rgb(255 255 255 / 0.9)) drop-shadow(0 0 2.2rem rgb(255 255 255 / 0.7));
 }
-.cielo-tel.e-scelto .quiz__stella:not(.scelta) { opacity: 0.35; }
 .quiz__stella:focus-visible { outline: 2px solid var(--chiaro); outline-offset: 2px; border-radius: 50%; }   /* l'anello del focus è tondo, attorno alla stella */
 @media (prefers-reduced-motion: reduce) { .quiz__stella { transition: none; } }
 
@@ -802,3 +801,37 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
 .pannello--piccolo .elenco-progetti { grid-column: 1 / -1; justify-self: center; width: max-content; max-width: 100%; }
 .pannello--piccolo .elenco-progetti__nome { font-size: clamp(2.6rem, 1rem + 5vw, 5.5rem); }
 .js .pannello--piccolo .pannello__chiudi { top: calc(var(--riquadro-sopra, 0px) + 0.75rem); right: calc(var(--riquadro-lato, 0px) + 0.75rem); }
+
+
+/* ---------- La home sul telefono ----------
+   La stessa composizione del computer, in verticale: il nome grande, la stella di strass
+   appoggiata alla fine di MATILDE (stesso rapporto tra stella e lettere), il menu accanto
+   alla stella dove arriva il pollice. La scena non riempie tutto lo schermo: in fondo
+   affiora già il firmamento e la freccia sta sul bordo, così si vede dove porta. */
+@media (max-width: 40rem) {
+  /* la scena resta alta uno schermo (all'inizio la stella è sola), ma il firmamento risale
+     di un terzo: a fine animazione affiora in fondo, sotto la freccia */
+  .js .quiz { margin-top: -30svh; }
+  .azioni { justify-content: flex-start; gap: 0.25rem 1.1rem; }   /* i download a sinistra, il tema a destra */
+  .tema { margin-left: auto; }
+  .ruolo { top: calc(var(--margine) + 3.6rem); }
+  .nome { top: calc(var(--margine) + 5.6rem); font-size: 28vw; }
+
+  .menu { left: var(--margine); right: auto; bottom: auto; top: calc(var(--margine) + 5.6rem + 2 * 0.9 * 28vw + 1.25rem); }
+  .menu ul { display: grid; justify-items: start; gap: 0; }
+  .menu a { font-size: 1.375rem; min-height: 2.75rem; }
+
+  /* la freccia: sul bordo tra la scena e il firmamento */
+  .giu { display: grid; }
+  .js .giu { bottom: calc(30svh + 0.5rem); }
+  .posto-nastro { display: none; }
+
+  /* il firmamento: titolo, poi subito le stelle; il testo lungo dopo */
+  .quiz { padding-top: 1.25rem; }
+  .quiz__testa { display: contents; }
+  .quiz__titoli { order: 1; }
+  .cielo-tel { order: 2; }
+  .cielo-tel__mano { order: 3; }
+  .cielo-tel__invito { order: 4; }
+  .quiz__nota { order: 5; margin-top: 2.5rem; }
+}
