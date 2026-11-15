@@ -164,8 +164,26 @@
     const RICORDA = 'quiz-aperto';
     const giuTesto = giu.querySelector('[data-giu-testo]');
     const ricorda = (si) => { try { si ? sessionStorage.setItem(RICORDA, '1') : sessionStorage.removeItem(RICORDA); } catch (errore) { /* senza memoria, pazienza */ } };
+    // sul telefono il firmamento è un foglio sopra la home: niente scorrimento, la pagina sotto resta ferma
+    const telefono = window.matchMedia('(max-width: 40rem)');
+    // la freccia vive nella scena: col foglio aperto passa sopra il foglio, chiuso torna al suo posto
+    const casaGiu = giu.parentElement, dopoGiu = giu.nextSibling;
+    const giuSopra = (si) => { if (si) document.body.append(giu); else casaGiu.insertBefore(giu, dopoGiu); };
     function apri(scendi, conTastiera) {
+      quiz.classList.remove('e-chiude');
       quiz.classList.add('e-aperto');
+      if (telefono.matches) {
+        document.documentElement.classList.add('firmamento-aperto');
+        giuSopra(true);
+        giu.focus({ preventScroll: true });
+        quiz.scrollTop = 0;
+        giu.setAttribute('aria-expanded', 'true');
+        giu.setAttribute('aria-label', 'Chiudi il firmamento');
+        ricorda(true);
+        disponi();
+        if (conTastiera) requestAnimationFrame(() => stelle[0].focus({ preventScroll: true }));
+        return;
+      }
       giu.setAttribute('aria-expanded', 'true');
       giu.setAttribute('aria-label', 'Chiudi il quiz e torna su');
       if (giuTesto) giuTesto.textContent = 'Torna al nome e chiudi il firmamento';
@@ -183,6 +201,21 @@
       giu.setAttribute('aria-label', 'Scendi al quiz: scegli la tua stella');
       if (giuTesto) giuTesto.textContent = 'Vai al firmamento e scegli la tua stella';
       ricorda(false);
+      if (telefono.matches || document.documentElement.classList.contains('firmamento-aperto')) {
+        // il foglio scende e sparisce; la home è rimasta dov'era
+        const togli = () => {
+          quiz.classList.remove('e-aperto', 'e-chiude');
+          document.documentElement.classList.remove('firmamento-aperto');
+          const aFuoco = document.activeElement === giu;
+          giuSopra(false);
+          if (aFuoco) giu.focus({ preventScroll: true });
+        };
+        if (meno) { togli(); return; }
+        quiz.classList.add('e-chiude');
+        quiz.addEventListener('animationend', togli, { once: true });
+        setTimeout(() => { if (quiz.classList.contains('e-chiude')) togli(); }, 600);
+        return;
+      }
       // prima si torna su (alla scena finita), poi la fascia sparisce: niente salti
       const st = window.ScrollTrigger && window.ScrollTrigger.getAll()[0];
       const su = st ? st.end : 0;
