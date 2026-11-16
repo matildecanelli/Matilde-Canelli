@@ -595,6 +595,7 @@ function avvia() {
   /* ---------- Il disegno ---------- */
   let fermo = false;
   let luceAuto = true;
+  const dito = { punto: new THREE.Vector2(), quando: -10 };   // l'ultimo tocco col dito, e quando
   let ultimo = performance.now();
   let inizio = -1;
   function disegna(adesso) {
@@ -606,7 +607,15 @@ function avvia() {
       tempo.value = t;
       uniformi.uComparsa.value = Math.min(2, (t - inizio) / REGOLA.comparsa);
     }
-    if (luceAuto && !menoMovimento) uniformi.uPuntatore.value.set(stella.position.x + Math.cos(t * 0.5) * altaStella * 0.4, stella.position.y + Math.sin(t * 0.7) * altaStella * 0.3);
+    if (luceAuto && !menoMovimento) {
+      // senza mouse la luce gira da sola intorno alla stella; col dito (telefono) va dove si è
+      // toccato, ci resta un poco e poi torna piano a girare da sola
+      const auto = new THREE.Vector2(stella.position.x + Math.cos(t * 0.5) * altaStella * 0.4, stella.position.y + Math.sin(t * 0.7) * altaStella * 0.3);
+      const dopo = t - dito.quando;
+      const peso = dopo < 2.5 ? 1 : Math.max(0, 1 - (dopo - 2.5) / 2);
+      auto.lerp(dito.punto, peso);
+      uniformi.uPuntatore.value.lerp(auto, Math.min(1, dt * 5));
+    }
     nuoviColori(t);
     const k = menoMovimento ? 1 : Math.min(1, dt * 2.5);
     uniformi.uNero.value += (neroVoluto - uniformi.uNero.value) * Math.min(1, dt * 3);   // il nero arriva in mezzo secondo circa
@@ -632,12 +641,21 @@ function avvia() {
     requestAnimationFrame(passo);
   }
 
-  window.addEventListener('pointermove', (e) => {
-    luceAuto = false;
+  // il mouse: la luce e la stella lo seguono. Il dito (telefono, tablet): un tocco o un
+  // trascinamento manda la stella in quella direzione, poi torna a muoversi da sola
+  const segui = (e) => {
     const box = canvas.getBoundingClientRect();
-    uniformi.uPuntatore.value.set(e.clientX - box.left - L / 2, box.top + A / 2 - e.clientY);
+    const x = e.clientX - box.left - L / 2, y = box.top + A / 2 - e.clientY;
+    if (e.pointerType === 'mouse') {
+      luceAuto = false;
+      uniformi.uPuntatore.value.set(x, y);
+    } else {
+      dito.punto.set(x, y); dito.quando = performance.now() / 1000;
+    }
     if (menoMovimento) disegna(performance.now());
-  });
+  };
+  window.addEventListener('pointermove', segui, { passive: true });
+  window.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') segui(e); }, { passive: true });
   voci.filter((v) => v.progetto && v.colore).forEach((v) => {
     const su = () => { fisso = new THREE.Color(v.colore); };
     const giu = () => { fisso = null; prossimoCambio = 0; };

@@ -133,6 +133,11 @@
 /* Quando un pannello è aperto, la scena dietro si sfoca e si spegne */
 .palco { transition: filter 600ms ease, opacity 600ms ease; }
 .palco[inert] { filter: blur(10px); opacity: 0.35; }
+/* anche il firmamento, che sta fuori dalla scena (sul telefono è il foglio sopra la home):
+   senza questo, dietro la risposta della stella il cielo restava nitido */
+.quiz, body > .giu { transition: filter 600ms ease, opacity 600ms ease; }
+html:has(.palco[inert]) .quiz { filter: blur(10px) brightness(0.4); }   /* si spegne col filtro: con l'opacità si vedrebbe la home sotto il foglio */
+html:has(.palco[inert]) body > .giu { filter: blur(10px); opacity: 0.35 !important; }   /* !important: la freccia aperta ha opacity 1 !important */
 
 /* Lo strato colorato: il colore della particella che si allarga, poi svanisce */
 .pannello::before {

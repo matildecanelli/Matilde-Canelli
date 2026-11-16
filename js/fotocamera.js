@@ -47,6 +47,7 @@ function prepara() {
   } catch (errore) {
     return;                  // senza WebGL resta la foto della fotocamera
   }
+  figura.classList.add('in-3d');   // c'è WebGL: niente foto, si aspetta l'oggetto 3D
   motore.setClearColor(0x000000, 0);
   motore.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -364,7 +365,7 @@ function prepara() {
     const adesso = performance.now(), dt = Math.max(1, adesso - stato.ultimoT) / 1000;
     const dx = e.clientX - stato.ultimaX, dy = e.clientY - stato.ultimaY;
     stato.angolo += dx * REGOLA.trascina;
-    stato.velocita = (dx * REGOLA.trascina) / dt;
+    stato.velocita = Math.max(-REGOLA.giroDaSola * 12, Math.min(REGOLA.giroDaSola * 12, (dx * REGOLA.trascina) / dt));   // con un tetto: col dito i movimenti arrivano a pochi ms l'uno dall'altro
     stato.inclina = Math.max(-0.3, Math.min(0.3, stato.inclina + dy * REGOLA.trascina * 0.5));
     stato.ultimaX = e.clientX; stato.ultimaY = e.clientY; stato.ultimoT = adesso;
     aggiornaValore();
@@ -373,12 +374,13 @@ function prepara() {
   const lascia = () => {
     if (!stato.preso) return;
     stato.preso = false; stato.tocco = performance.now() / 1000;
-    if (menoMovimento) stato.velocita = 0;
+    if (menoMovimento || performance.now() - stato.ultimoT > 80) stato.velocita = 0;   // fermo prima di lasciare: niente spinta
     palco.classList.remove('e-presa');
     aggiornaValore();
   };
   palco.addEventListener('pointerup', lascia);
-  palco.addEventListener('pointercancel', lascia);
+  // il browser si è preso il gesto (sul telefono: si stava scorrendo la pagina), quindi niente spinta
+  palco.addEventListener('pointercancel', () => { stato.velocita = 0; lascia(); });
 
   palco.addEventListener('keydown', (e) => {
     palco.classList.remove('e-col-mouse');
@@ -447,7 +449,7 @@ function prepara() {
       pronta = true;
       figura.classList.add('e-3d');
       if (visibile && misura()) { disegna(performance.now()); sveglia(); }
-    }).catch(() => { /* se le foto non arrivano, resta l'immagine ferma */ });
+    }).catch(() => figura.classList.remove('in-3d'));   // se le foto non arrivano, resta l'immagine ferma
   }
 
   new IntersectionObserver(([voce]) => {
