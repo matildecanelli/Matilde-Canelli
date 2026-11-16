@@ -397,7 +397,7 @@ html { scrollbar-color: var(--separatore) var(--fondo); }
 .menu a:hover, .menu a:focus-visible { color: var(--viola); }
 /* nel tema scuro le voci del menu sono verdi (salvia chiaro), non grigie */
 html:not([data-tema="chiaro"]) .menu a { color: var(--palette-salvia-chiaro); }
-html:not([data-tema="chiaro"]) .quiz__sotto, html:not([data-tema="chiaro"]) .quiz__nota { color: var(--palette-salvia-chiaro); }   /* il testo della fascia delle stelle, verde come il menu */
+html:not([data-tema="chiaro"]) .quiz__sotto { color: var(--palette-salvia-chiaro); }   /* il sottotitolo della fascia delle stelle, verde come il menu */
 html:not([data-tema="chiaro"]) .menu a:hover, html:not([data-tema="chiaro"]) .menu a:focus-visible { color: var(--chiaro); }
 .scheda__risultato dt { color: var(--viola); }
 .ritratto__scritta { color: var(--palette-viola); }   /* sulla foto chiara: lo stesso viola nei due temi */
@@ -487,11 +487,11 @@ html:not(.js) .giu { display: none; }
 .js .quiz {
   overflow-y: auto; overscroll-behavior: contain;
   background: var(--fondo);
-  padding-bottom: calc(var(--margine) + 5rem);   /* il testo non finisce sotto la freccia */
+  padding-top: calc(var(--margine) + 5rem);      /* il contenuto parte sotto la freccia, che sta in alto */
 }
 /* sul computer è la fascia sotto la home, alta uno schermo: la pagina ci scende e lì si blocca */
 @media (min-width: 40.01rem) and (min-aspect-ratio: 1/1) {
-  .js .quiz { height: 100svh; }
+  .js .quiz { height: 100svh; padding-top: clamp(2.5rem, 6vh, 5rem); padding-bottom: clamp(1.5rem, 4vh, 3rem); }   /* la freccia sta al centro, tra titolo e testo: non serve spazio sopra */
 }
 /* telefono e schermi in verticale: un foglio che sale sopra la home */
 @media (max-width: 40rem), (max-aspect-ratio: 1/1) {
@@ -508,13 +508,19 @@ html:not(.js) .giu { display: none; }
   @keyframes foglio-scende { to { translate: 0 100%; } }
 }
 html.firmamento-aperto, html.firmamento-aperto body { overflow: hidden; }
-/* una sfumatura in fondo: il testo che scorre sfuma prima di arrivare alla freccia */
+/* una sfumatura in alto: il testo che scorre sfuma prima di arrivare alla freccia (dove il foglio scorre:
+   telefono e schermi in verticale; sul computer il testo sta accanto alla freccia e non va coperto) */
+@media (max-width: 40rem), (max-aspect-ratio: 1/1) {
 html.firmamento-aperto body::after {
-  content: ""; position: fixed; left: 0; right: 0; bottom: 0; z-index: 16; height: calc(var(--margine) + 5rem);
-  background: linear-gradient(transparent, var(--fondo) 55%); pointer-events: none;
+  content: ""; position: fixed; left: 0; right: 0; top: 0; z-index: 16; height: calc(var(--margine) + 4.5rem);
+  background: linear-gradient(var(--fondo) 55%, transparent); pointer-events: none;
 }
-/* aperto il foglio, la freccia resta ferma in fondo, sopra il foglio (visibile anche se l'ingresso non è finito) */
-.js .giu[aria-expanded="true"] { position: fixed; z-index: 17; background: var(--fondo); opacity: 1 !important; }
+}
+/* aperto il foglio, la freccia sale in alto al centro e resta ferma lì, sopra il foglio
+   (visibile anche se l'ingresso non è finito). La scritta "Chiudi il firmamento" compare
+   sotto, solo al passaggio del mouse */
+.js .giu[aria-expanded="true"] { position: fixed; z-index: 17; top: var(--margine); bottom: auto; background: var(--fondo); opacity: 1 !important; }
+.js .giu[aria-expanded="true"] .giu__testo { bottom: auto; top: calc(100% + 0.7rem); }
 .js .giu[aria-expanded="true"]:hover, .js .giu[aria-expanded="true"]:focus-visible { background: var(--colore-tema); }
 /* la fascia è aperta: la freccia non serve più */
 /* aperta la fascia, la freccia resta e si gira verso l'alto: premendola si torna su e la fascia si chiude */
@@ -535,7 +541,7 @@ html.firmamento-aperto body::after {
 }
 /* titolo a sinistra e testo a destra, in due colonne: il testo sta nella sua colonna, allineato
    al centro del titolo, e va a capo in modo equilibrato (text-wrap: pretty: niente parole sole) */
-.quiz__testa { display: grid; grid-template-columns: minmax(0, 1fr) minmax(17rem, 32rem); align-items: center; gap: 1.5rem clamp(2rem, 5vw, 5rem); }
+.quiz__testa { display: grid; grid-template-columns: minmax(0, 1fr) minmax(17rem, 28rem); align-items: end; gap: 1.5rem clamp(2rem, 5vw, 5rem); }
 .quiz__titoli { flex: none; }
 .quiz__domanda {
   margin: 0;
@@ -543,8 +549,10 @@ html.firmamento-aperto body::after {
   font-size: clamp(2.2rem, 1rem + 3.2vw, 5rem); line-height: 0.95; color: var(--colore-nome, var(--chiaro));
 }
 .quiz__sotto { margin: 0.4rem 0 0; font-size: 1rem; color: var(--tenue); }
-.quiz__nota { font-size: 0.875rem; line-height: 1.55; color: var(--tenue); text-wrap: pretty; hyphens: manual; }
-.quiz__nota p { margin: 0 0 0.5em; }
+/* il testo di Matilde: chiaro, non verde, a una misura comoda; l'ultima frase è la battuta finale */
+.quiz__nota { font-size: 0.9375rem; line-height: 1.6; color: var(--chiaro); text-wrap: pretty; hyphens: manual; }
+.quiz__nota p { margin: 0 0 0.9em; }
+.quiz__nota p:last-child { font-weight: 700; color: var(--colore-tema); }
 .quiz__nota p:last-child { margin-bottom: 0; }
 
 /* ---------- Il firmamento (js/quiz.js) ----------
@@ -585,7 +593,7 @@ html.firmamento-aperto body::after {
    bagliore bianco molto morbido e sfocato; scelta una stella, le altre si attenuano */
 .quiz__stella:hover, .quiz__stella:focus-visible, .quiz__stella.scelta { transform: translateY(-0.6rem); }
 .quiz__stella:hover svg, .quiz__stella:focus-visible svg, .quiz__stella.scelta svg {
-  filter: drop-shadow(0 0 0.9rem rgb(255 255 255 / 0.32)) drop-shadow(0 0 2.2rem rgb(255 255 255 / 0.18));
+  filter: drop-shadow(0 0 0.35rem rgb(255 255 255 / 0.55)) drop-shadow(0 0 1.1rem rgb(255 255 255 / 0.45)) drop-shadow(0 0 2.8rem rgb(255 255 255 / 0.3));
 }
 [data-tema="chiaro"] .quiz__stella:hover svg, [data-tema="chiaro"] .quiz__stella:focus-visible svg, [data-tema="chiaro"] .quiz__stella.scelta svg {
   filter: drop-shadow(0 0 0.9rem rgb(255 255 255 / 0.9)) drop-shadow(0 0 2.2rem rgb(255 255 255 / 0.7));
@@ -593,7 +601,7 @@ html.firmamento-aperto body::after {
 .quiz__stella:focus-visible { outline: 2px solid var(--chiaro); outline-offset: 2px; border-radius: 50%; }   /* l'anello del focus è tondo, attorno alla stella */
 @media (prefers-reduced-motion: reduce) { .quiz__stella { transition: none; } }
 
-.cielo-tel__invito { flex: none; margin: 0.5rem 0 0; text-align: center; font-size: 0.8125rem; color: var(--tenue); }
+.cielo-tel__invito { flex: none; margin: 1rem 0 0; text-align: center; font-size: 0.8125rem; color: var(--tenue); }
 html:not([data-tema="chiaro"]) .cielo-tel__invito { color: var(--palette-salvia-chiaro); }
 /* il suggerimento "trascina il cielo": sotto il cielo, centrato, sempre visibile quando il cielo
    è più largo dello schermo (ci sono altre stelle da scoprire). Sul computer grande non c'è */
