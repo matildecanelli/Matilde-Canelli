@@ -364,13 +364,18 @@
   }
 
   function chiudi(pannello, { senzaAnimazione = false } = {}) {
+    let finito = false;
     const fine = () => {
+      if (finito) return;
+      finito = true;
+      // se nel frattempo si è aperto un altro pannello, non lo tocchiamo
+      if (aperto === pannello) return;
       pannello.classList.remove('e-aperto');
       pannello.removeAttribute('role');
       pannello.removeAttribute('aria-modal');
       pannello.getAnimations().forEach((a) => a.cancel());
       pannello.style.clipPath = '';
-      palco.inert = false;
+      if (!aperto) palco.inert = false;
       if (window.palco) { window.palco.riparti(); window.palco.riforma(pannello.id); }
       if (ultimoAttivatore && document.contains(ultimoAttivatore)) ultimoAttivatore.focus({ preventScroll: true });
     };
@@ -386,6 +391,10 @@
       { duration: 700, easing: CURVA, fill: 'forwards' }
     );
     animazione.onfinish = fine;
+    animazione.oncancel = fine;
+    // rete di sicurezza: se l'animazione non arriva in fondo (scheda in pausa mentre parte
+    // un download, telefono che sospende la pagina), la scena dietro torna comunque usabile
+    setTimeout(fine, 900);
   }
 
   /* ---------- L'indirizzo comanda: #imaze apre Imaze, niente chiude tutto ---------- */

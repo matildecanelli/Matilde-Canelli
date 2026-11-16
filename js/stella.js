@@ -707,6 +707,10 @@ function avvia() {
       accendiClic();
     });
     document.documentElement.classList.add('con-scroll');
+    // ricontrollo anche quando ScrollTrigger rifà le misure (rotazione, barra del browser che
+    // si nasconde) e quando lo scroll si ferma: un comando che si vede deve sempre rispondere
+    ScrollTrigger.addEventListener('refresh', () => requestAnimationFrame(accendiClic));
+    ScrollTrigger.addEventListener('scrollEnd', accendiClic);
     // chi usa la tastiera e arriva su un link ancora nascosto: saltiamo alla fine dell'animazione
     document.querySelectorAll('[data-entra]').forEach((el) => el.addEventListener('focusin', () => {
       const st = tl && tl.scrollTrigger;
