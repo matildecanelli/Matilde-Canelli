@@ -18,7 +18,7 @@
   <link rel="preload" href="assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/home.css">
-  <link rel="stylesheet" href="css/stella.css?v=20261118e">
+  <link rel="stylesheet" href="css/stella.css?v=20261118g">
   <!-- Three.js (la libreria per il 3D nel browser) caricato da un CDN, senza installare niente -->
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
-  <link rel="stylesheet" href="css/finestre.css?v=20261118e">
+  <link rel="stylesheet" href="css/finestre.css?v=20261118g">
   <!-- Se Three.js non arriva dal CDN, stella.js non parte e window.palco non esiste:
        a pagina caricata lo controlliamo e mostriamo la composizione finale, ferma -->
   <script>
@@ -126,11 +126,18 @@
         <button class="finestra__giu" type="button" data-apri-firmamento aria-label="Apri il firmamento: scegli una stella. Ti dirò chi sei, ma non fidarti troppo">Ti dirò chi sei, ma non fidarti troppo. <span class="finestra__tondo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg></span></button>
       </div>
     </aside>
-    <!-- la striscia in fondo, lilla, che scorre piano (due copie uguali per un giro senza scatti) -->
+    <!-- la striscia in fondo, come quella dei telegiornali: l'etichetta ULTIM'ORA ferma a sinistra
+         e le "notizie" di Matilde che scorrono. Per il giro senza scatti le due metà devono essere
+         uguali (ognuna più larga dello schermo): ogni notizia nuova va aggiunta in tutte e due -->
     <div class="nastro" aria-hidden="true" data-entra>
+      <p class="nastro__etichetta">Ultim'ora</p>
       <div class="nastro__scorre">
-        <p>Strass incollati a mano</p><p>Design digitale</p><p>Ossessioni sparse</p><p>Strass incollati a mano</p><p>Design digitale</p><p>Ossessioni sparse</p>
-        <p>Strass incollati a mano</p><p>Design digitale</p><p>Ossessioni sparse</p><p>Strass incollati a mano</p><p>Design digitale</p><p>Ossessioni sparse</p>
+        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
+        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
+        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
+        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
+        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
+        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
       </div>
     </div>
     <script>
@@ -692,14 +699,14 @@
   <div class="bling" data-bling aria-hidden="true"></div>
   <div class="lampo" data-lampo aria-hidden="true"></div>
 
-  <script src="js/stella.js?v=20261118e" type="module"></script>
-  <script src="js/lattina.js?v=20261118e" type="module"></script>
-  <script src="js/statua.js?v=20261118e" type="module"></script>
-  <script src="js/occhiali.js?v=20261118e" type="module"></script>
-  <script src="js/barattolo.js?v=20261118e" type="module"></script>
-  <script src="js/fotocamera.js?v=20261118e" type="module"></script>
-  <script src="js/nomi-strass.js?v=20261118e" type="module"></script>
-  <script src="js/pannelli.js?v=20261118e" defer></script>
+  <script src="js/stella.js?v=20261118g" type="module"></script>
+  <script src="js/lattina.js?v=20261118g" type="module"></script>
+  <script src="js/statua.js?v=20261118g" type="module"></script>
+  <script src="js/occhiali.js?v=20261118g" type="module"></script>
+  <script src="js/barattolo.js?v=20261118g" type="module"></script>
+  <script src="js/fotocamera.js?v=20261118g" type="module"></script>
+  <script src="js/nomi-strass.js?v=20261118g" type="module"></script>
+  <script src="js/pannelli.js?v=20261118g" defer></script>
   <script src="js/quiz.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>
