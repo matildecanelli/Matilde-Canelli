@@ -18,7 +18,7 @@
   <link rel="preload" href="assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/home.css">
-  <link rel="stylesheet" href="css/stella.css?v=20261118g">
+  <link rel="stylesheet" href="css/stella.css?v=20261118k">
   <!-- Three.js (la libreria per il 3D nel browser) caricato da un CDN, senza installare niente -->
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
-  <link rel="stylesheet" href="css/finestre.css?v=20261118g">
+  <link rel="stylesheet" href="css/finestre.css?v=20261118k">
   <!-- Se Three.js non arriva dal CDN, stella.js non parte e window.palco non esiste:
        a pagina caricata lo controlliamo e mostriamo la composizione finale, ferma -->
   <script>
@@ -126,20 +126,30 @@
         <button class="finestra__giu" type="button" data-apri-firmamento aria-label="Apri il firmamento: scegli una stella. Ti dirò chi sei, ma non fidarti troppo">Ti dirò chi sei, ma non fidarti troppo. <span class="finestra__tondo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg></span></button>
       </div>
     </aside>
-    <!-- la striscia in fondo, come quella dei telegiornali: l'etichetta ULTIM'ORA ferma a sinistra
-         e le "notizie" di Matilde che scorrono. Per il giro senza scatti le due metà devono essere
-         uguali (ognuna più larga dello schermo): ogni notizia nuova va aggiunta in tutte e due -->
+    <!-- la striscia in fondo: le frasi di Matilde che scorrono piano. Ci sono tre versioni (A, B, C),
+         ognuna di cinque frasi più una di chiusura: a ogni caricamento arriva la successiva.
+         Senza JavaScript resta la versione A -->
     <div class="nastro" aria-hidden="true" data-entra>
-      <p class="nastro__etichetta">Ultim'ora</p>
-      <div class="nastro__scorre">
-        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
-        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
-        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
-        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
-        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
-        <p>Il continuo evolversi del marketing e del design mi porterà a non trovare lavoro</p>
+      <div class="nastro__scorre" data-frasi>
+        <p>Creativa di professione, improvvisatrice per vocazione</p><p>Sito ancora in work in progress perché cambio idea ogni 23 minuti</p><p>Making things happen (la notte prima della deadline, approssimativamente)</p><p>Multitasking: fare male più cose contemporaneamente</p><p>Penso troppo, produco comunque</p><p>Se stai leggendo tutto, abbiamo entrambi troppo tempo libero</p>
+        <p>Creativa di professione, improvvisatrice per vocazione</p><p>Sito ancora in work in progress perché cambio idea ogni 23 minuti</p><p>Making things happen (la notte prima della deadline, approssimativamente)</p><p>Multitasking: fare male più cose contemporaneamente</p><p>Penso troppo, produco comunque</p><p>Se stai leggendo tutto, abbiamo entrambi troppo tempo libero</p>
       </div>
     </div>
+    <p class="piede" data-entra>powered by curiosità, sporcarsi le mani smanettando e tante decisioni discutibili</p>
+    <script>
+      (function () {
+        // tre versioni da cinque frasi, più una frase di chiusura: a ogni caricamento arriva la successiva
+        var frasi = {
+          a: ["Creativa di professione, improvvisatrice per vocazione", "Sito ancora in work in progress perché cambio idea ogni 23 minuti", "Making things happen (la notte prima della deadline, approssimativamente)", "Multitasking: fare male più cose contemporaneamente", "Penso troppo, produco comunque", "Se stai leggendo tutto, abbiamo entrambi troppo tempo libero"],
+          b: ["Creatività a tempo indeterminato, organizzazione a tempo perso", "Sito di contenuti creativi altamente non catalogabili, ma ci proviamo", "Esperta di cose che non sapevo di dover fare", "Estetica discutibile, intenzioni ottime", "Professionista del «ci penso io» seguito da un «oh merda»", "Grazie per l'attenzione nel leggere, non era necessaria"],
+          c: ["Making things happen (eventualmente)", "Ogni progetto nasce da un'idea e finisce in altre sette", "Problem solving: prima creo il problema, mi lamento, poi lo risolvo", "Attenzione: progetto soggetto a modifiche improvvise", "Non è procrastinazione, è lasciar maturare le idee", "Stai ancora leggendo? Impressionante."]
+        };
+        var ordine = ['a', 'b', 'c'], quale = 'a';
+        try { quale = ordine[(ordine.indexOf(localStorage.getItem('frasi')) + 1) % ordine.length]; localStorage.setItem('frasi', quale); } catch (e) {}
+        var riga = frasi[quale].map(function (f) { var p = document.createElement('p'); p.textContent = f; return p.outerHTML; }).join('');
+        document.querySelector('[data-frasi]').innerHTML = riga + riga;   // due metà uguali: il giro non ha scatti
+      })();
+    </script>
     <script>
       (function () {
         var oggetti = [
@@ -699,14 +709,14 @@
   <div class="bling" data-bling aria-hidden="true"></div>
   <div class="lampo" data-lampo aria-hidden="true"></div>
 
-  <script src="js/stella.js?v=20261118g" type="module"></script>
-  <script src="js/lattina.js?v=20261118g" type="module"></script>
-  <script src="js/statua.js?v=20261118g" type="module"></script>
-  <script src="js/occhiali.js?v=20261118g" type="module"></script>
-  <script src="js/barattolo.js?v=20261118g" type="module"></script>
-  <script src="js/fotocamera.js?v=20261118g" type="module"></script>
-  <script src="js/nomi-strass.js?v=20261118g" type="module"></script>
-  <script src="js/pannelli.js?v=20261118g" defer></script>
+  <script src="js/stella.js?v=20261118k" type="module"></script>
+  <script src="js/lattina.js?v=20261118k" type="module"></script>
+  <script src="js/statua.js?v=20261118k" type="module"></script>
+  <script src="js/occhiali.js?v=20261118k" type="module"></script>
+  <script src="js/barattolo.js?v=20261118k" type="module"></script>
+  <script src="js/fotocamera.js?v=20261118k" type="module"></script>
+  <script src="js/nomi-strass.js?v=20261118k" type="module"></script>
+  <script src="js/pannelli.js?v=20261118k" defer></script>
   <script src="js/quiz.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>

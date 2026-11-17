@@ -13,6 +13,7 @@
 :root {
   --mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --nastro: 2.75rem;
+  --piede: 1.9rem;                            /* la riga "powered by" sotto la striscia */
   /* i colori delle finestre. Tema scuro: corpo nero, barra e bordo lilla */
   --lilla: var(--palette-lilla);             /* l'accento: bordi, orbita, striscia */
   --f-fondo: #0b0a0c;
@@ -122,28 +123,21 @@
 
 /* ---------- La striscia in fondo ---------- */
 :root .nastro {
-  display: block; position: absolute; z-index: 3; left: 0; right: 0; bottom: calc(var(--margine) * 0.6);
+  display: block; position: absolute; z-index: 3; left: 0; right: 0; bottom: calc(var(--margine) * 0.6 + var(--piede));
   height: var(--nastro); overflow: hidden;
   border-block: 1.5px solid var(--lilla);
-}
-/* come al telegiornale: l'etichetta ferma a sinistra, sopra le notizie che scorrono */
-.nastro__etichetta {
-  position: absolute; z-index: 1; left: 0; top: 0; bottom: 0;
-  display: flex; align-items: center; gap: 0.5rem; margin: 0; padding: 0 1rem 0 var(--margine);
-  background: var(--f-barra); color: var(--f-su-barra);
-  font-family: var(--mono); font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
-}
-/* il pallino rosso che lampeggia, come una diretta */
-.nastro__etichetta::before { content: ""; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #e12354; }
-@media (prefers-reduced-motion: no-preference) {
-  .nastro__etichetta::before { animation: diretta 1.4s steps(1) infinite; }
-  @keyframes diretta { 50% { opacity: 0.2; } }
 }
 .nastro__scorre { display: flex; width: max-content; height: 100%; align-items: center; }
 .nastro__scorre p {
   display: flex; align-items: center; margin: 0; white-space: nowrap;
-  font-family: var(--font); font-size: 0.9375rem; font-weight: 500;
-  color: var(--chiaro);
+  font-family: var(--mono); font-size: 0.875rem; letter-spacing: 0.02em;
+  color: var(--lilla);
+}
+/* in fondo a tutto, sotto la striscia: powered by… */
+:root .piede {
+  display: block; position: absolute; z-index: 3; left: var(--margine); right: var(--margine); bottom: calc(var(--margine) * 0.6);
+  height: var(--piede); margin: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 0.75rem; color: var(--tenue); text-align: center;
 }
 .nastro__scorre p::after {
   content: ""; width: 1rem; height: 1rem; margin-inline: 1.25rem; background: var(--lilla);
@@ -151,7 +145,7 @@
           mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .nastro__scorre { animation: nastro 55s linear infinite; }   /* lenta: le notizie si devono poter leggere (con più notizie, allungare il tempo) */
+  .nastro__scorre { animation: nastro 140s linear infinite; }   /* lenta: le frasi si devono poter leggere */
   @keyframes nastro { to { translate: -50% 0; } }
 }
 
@@ -166,7 +160,7 @@
   }
   /* il menu è una finestrella anche lui (in basso a destra); in alto a destra restano CV, portfolio e tema */
   :root .menu {
-    left: auto; right: calc(var(--margine) + 1.5rem); top: auto; bottom: calc(var(--nastro) + var(--margine) * 0.6 + 4svh);
+    left: auto; right: calc(var(--margine) + 1.5rem); top: auto; bottom: calc(var(--nastro) + var(--piede) + var(--margine) * 0.6 + 4svh);
     transform: none; rotate: 3deg; width: min(19vw, 17rem);
   }
   /* la finestra è la lista stessa: così entra con lo scroll insieme alle voci */
@@ -204,14 +198,14 @@
   :root .orbita { left: 64%; top: 40%; width: calc(var(--stella) * 1.7); height: calc(var(--stella) * 0.62); }
   :root .lucina--1 { left: 2.5%; top: 37%; }
   :root .lucina--2 { left: 43.5%; top: 80%; }
-  :root .lucina--3 { left: 66%; top: 4%; width: 1.2rem; height: 1.2rem; }
+  :root .lucina--3 { left: 57%; top: calc(var(--margine) + 4rem); width: 1.2rem; height: 1.2rem; }   /* sotto la riga di CV e portfolio, mai sopra le scritte */
 
   :root .finestra--me { left: 75.5%; top: 13%; width: min(21.5vw, 22rem); rotate: 5deg; }
   /* le finestre in basso finiscono sopra la striscia: le loro misure seguono anche l'altezza dello schermo */
-  :root .finestra--spark { left: 31%; bottom: calc(var(--nastro) + var(--margine) * 0.6 + 4svh); }
+  :root .finestra--spark { left: 31%; bottom: calc(var(--nastro) + var(--piede) + var(--margine) * 0.6 + 4svh); }
   :root .finestra--spark .finestra__oggetto--alto { width: min(7.5vw, 12svh); }
   :root .finestra--spark .finestra__oggetto--largo { width: min(12.5vw, 19svh); }
-  :root .finestra--firmamento { left: 3%; bottom: calc(var(--nastro) + var(--margine) * 0.6 + 6svh); width: min(27vw, 20rem); rotate: -5deg; }
+  :root .finestra--firmamento { left: 3%; bottom: calc(var(--nastro) + var(--piede) + var(--margine) * 0.6 + 6svh); width: min(27vw, 20rem); rotate: -5deg; }
 }
 
 /* ---------- Telefono e schermi in verticale ---------- */
@@ -223,16 +217,17 @@
   :root .lucina { width: 1.4rem; height: 1.4rem; }
   :root .lucina--1 { right: 8%; top: 27%; }
   :root .lucina--2 { left: 55%; bottom: 30%; }
-  :root .finestra--firmamento { left: var(--margine); width: 50%; bottom: calc(var(--nastro) + var(--margine) + 1.5rem); rotate: -2deg; }
+  :root .finestra--firmamento { left: var(--margine); width: 50%; bottom: calc(var(--nastro) + var(--piede) + var(--margine) + 1.5rem); rotate: -2deg; }
   :root .finestra--firmamento .finestra__corpo { padding: 0.75rem 0.8rem 0.85rem; }
   :root .finestra--firmamento .finestra__giu { flex-direction: column; align-items: flex-start; gap: 0.7rem; font-size: 0.9375rem; }
   :root .finestra--firmamento .finestra__barra, :root .finestra--spark .finestra__barra { font-size: 0.75rem; }
-  :root .finestra--spark { right: var(--margine); bottom: calc(var(--nastro) + var(--margine) + 2.5rem); rotate: 2deg; }
+  :root .finestra--spark { right: var(--margine); bottom: calc(var(--nastro) + var(--piede) + var(--margine) + 2.5rem); rotate: 2deg; }
   :root .finestra--spark .finestra__oggetto--alto { width: 4rem; }
   :root .finestra--spark .finestra__oggetto--largo { width: 5.5rem; }
   /* sul telefono le due finestre stanno affiancate: i tastini decorativi della barra non ci starebbero */
   :root .finestra__tasti { display: none; }
   :root .giu:not([aria-expanded="true"]) { display: none; }   /* il firmamento si apre dalla sua finestra; aperto, la freccia torna per chiuderlo */
-  :root { --nastro: 2.5rem; }
+  :root { --nastro: 2.5rem; --piede: 2.75rem; }   /* "powered by…" sul telefono va su due righe */
+  :root .piede { font-size: 0.75rem; line-height: 1.4; text-wrap: balance; }   /* 12px: più piccolo non si legge */
   .nastro__scorre p { font-size: 0.8125rem; }
 }
