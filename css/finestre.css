@@ -1,0 +1,208 @@
+/* ==========================================================================
+   finestre.css: la home a finestrelle
+
+   Il ruolo in alto a sinistra; CV, portfolio e tema in alto a destra; il nome
+   a sinistra (MATILDE appena rientrato); la stella enorme a cavallo della E,
+   con un'orbita sottile solo intorno a lei; finestrelle da vecchio computer col
+   bordo lilla (alcune inclinate): chi_sono.txt, fatto_a_mano.exe (uno dei suoi
+   oggetti di strass in 3D che gira da solo, uno per caricamento), il firmamento
+   (al posto della freccia) e il menu; in fondo una striscia lilla che scorre.
+   Nel tema chiaro le finestre si invertono: corpo chiaro, barra e bordo viola.
+   ========================================================================== */
+
+:root {
+  --mono: "Space Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --nastro: 2.75rem;
+  /* i colori delle finestre. Tema scuro: corpo nero, barra e bordo lilla */
+  --lilla: var(--palette-lilla);             /* l'accento: bordi, orbita, striscia */
+  --f-fondo: #0b0a0c;
+  --f-barra: var(--palette-lilla);
+  --f-su-barra: #0b0a0c;
+  --f-testo: var(--chiaro);
+  --lucina: #fff;
+}
+/* tema chiaro: tutto si inverte. Pagina lavanda, nome viola (stella.css), finestre chiare con barra e bordo viola */
+:root[data-tema="chiaro"] {
+  --lilla: var(--palette-viola);
+  --f-fondo: var(--palette-lavanda);
+  --f-barra: var(--palette-viola);
+  --f-su-barra: var(--palette-lavanda);
+  --f-testo: var(--palette-nero);
+  --lucina: var(--palette-viola);
+}
+:root:not([data-tema="chiaro"]) body, :root:not([data-tema="chiaro"]) .palco { background: #0b0a0c; }
+
+/* ---------- Le finestrelle ---------- */
+:root .finestra {
+  display: block;
+  position: absolute; z-index: 3;
+  border: 2px solid var(--lilla);
+  border-radius: 0.35rem;
+  background: var(--f-fondo);
+  font-family: var(--mono);
+  color: var(--f-testo);
+}
+.finestra__barra {
+  display: flex; align-items: center; gap: 0.55rem;
+  margin: 0; padding: 0.35rem 0.6rem;
+  background: var(--f-barra); color: var(--f-su-barra);
+  font-size: 0.875rem; font-weight: 400; letter-spacing: 0.01em;
+}
+.finestra__barra > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.finestra__icona { width: 1rem; height: 1rem; flex: none; fill: currentColor; }
+.finestra__tasti { display: flex; align-items: center; gap: 0.45rem; margin-left: auto; }
+.finestra__tasti i { display: block; width: 0.8rem; height: 0.8rem; border: 1.5px solid currentColor; }
+.finestra__tasti .t-riduci { height: 0; border-width: 0 0 1.5px; align-self: flex-end; margin-bottom: 0.15rem; }
+.finestra__tasti .t-ingrandisci { box-shadow: 2px -2px 0 -0.5px var(--f-barra), 2px -2px 0 1px currentColor; }
+.finestra__tasti .t-chiudi { background: linear-gradient(45deg, transparent 43%, currentColor 43% 57%, transparent 57%), linear-gradient(-45deg, transparent 43%, currentColor 43% 57%, transparent 57%); }
+.finestra__corpo { display: block; padding: 0.9rem 1rem 1rem; font-size: 0.8125rem; line-height: 1.55; }
+.finestra__corpo p { margin: 0 0 0.8rem; }
+.finestra__link { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; margin: 0 !important; }
+.finestra__vai {
+  display: inline-block; padding: 0.3rem 0; margin: -0.3rem 0; border: 0; background: none; cursor: pointer;
+  font: inherit; color: var(--f-testo);
+  text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px;
+}
+.finestra__vai:hover, .finestra__vai:focus-visible { color: var(--lilla); text-decoration-thickness: 2px; }
+.finestra__vai--grande { font-family: var(--font); font-size: 1.125rem; }
+
+/* la finestra del progetto: dentro solo l'oggetto 3D, al centro; tutta la finestra porta al progetto */
+.finestra__corpo--oggetto { display: grid; place-items: center; padding: 0.75rem; }
+.finestra__oggetto { display: block; }
+.finestra__oggetto--alto { width: 6rem; aspect-ratio: 3 / 5; }
+.finestra__oggetto--largo { width: 10rem; aspect-ratio: 4 / 3; }
+.finestra__palco, .finestra__palco canvas { display: block; width: 100%; height: 100%; }
+.finestra__palco canvas { opacity: 0; transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1); }
+.finestra__oggetto.e-3d canvas { opacity: 1; }
+
+/* firmamento: la scritta e il tasto tondo con la freccia in giù, come quello di prima */
+.finestra__giu {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--font); font-size: 1.0625rem; color: var(--f-testo); text-align: left;
+}
+.finestra__tondo {
+  display: grid; place-items: center; flex: none;
+  width: 3rem; height: 3rem; border: 3px solid var(--colore-tema); border-radius: 999px;
+  color: var(--colore-tema); transition: background-color 250ms ease, color 250ms ease;
+}
+.finestra__tondo svg { width: 1.35rem; height: 1.35rem; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.finestra__giu:hover .finestra__tondo, .finestra__giu:focus-visible .finestra__tondo { background: var(--colore-tema); color: var(--fondo); }
+.finestra__giu:focus-visible { outline: none; }
+.finestra__giu:focus-visible .finestra__tondo { outline: 2px solid var(--colore-tema); outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  .finestra__tondo svg { animation: giu-scende 1.8s ease-in-out infinite; }
+}
+
+/* chi_sono.txt: la domanda in evidenza */
+.finestra__domanda { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.25rem !important; }
+
+/* ---------- L'orbita e le stelline ---------- */
+:root .orbita {
+  display: block; position: absolute; z-index: 1; pointer-events: none;
+  translate: -50% -50%; rotate: -16deg;
+  border: 1.5px solid var(--lilla); border-radius: 50%;
+}
+:root .lucina {
+  display: block; position: absolute; z-index: 3; pointer-events: none;
+  width: 2.25rem; height: 2.25rem; fill: var(--lucina);
+  filter: drop-shadow(0 0 0.5rem rgb(255 255 255 / 0.55)) drop-shadow(0 0 1.2rem color-mix(in srgb, var(--lilla) 60%, transparent));
+}
+
+/* ---------- La striscia in fondo ---------- */
+:root .nastro {
+  display: block; position: absolute; z-index: 3; left: 0; right: 0; bottom: calc(var(--margine) * 0.6);
+  height: var(--nastro); overflow: hidden;
+  border-block: 1.5px solid var(--lilla);
+}
+.nastro__scorre { display: flex; width: max-content; height: 100%; align-items: center; }
+.nastro__scorre p {
+  display: flex; align-items: center; margin: 0; white-space: nowrap;
+  font-family: var(--mono); font-size: 0.9375rem; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--lilla);
+}
+.nastro__scorre p::after {
+  content: ""; width: 1rem; height: 1rem; margin-inline: 1.25rem; background: var(--lilla);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nastro__scorre { animation: nastro 45s linear infinite; }
+  @keyframes nastro { to { translate: -50% 0; } }
+}
+
+/* ---------- Computer ----------
+   Misure prese dallo spunto (in frazioni dello schermo). --F è l'altezza di lettera del nome,
+   --stella quanto è grande la stella alla fine (vedi js/stella.js: x 0.64, y 0.4, scala 0.7). */
+@media (min-width: 40.01rem) and (min-aspect-ratio: 1/1) {
+  :root {
+    --F: min(14.5vw, 25svh);
+    --T: calc(var(--margine) + 3.25rem);
+    --stella: calc(min(78svh, 55vw) * 0.7);
+  }
+  /* il menu è una finestrella anche lui (in basso a destra); in alto a destra restano CV, portfolio e tema */
+  :root .menu {
+    left: auto; right: calc(var(--margine) + 1.5rem); top: auto; bottom: calc(var(--nastro) + var(--margine) * 0.6 + 4svh);
+    transform: none; rotate: 3deg; width: min(19vw, 17rem);
+  }
+  /* la finestra è la lista stessa: così entra con lo scroll insieme alle voci */
+  :root .menu ul { border: 2px solid var(--lilla); border-radius: 0.35rem; background: var(--f-fondo); }
+  :root .menu ul::before {
+    content: "menu"; display: block; justify-self: stretch; margin: -0.6rem -1rem 0.4rem; padding: 0.35rem 0.6rem 0.35rem 2.1rem;
+    font-family: var(--mono); font-size: 0.875rem; color: var(--f-su-barra);
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%230b0a0c' d='M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z'/%3E%3C/svg%3E") no-repeat left 0.6rem center / 1rem 1rem,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 14' fill='none' stroke='%230b0a0c' stroke-width='1.6'%3E%3Cpath d='M1 12.5h11'/%3E%3Crect x='22' y='4' width='9' height='9'/%3E%3Cpath d='M25 4V1h9v9h-3'/%3E%3Crect x='44' y='2' width='11' height='11'/%3E%3Cpath d='M45 3l9 9M54 3l-9 9'/%3E%3C/svg%3E") no-repeat right 0.6rem center / 3.6rem 0.85rem,
+      var(--f-barra);
+  }
+  /* nel tema chiaro le icone della barra sono chiare (lavanda) */
+  :root[data-tema="chiaro"] .menu ul::before {
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23F9F6FD' d='M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z'/%3E%3C/svg%3E") no-repeat left 0.6rem center / 1rem 1rem,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 14' fill='none' stroke='%23F9F6FD' stroke-width='1.6'%3E%3Cpath d='M1 12.5h11'/%3E%3Crect x='22' y='4' width='9' height='9'/%3E%3Cpath d='M25 4V1h9v9h-3'/%3E%3Crect x='44' y='2' width='11' height='11'/%3E%3Cpath d='M45 3l9 9M54 3l-9 9'/%3E%3C/svg%3E") no-repeat right 0.6rem center / 3.6rem 0.85rem,
+      var(--f-barra);
+  }
+  :root .menu ul { display: grid; justify-items: start; gap: 0; padding: 0.6rem 1rem 0.8rem; }
+  :root .palco .menu a { font-size: 1.375rem; padding: 0.2rem 0; color: var(--f-testo); text-shadow: none; }
+  :root .palco .menu a::before { content: "> "; font-family: var(--mono); font-size: 0.8em; color: var(--lilla); }
+  :root .palco .menu a:hover, :root .palco .menu a:focus-visible { transform: translateX(0.3rem); color: var(--lilla); }
+  :root .palco .menu a[data-voce="progetti"]::after { display: none; }
+
+  :root .nome { left: calc(var(--margine) + 0.6rem); top: var(--T); font-size: var(--F); }
+  :root .nome__riga--2 { padding-left: 0.16em; }
+
+  /* la freccia non serve: il firmamento si apre dalla sua finestra (quando è aperto, la freccia torna per chiuderlo) */
+  :root .giu:not([aria-expanded="true"]) { display: none; }
+
+  :root .orbita { left: 64%; top: 40%; width: calc(var(--stella) * 1.7); height: calc(var(--stella) * 0.62); }
+  :root .lucina--1 { left: 2.5%; top: 37%; }
+  :root .lucina--2 { left: 43.5%; top: 80%; }
+  :root .lucina--3 { left: 66%; top: 4%; width: 1.2rem; height: 1.2rem; }
+
+  :root .finestra--me { left: 75.5%; top: 13%; width: min(21.5vw, 22rem); rotate: 5deg; }
+  /* le finestre in basso finiscono sopra la striscia: le loro misure seguono anche l'altezza dello schermo */
+  :root .finestra--spark { left: 31%; bottom: calc(var(--nastro) + var(--margine) * 0.6 + 4svh); }
+  :root .finestra--spark .finestra__oggetto--alto { width: min(7.5vw, 12svh); }
+  :root .finestra--spark .finestra__oggetto--largo { width: min(12.5vw, 19svh); }
+  :root .finestra--firmamento { left: 3%; bottom: calc(var(--nastro) + var(--margine) * 0.6 + 6svh); width: min(27vw, 20rem); rotate: -5deg; }
+}
+
+/* ---------- Telefono e schermi in verticale ---------- */
+@media (max-width: 40rem), (max-aspect-ratio: 1/1) {
+  :root .finestra--firmamento, :root .lucina--3 { display: none; }
+  :root .orbita { display: none; }
+  :root .lucina { width: 1.4rem; height: 1.4rem; }
+  :root .lucina--1 { right: 8%; top: 27%; }
+  :root .lucina--2 { left: 55%; bottom: 30%; }
+  :root .finestra--me { left: var(--margine); width: 50%; bottom: calc(var(--nastro) + var(--margine) + 6.5rem); rotate: -2deg; }
+  :root .finestra--me .finestra__corpo { font-size: 0.75rem; padding: 0.7rem 0.8rem 0.8rem; }
+  :root .finestra--me .finestra__barra, :root .finestra--spark .finestra__barra { font-size: 0.75rem; }
+  :root .finestra--spark { right: var(--margine); bottom: calc(var(--nastro) + var(--margine) + 7.5rem); rotate: 2deg; }
+  :root .finestra--spark .finestra__oggetto--alto { width: 4rem; }
+  :root .finestra--spark .finestra__oggetto--largo { width: 5.5rem; }
+  /* sul telefono le due finestre stanno affiancate: i tastini decorativi della barra non ci starebbero */
+  :root .finestra__tasti { display: none; }
+  :root .giu:not([aria-expanded="true"]) { bottom: calc(var(--nastro) + var(--margine) + 0.5rem); }
+  :root { --nastro: 2.5rem; }
+  .nastro__scorre p { font-size: 0.8125rem; }
+}

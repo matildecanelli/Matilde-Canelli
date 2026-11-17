@@ -15,10 +15,10 @@
 import * as THREE from 'three';
 import { stanzaDiLuci, pietre, materialeGemma, geometriaPietra } from './strass.js';
 
-const figura = document.querySelector('[data-occhiali]');
-if (figura) prepara();
+document.querySelectorAll('[data-occhiali]').forEach(prepara);
 
-function prepara() {
+function prepara(figura) {
+  const fermo = figura.hasAttribute('data-fermo');   // nella finestrella della home: gira da sola, non si trascina
   const palco = figura.querySelector('[data-occhiali-palco]');
   const canvas = palco.querySelector('canvas');
   const menoMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -96,6 +96,7 @@ function prepara() {
   /* ---------- Il giro: trascinando, con la tastiera, o da soli ---------- */
   const rad = THREE.MathUtils.degToRad;
   const stato = { angolo: 0, velocita: 0, inclina: 0, preso: false, ultimaX: 0, ultimaY: 0, ultimoT: 0, tocco: -10 };
+  if (!fermo) {
   palco.addEventListener('pointerdown', (e) => {
     stato.preso = true; stato.ultimaX = e.clientX; stato.ultimaY = e.clientY; stato.ultimoT = performance.now(); stato.velocita = 0;
     try { palco.setPointerCapture(e.pointerId); } catch (errore) { /* niente */ }
@@ -135,9 +136,11 @@ function prepara() {
     aggiornaValore();
     sveglia();
   });
+  }
 
   // per i lettori di schermo: di quanto sono girati, e quale lato si vede
   function aggiornaValore() {
+    if (fermo) return;
     const gradi = ((Math.round(stato.angolo) % 360) + 360) % 360;
     const lato = gradi < 45 || gradi >= 315 ? 'davanti, con le lenti nere' : gradi < 135 ? 'una stanghetta' : gradi < 225 ? 'dietro, con l’interno bianco' : 'l’altra stanghetta';
     palco.setAttribute('aria-valuenow', String(gradi));

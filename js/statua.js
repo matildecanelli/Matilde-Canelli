@@ -18,10 +18,10 @@
 
 import * as THREE from 'three';
 
-const figura = document.querySelector('[data-statua]');
-if (figura) prepara();
+document.querySelectorAll('[data-statua]').forEach(prepara);
 
-function prepara() {
+function prepara(figura) {
+  const fermo = figura.hasAttribute('data-fermo');   // nella finestrella della home: gira da sola, non si trascina
   const palco = figura.querySelector('[data-statua-palco]');
   const canvas = palco.querySelector('canvas');
   const menoMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -105,6 +105,7 @@ function prepara() {
 
   /* ---------- Il giro: trascinando, con la tastiera, o da sola ---------- */
   const stato = { angolo: 0, velocita: 0, inclina: 0, preso: false, ultimaX: 0, ultimaY: 0, ultimoT: 0, tocco: -10 };
+  if (!fermo) {
   palco.addEventListener('pointerdown', (e) => {
     stato.preso = true; stato.ultimaX = e.clientX; stato.ultimaY = e.clientY; stato.ultimoT = performance.now(); stato.velocita = 0;
     try { palco.setPointerCapture(e.pointerId); } catch (errore) { /* niente */ }
@@ -143,9 +144,11 @@ function prepara() {
     aggiornaValore();
     sveglia();
   });
+  }
 
   // per i lettori di schermo: di quanto è girata, e quale lato si vede
   function aggiornaValore() {
+    if (fermo) return;
     const gradi = ((Math.round(THREE.MathUtils.radToDeg(stato.angolo)) % 360) + 360) % 360;
     const lato = gradi < 45 || gradi >= 315 ? 'davanti, con le mani giunte' : gradi < 135 ? 'il fianco' : gradi < 225 ? 'la schiena' : 'l’altro fianco';
     palco.setAttribute('aria-valuenow', String(gradi));

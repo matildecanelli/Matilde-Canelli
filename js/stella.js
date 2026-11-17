@@ -36,7 +36,7 @@ const REGOLA = {
   // dove arriva la stella alla fine dello scroll (frazioni dello schermo, 0.5 = centro)
   // e quanto rimpicciolisce (1 = uguale)
   stellaFine: {
-    computer: { x: 0.74, y: 0.7, scala: 0.6 },
+    computer: { x: 0.64, y: 0.4, scala: 0.7 },   // enorme, a cavallo della E di MATILDE (le finestrelle intorno: css/finestre.css)
     // telefono: la stella resta, appoggiata alla fine di MATILDE come sul computer
     // (stesso rapporto tra stella e nome: circa una volta e mezza l'altezza delle lettere)
     telefono: { x: 0.72, y: 0.44, scala: 0.5 },
@@ -52,7 +52,7 @@ const REGOLA = {
   iride: { pastello: 0.22, bande: 0.35, corpo: 1 },   // quanto bianco nei cristalli, quanto larghe le macchie di colore, quanto acceso il corpo
   // il giro durante lo scroll: la stella fa una capriola su tutti e tre gli assi
   // (da destra a sinistra, dall'alto in basso e su sé stessa), poi resta inclinata e appoggiata al nome
-  giro: { voltaX: 1, voltaY: 1, voltaZ: 1, finaleY: 35, finaleZ: -14, finaleX: 8 },   // giri interi e gradi finali
+  giro: { voltaX: 1, voltaY: 1, voltaZ: 1, finaleY: 18, finaleZ: -12, finaleX: 6 },   // giri interi e gradi finali
   // il corpo 3D della stella: quanto sono larghe le braccia (0..1), quanto sono tonde punte e insenature,
   // quanto è largo il bordo arrotondato, quanto è gonfia, quanto è gonfio il retro
   forma3d: { braccia: 0.44, tondo: 0.17, tubo: 0.3, spessore: 0.42, retro: 0.75 },

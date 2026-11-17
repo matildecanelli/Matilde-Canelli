@@ -18,7 +18,7 @@
   <link rel="preload" href="assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/home.css">
-  <link rel="stylesheet" href="css/stella.css">
+  <link rel="stylesheet" href="css/stella.css?v=20261118a">
   <!-- Three.js (la libreria per il 3D nel browser) caricato da un CDN, senza installare niente -->
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
@@ -33,6 +33,11 @@
       if (scelto === 'chiaro') document.documentElement.dataset.tema = 'chiaro';
     } catch (e) {}
   </script>
+  <!-- Space Mono: il carattere da vecchio computer delle finestrelle della home -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="css/finestre.css?v=20261118a">
   <!-- Se Three.js non arriva dal CDN, stella.js non parte e window.palco non esiste:
        a pagina caricata lo controlliamo e mostriamo la composizione finale, ferma -->
   <script>
@@ -89,6 +94,72 @@
         <li><a href="#contatti" data-voce="contatti">Contatti</a></li>
       </ul>
     </nav>
+
+    <!-- ===== Le finestrelle da vecchio computer intorno al nome e alla stella (css/finestre.css) ===== -->
+    <!-- l'orbita intorno alla stella e le stelline bianche -->
+    <div class="orbita" aria-hidden="true" data-entra></div>
+    <svg class="lucina lucina--1" viewBox="0 0 24 24" aria-hidden="true" data-entra><path d="M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z"/></svg>
+    <svg class="lucina lucina--2" viewBox="0 0 24 24" aria-hidden="true" data-entra><path d="M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z"/></svg>
+    <svg class="lucina lucina--3" viewBox="0 0 24 24" aria-hidden="true" data-entra><path d="M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z"/></svg>
+    <!-- chi_sono.txt: la domanda ironica del pannello Chi sono, e il link per aprirlo -->
+    <aside class="finestra finestra--me" aria-label="Chi sono, in breve" data-entra>
+      <p class="finestra__barra"><svg class="finestra__icona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z"/></svg><span>chi_sono.txt</span><span class="finestra__tasti" aria-hidden="true"><i class="t-riduci"></i><i class="t-ingrandisci"></i><i class="t-chiudi"></i></span></p>
+      <div class="finestra__corpo">
+        <p class="finestra__domanda">Ma questa chi è?</p>
+        <p>Domanda più che lecita.</p>
+        <a class="finestra__vai" href="#chi-sono">&gt; scoprilo</a>
+      </div>
+    </aside>
+    <!-- la finestra del progetto: uno dei cinque oggetti di strass in 3D, che gira da solo (non si trascina).
+         A ogni caricamento ne arriva un altro, a rotazione; il titolo è il nome del progetto e porta lì -->
+    <aside class="finestra finestra--spark" aria-label="Un progetto" data-entra>
+      <p class="finestra__barra"><svg class="finestra__icona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z"/></svg><span>fatto_a_mano.exe</span><span class="finestra__tasti" aria-hidden="true"><i class="t-riduci"></i><i class="t-ingrandisci"></i><i class="t-chiudi"></i></span></p>
+      <a class="finestra__corpo finestra__corpo--oggetto" href="#progetti" data-spark-link>
+        <span class="finestra__oggetto" aria-hidden="true" data-spark></span>
+        <span class="solo-lettori" data-spark-testo>Guarda i progetti</span>
+      </a>
+    </aside>
+    <!-- firmamento: apre il firmamento con il tasto tondo e la freccia in giù (fa quello che faceva la freccia) -->
+    <aside class="finestra finestra--firmamento" aria-label="Firmamento" data-entra>
+      <p class="finestra__barra"><svg class="finestra__icona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z"/></svg><span>scegli una stella</span><span class="finestra__tasti" aria-hidden="true"><i class="t-riduci"></i><i class="t-ingrandisci"></i><i class="t-chiudi"></i></span></p>
+      <div class="finestra__corpo">
+        <button class="finestra__giu" type="button" data-apri-firmamento aria-label="Apri il firmamento: scegli una stella e ti dirò chi sei">…e ti dirò chi sei. <span class="finestra__tondo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg></span></button>
+      </div>
+    </aside>
+    <!-- la striscia in fondo, lilla, che scorre piano (due copie uguali per un giro senza scatti) -->
+    <div class="nastro" aria-hidden="true" data-entra>
+      <div class="nastro__scorre">
+        <p>Strass incollati a mano</p><p>Design digitale</p><p>Ossessioni sparse</p><p>Strass incollati a mano</p><p>Design digitale</p><p>Ossessioni sparse</p>
+        <p>Strass incollati a mano</p><p>Design digitale</p><p>Ossessioni sparse</p><p>Strass incollati a mano</p><p>Design digitale</p><p>Ossessioni sparse</p>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var oggetti = [
+          ['statua', 'IMAZE', 'imaze', 'alto'], ['lattina', 'Synapses', 'synapses', 'alto'],
+          ['occhiali', 'JU1CE', 'ju1ce', 'largo'], ['fotocamera', 'EnergiaPura', 'energiapura', 'largo'],
+          ['barattolo', 'Virtuoso', 'virtuoso', 'largo']
+        ];
+        var n = 0;
+        try { n = (parseInt(localStorage.getItem('spark'), 10) + 1) || 0; localStorage.setItem('spark', String(n)); }
+        catch (e) { n = Math.floor(Math.random() * oggetti.length); }
+        var o = oggetti[((n % oggetti.length) + oggetti.length) % oggetti.length];
+        var casa = document.querySelector('[data-spark]');
+        casa.setAttribute('data-' + o[0], '');
+        casa.setAttribute('data-fermo', '');
+        casa.classList.add('finestra__oggetto--' + o[3]);
+        casa.innerHTML = '<span class="finestra__palco" data-' + o[0] + '-palco><canvas></canvas></span>';
+        document.querySelector('[data-spark-testo]').textContent = 'Apri il progetto ' + o[1];
+        document.querySelector('[data-spark-link]').href = '#' + o[2];
+        // "Vai al firmamento": fa quello che fa la freccia
+        // passiamo anche "detail": col mouse vale 1, con la tastiera 0. Così il firmamento mette in
+        // evidenza la prima stella (l'anello del focus) solo per chi usa la tastiera
+        document.querySelector('[data-apri-firmamento]').addEventListener('click', function (e) {
+          var giu = document.querySelector('[data-giu]');
+          if (giu && giu.getAttribute('aria-expanded') !== 'true') giu.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: e.detail }));
+        });
+      })();
+    </script>
 
     <!-- Il firmamento è chiuso: si apre solo da questa freccia, come un foglio sopra la home,
          e si chiude solo ripremendola (js/quiz.js). Vale su ogni schermo. -->
@@ -616,14 +687,14 @@
   <div class="bling" data-bling aria-hidden="true"></div>
   <div class="lampo" data-lampo aria-hidden="true"></div>
 
-  <script src="js/stella.js" type="module"></script>
-  <script src="js/lattina.js" type="module"></script>
-  <script src="js/statua.js" type="module"></script>
-  <script src="js/occhiali.js" type="module"></script>
-  <script src="js/barattolo.js" type="module"></script>
-  <script src="js/fotocamera.js" type="module"></script>
-  <script src="js/nomi-strass.js" type="module"></script>
-  <script src="js/pannelli.js" defer></script>
+  <script src="js/stella.js?v=20261118a" type="module"></script>
+  <script src="js/lattina.js?v=20261118a" type="module"></script>
+  <script src="js/statua.js?v=20261118a" type="module"></script>
+  <script src="js/occhiali.js?v=20261118a" type="module"></script>
+  <script src="js/barattolo.js?v=20261118a" type="module"></script>
+  <script src="js/fotocamera.js?v=20261118a" type="module"></script>
+  <script src="js/nomi-strass.js?v=20261118a" type="module"></script>
+  <script src="js/pannelli.js?v=20261118a" defer></script>
   <script src="js/quiz.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>
