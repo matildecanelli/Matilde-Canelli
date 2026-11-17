@@ -210,6 +210,32 @@ function avvia() {
     return n;
   }
 
+  // senza mouse (telefono, tablet) nessuno passa sul nome nella lista: quando il progetto si apre,
+  // il titolo si riempie di strass da solo, una pietra dopo l'altra, e ondeggia un attimo per brillare
+  const senzaMouse = window.matchMedia('(hover: none)');
+  function brilla(el, id, ritardo = 0) {
+    const n = prepara(el, id);
+    if (!n) return null;
+    el.classList.add('e-strass');
+    if (menoMovimento) { n.giroX = 0; n.giroY = 0; disegna(n, 1.3); return n; }
+    if (n.brillaFino && performance.now() < n.brillaFino) return n;   // sta già brillando
+    const via = performance.now() + ritardo, durata = REGOLA.comparsa * 1000 * 1.8;
+    n.brillaFino = via + durata;
+    n.giroX = 0; n.giroY = 0;
+    disegna(n, 0);   // vuoto finché non tocca a lui
+    const passo = (ora) => {
+      const k = Math.max(0, (ora - via) / (REGOLA.comparsa * 1000));
+      const smorza = Math.max(0, 1 - k / 1.8);
+      n.giroY = Math.sin(k * 3.2) * REGOLA.inclinazione * 1.4 * smorza;
+      n.giroX = Math.sin(k * 2.1 + 1) * REGOLA.inclinazione * 0.6 * smorza;
+      disegna(n, Math.min(1.3, k));
+      if (ora < n.brillaFino) requestAnimationFrame(passo);
+      else { n.giroX = 0; n.giroY = 0; disegna(n, 1.3); }
+    };
+    requestAnimationFrame(passo);
+    return n;
+  }
+
   /* ---------- Nella lista: gli strass compaiono al passaggio ---------- */
   let attivo = null, inizio = 0, puntatore = null, inCorsa = false;
   function giro(adesso) {
@@ -253,18 +279,25 @@ function avvia() {
   const titolo = (id) => document.querySelector(`#${CSS.escape(id)} .pannello__nome`);
   function titoloAperto() {
     const id = location.hash.slice(1);
-    if (colore(id) && titolo(id)) tempesta(titolo(id), id);
+    if (!colore(id) || !titolo(id)) return;
+    // sul telefono il titolo si riempie dopo che il pannello si è aperto (o che il nome è atterrato)
+    if (senzaMouse.matches) brilla(titolo(id), id, 950);
+    else tempesta(titolo(id), id);
   }
   window.addEventListener('hashchange', titoloAperto);
   // cambiando misura della finestra o tema, i nomi tempestati si ridisegnano (misure e colori nuovi)
-  const ridisegna = () => { for (const n of [...nomi.values()]) if (n.el.classList.contains('e-strass')) tempesta(n.el, n.id); };
+  const ridisegna = () => { for (const n of [...nomi.values()]) if (n.el.classList.contains('e-strass') && !(n.brillaFino > performance.now())) tempesta(n.el, n.id); };
   let attesa;
   window.addEventListener('resize', () => { clearTimeout(attesa); attesa = setTimeout(ridisegna, 200); });
   new MutationObserver(ridisegna).observe(document.documentElement, { attributes: true, attributeFilter: ['data-tema'] });
 
   // quello che serve a progetti.js: il titolo del progetto, e la copia che vola con i suoi strass
   window.nomiStrass = {
-    titolo(el) { const id = el.closest('[data-pannello]')?.id; return id && colore(id) ? tempesta(el, id) : null; },
+    titolo(el) {
+      const id = el.closest('[data-pannello]')?.id;
+      if (!id || !colore(id)) return null;
+      return senzaMouse.matches ? brilla(el, id, 900) : tempesta(el, id);
+    },
     vesti(da, copia) {
       const n = nomi.get(da);
       if (!n || !da.classList.contains('e-strass')) return null;
