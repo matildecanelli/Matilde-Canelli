@@ -18,7 +18,7 @@
   <link rel="preload" href="assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/home.css">
-  <link rel="stylesheet" href="css/stella.css?v=20261118a">
+  <link rel="stylesheet" href="css/stella.css?v=20261118b">
   <!-- Three.js (la libreria per il 3D nel browser) caricato da un CDN, senza installare niente -->
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
@@ -37,7 +37,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
-  <link rel="stylesheet" href="css/finestre.css?v=20261118a">
+  <link rel="stylesheet" href="css/finestre.css?v=20261118b">
   <!-- Se Three.js non arriva dal CDN, stella.js non parte e window.palco non esiste:
        a pagina caricata lo controlliamo e mostriamo la composizione finale, ferma -->
   <script>
@@ -123,7 +123,7 @@
     <aside class="finestra finestra--firmamento" aria-label="Firmamento" data-entra>
       <p class="finestra__barra"><svg class="finestra__icona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 0C12.4 8 16 11.6 24 12 16 12.4 12.4 16 12 24 11.6 16 8 12.4 0 12 8 11.6 11.6 8 12 0Z"/></svg><span>scegli una stella</span><span class="finestra__tasti" aria-hidden="true"><i class="t-riduci"></i><i class="t-ingrandisci"></i><i class="t-chiudi"></i></span></p>
       <div class="finestra__corpo">
-        <button class="finestra__giu" type="button" data-apri-firmamento aria-label="Apri il firmamento: scegli una stella e ti dirò chi sei">…e ti dirò chi sei. <span class="finestra__tondo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg></span></button>
+        <button class="finestra__giu" type="button" data-apri-firmamento aria-label="Apri il firmamento: scegli una stella. Ti dirò chi sei, ma non fidarti troppo">Ti dirò chi sei, ma non fidarti troppo. <span class="finestra__tondo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg></span></button>
       </div>
     </aside>
     <!-- la striscia in fondo, lilla, che scorre piano (due copie uguali per un giro senza scatti) -->
@@ -157,6 +157,12 @@
         document.querySelector('[data-apri-firmamento]').addEventListener('click', function (e) {
           var giu = document.querySelector('[data-giu]');
           if (giu && giu.getAttribute('aria-expanded') !== 'true') giu.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: e.detail }));
+        });
+        // come la freccia di prima: col mouse sopra il tasto tondo, uno scoppio di stelline
+        document.querySelector('[data-apri-firmamento]').addEventListener('pointerenter', function (e) {
+          if (e.pointerType !== 'mouse' || !window.scoppioStelline || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          var b = this.querySelector('.finestra__tondo').getBoundingClientRect();
+          window.scoppioStelline(b.left + b.width / 2, b.top + b.height / 2);
         });
       })();
     </script>
@@ -687,14 +693,14 @@
   <div class="bling" data-bling aria-hidden="true"></div>
   <div class="lampo" data-lampo aria-hidden="true"></div>
 
-  <script src="js/stella.js?v=20261118a" type="module"></script>
-  <script src="js/lattina.js?v=20261118a" type="module"></script>
-  <script src="js/statua.js?v=20261118a" type="module"></script>
-  <script src="js/occhiali.js?v=20261118a" type="module"></script>
-  <script src="js/barattolo.js?v=20261118a" type="module"></script>
-  <script src="js/fotocamera.js?v=20261118a" type="module"></script>
-  <script src="js/nomi-strass.js?v=20261118a" type="module"></script>
-  <script src="js/pannelli.js?v=20261118a" defer></script>
+  <script src="js/stella.js?v=20261118b" type="module"></script>
+  <script src="js/lattina.js?v=20261118b" type="module"></script>
+  <script src="js/statua.js?v=20261118b" type="module"></script>
+  <script src="js/occhiali.js?v=20261118b" type="module"></script>
+  <script src="js/barattolo.js?v=20261118b" type="module"></script>
+  <script src="js/fotocamera.js?v=20261118b" type="module"></script>
+  <script src="js/nomi-strass.js?v=20261118b" type="module"></script>
+  <script src="js/pannelli.js?v=20261118b" defer></script>
   <script src="js/quiz.js" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>

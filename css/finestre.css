@@ -7,7 +7,7 @@
    bordo lilla (alcune inclinate): chi_sono.txt, fatto_a_mano.exe (uno dei suoi
    oggetti di strass in 3D che gira da solo, uno per caricamento), il firmamento
    (al posto della freccia) e il menu; in fondo una striscia lilla che scorre.
-   Nel tema chiaro le finestre si invertono: corpo chiaro, barra e bordo viola.
+   Nel tema chiaro le finestre restano nere, con barra e bordo viola.
    ========================================================================== */
 
 :root {
@@ -20,14 +20,15 @@
   --f-su-barra: #0b0a0c;
   --f-testo: var(--chiaro);
   --lucina: #fff;
+  --f-accento: var(--palette-lilla);         /* dentro le finestre (sempre nere): i segni, il passaggio del mouse, il tasto tondo */
 }
-/* tema chiaro: tutto si inverte. Pagina lavanda, nome viola (stella.css), finestre chiare con barra e bordo viola */
+/* tema chiaro: pagina lavanda, nome viola (stella.css); le finestre restano nere, con barra e bordo viola */
 :root[data-tema="chiaro"] {
   --lilla: var(--palette-viola);
-  --f-fondo: var(--palette-lavanda);
+  --f-fondo: #0b0a0c;
   --f-barra: var(--palette-viola);
   --f-su-barra: var(--palette-lavanda);
-  --f-testo: var(--palette-nero);
+  --f-testo: var(--palette-avorio);
   --lucina: var(--palette-viola);
 }
 :root:not([data-tema="chiaro"]) body, :root:not([data-tema="chiaro"]) .palco { background: #0b0a0c; }
@@ -63,7 +64,7 @@
   font: inherit; color: var(--f-testo);
   text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px;
 }
-.finestra__vai:hover, .finestra__vai:focus-visible { color: var(--lilla); text-decoration-thickness: 2px; }
+.finestra__vai:hover, .finestra__vai:focus-visible { color: var(--f-accento); text-decoration-thickness: 2px; }
 .finestra__vai--grande { font-family: var(--font); font-size: 1.125rem; }
 
 /* la finestra del progetto: dentro solo l'oggetto 3D, al centro; tutta la finestra porta al progetto */
@@ -83,13 +84,13 @@
 }
 .finestra__tondo {
   display: grid; place-items: center; flex: none;
-  width: 3rem; height: 3rem; border: 3px solid var(--colore-tema); border-radius: 999px;
-  color: var(--colore-tema); transition: background-color 250ms ease, color 250ms ease;
+  width: 3rem; height: 3rem; border: 3px solid var(--f-accento); border-radius: 999px;
+  color: var(--f-accento); transition: background-color 250ms ease, color 250ms ease;
 }
 .finestra__tondo svg { width: 1.35rem; height: 1.35rem; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.finestra__giu:hover .finestra__tondo, .finestra__giu:focus-visible .finestra__tondo { background: var(--colore-tema); color: var(--fondo); }
+.finestra__giu:hover .finestra__tondo, .finestra__giu:focus-visible .finestra__tondo { background: var(--f-accento); color: var(--f-fondo); }
 .finestra__giu:focus-visible { outline: none; }
-.finestra__giu:focus-visible .finestra__tondo { outline: 2px solid var(--colore-tema); outline-offset: 3px; }
+.finestra__giu:focus-visible .finestra__tondo { outline: 2px solid var(--f-accento); outline-offset: 3px; }
 @media (prefers-reduced-motion: no-preference) {
   .finestra__tondo svg { animation: giu-scende 1.8s ease-in-out infinite; }
 }
@@ -107,6 +108,13 @@
   display: block; position: absolute; z-index: 3; pointer-events: none;
   width: 2.25rem; height: 2.25rem; fill: var(--lucina);
   filter: drop-shadow(0 0 0.5rem rgb(255 255 255 / 0.55)) drop-shadow(0 0 1.2rem color-mix(in srgb, var(--lilla) 60%, transparent));
+}
+/* le stelline pulsano piano, ognuna col suo ritmo */
+@media (prefers-reduced-motion: no-preference) {
+  :root .lucina { animation: pulsa 2.8s ease-in-out infinite; }
+  :root .lucina--2 { animation-duration: 3.4s; animation-delay: -1.2s; }
+  :root .lucina--3 { animation-duration: 2.4s; animation-delay: -0.6s; }
+  @keyframes pulsa { 0%, 100% { scale: 0.72; opacity: 0.7; } 50% { scale: 1.08; opacity: 1; } }
 }
 
 /* ---------- La striscia in fondo ---------- */
@@ -163,9 +171,10 @@
       var(--f-barra);
   }
   :root .menu ul { display: grid; justify-items: start; gap: 0; padding: 0.6rem 1rem 0.8rem; }
-  :root .palco .menu a { font-size: 1.375rem; padding: 0.2rem 0; color: var(--f-testo); text-shadow: none; }
-  :root .palco .menu a::before { content: "> "; font-family: var(--mono); font-size: 0.8em; color: var(--lilla); }
-  :root .palco .menu a:hover, :root .palco .menu a:focus-visible { transform: translateX(0.3rem); color: var(--lilla); }
+  /* le voci verdi, come il menu di sempre; al passaggio diventano chiare */
+  :root .palco .menu a { font-size: 1.375rem; padding: 0.2rem 0; color: var(--palette-salvia-chiaro); text-shadow: none; }
+  :root .palco .menu a::before { content: "> "; font-family: var(--mono); font-size: 0.8em; color: var(--f-accento); }
+  :root .palco .menu a:hover, :root .palco .menu a:focus-visible { transform: translateX(0.3rem); color: var(--f-testo); }
   :root .palco .menu a[data-voce="progetti"]::after { display: none; }
 
   :root .nome { left: calc(var(--margine) + 0.6rem); top: var(--T); font-size: var(--F); }
