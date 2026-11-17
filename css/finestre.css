@@ -203,20 +203,23 @@
 
 /* ---------- Telefono e schermi in verticale ---------- */
 @media (max-width: 40rem), (max-aspect-ratio: 1/1) {
-  :root .finestra--firmamento, :root .lucina--3 { display: none; }
+  /* sul telefono a sinistra c'è la finestra del firmamento (al posto di chi_sono.txt: Chi sono sta nel menu)
+     e la freccia sotto non serve più: lo spazio in basso resta libero */
+  :root .finestra--me, :root .lucina--3 { display: none; }
   :root .orbita { display: none; }
   :root .lucina { width: 1.4rem; height: 1.4rem; }
   :root .lucina--1 { right: 8%; top: 27%; }
   :root .lucina--2 { left: 55%; bottom: 30%; }
-  :root .finestra--me { left: var(--margine); width: 50%; bottom: calc(var(--nastro) + var(--margine) + 6.5rem); rotate: -2deg; }
-  :root .finestra--me .finestra__corpo { font-size: 0.75rem; padding: 0.7rem 0.8rem 0.8rem; }
-  :root .finestra--me .finestra__barra, :root .finestra--spark .finestra__barra { font-size: 0.75rem; }
-  :root .finestra--spark { right: var(--margine); bottom: calc(var(--nastro) + var(--margine) + 7.5rem); rotate: 2deg; }
+  :root .finestra--firmamento { left: var(--margine); width: 50%; bottom: calc(var(--nastro) + var(--margine) + 1.5rem); rotate: -2deg; }
+  :root .finestra--firmamento .finestra__corpo { padding: 0.75rem 0.8rem 0.85rem; }
+  :root .finestra--firmamento .finestra__giu { flex-direction: column; align-items: flex-start; gap: 0.7rem; font-size: 0.9375rem; }
+  :root .finestra--firmamento .finestra__barra, :root .finestra--spark .finestra__barra { font-size: 0.75rem; }
+  :root .finestra--spark { right: var(--margine); bottom: calc(var(--nastro) + var(--margine) + 2.5rem); rotate: 2deg; }
   :root .finestra--spark .finestra__oggetto--alto { width: 4rem; }
   :root .finestra--spark .finestra__oggetto--largo { width: 5.5rem; }
   /* sul telefono le due finestre stanno affiancate: i tastini decorativi della barra non ci starebbero */
   :root .finestra__tasti { display: none; }
-  :root .giu:not([aria-expanded="true"]) { bottom: calc(var(--nastro) + var(--margine) + 0.5rem); }
+  :root .giu:not([aria-expanded="true"]) { display: none; }   /* il firmamento si apre dalla sua finestra; aperto, la freccia torna per chiuderlo */
   :root { --nastro: 2.5rem; }
   .nastro__scorre p { font-size: 0.8125rem; }
 }
