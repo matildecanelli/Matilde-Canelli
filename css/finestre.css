@@ -103,7 +103,7 @@
 
 /* ---------- L'orbita e le stelline ---------- */
 :root .orbita {
-  display: block; position: absolute; z-index: 1; pointer-events: none;
+  display: block; position: absolute; z-index: 0; pointer-events: none;   /* dietro il nome (z 1) e dietro la stella */
   translate: -50% -50%; rotate: -16deg;
   border: 1.5px solid var(--lilla); border-radius: 50%;
 }
