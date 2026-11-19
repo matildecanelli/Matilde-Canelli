@@ -64,8 +64,8 @@
     <!-- In alto a destra: i due download e il cambio di tema -->
     <div class="azioni" data-entra>
       <a class="link" href="assets/docs/Canelli_Matilde_CV.pdf" download="Matilde-Canelli-CV.pdf">Scarica il CV</a>
-      <!-- apre il pannello Portfolio, dove si sceglie la versione da scaricare -->
-      <a class="link" href="#portfolio">Scarica il portfolio</a>
+      <!-- scarica subito il portfolio (la versione leggera, l'unica sul sito) -->
+      <a class="link" href="assets/docs/Matilde-Canelli_Portfolio_2026_Compresso.pdf" download="Matilde-Canelli-Portfolio.pdf">Scarica il portfolio</a>
       <!-- Il cambio di tema: solo il simbolo (luna sul nero, sole sul bianco) dentro un bordo spesso.
            Al clic fa un piccolo scoppio di stelline (js/tema.js). -->
       <button class="tema" type="button" aria-pressed="false" aria-label="Tema chiaro" data-tema-bottone>
@@ -560,7 +560,7 @@
           <div><dt>LinkedIn</dt><dd><a class="link" href="https://www.linkedin.com/in/matilde-canelli-91ab14238">matilde-canelli</a></dd></div>
           <div><dt>GitHub</dt><dd><a class="link" href="https://github.com/matildecanelli">matildecanelli</a></dd></div>
           <div><dt>CV</dt><dd><a class="link" href="assets/docs/Canelli_Matilde_CV.pdf" download="Matilde-Canelli-CV.pdf">Scarica il PDF</a></dd></div>
-          <div><dt>Portfolio</dt><dd><a class="link" href="#portfolio">Scegli la versione</a></dd></div>
+          <div><dt>Portfolio</dt><dd><a class="link" href="assets/docs/Matilde-Canelli_Portfolio_2026_Compresso.pdf" download="Matilde-Canelli-Portfolio.pdf">Scarica il PDF</a></dd></div>
         </dl>
         <!-- Quando il repository del sito avrà il suo nome definitivo, qui va il link diretto -->
         <p class="contatti__codice">Questo sito l'ho progettato e sviluppato io, in HTML, CSS e JavaScript, lavorando anche con l'AI. Il codice sarà pubblicato sul mio <a class="link" href="https://github.com/matildecanelli">profilo GitHub</a>.</p>
@@ -615,24 +615,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Il portfolio da scaricare, in due versioni: due nomi come in Progetti, con gli strass al passaggio.
-         È un pannello piccolo, al centro; si apre con la falena (js/pannelli.js). I PDF sono quelli di Matilde, così come li ha dati:
-         non vanno cambiati senza chiederle. -->
-    <section class="pannello pannello--progetti pannello--piccolo" id="portfolio" aria-labelledby="portfolio-titolo" data-pannello data-piccolo style="--c1:var(--colore-testo); --c2:var(--colore-fondo); --titolo:var(--colore-testo)">
-      <button class="pannello__chiudi" type="button" data-chiudi>Chiudi</button>
-      <h2 class="pannello__titolo solo-lettori" id="portfolio-titolo" tabindex="-1">Scarica il portfolio</h2>
-      <ol class="elenco-progetti" data-riquadro>
-        <li><a class="elenco-progetti__voce" href="assets/docs/Matilde-Canelli_Portfolio_2026_Alta-Qualita.pdf" download data-scarica data-voce="completo" data-strass="#B9A2D2" style="--sopra:#B9A2D2; --c1:#705094">
-          <span class="elenco-progetti__nome">Alta qualità</span>
-          <span class="elenco-progetti__tipo">la versione più nitida · PDF, 53 MB</span>
-        </a></li>
-        <li><a class="elenco-progetti__voce" href="assets/docs/Matilde-Canelli_Portfolio_2026_Compresso.pdf" download data-scarica data-voce="leggero" data-strass="#a9c4a9" style="--sopra:#a9c4a9; --c1:#5e7d5e">
-          <span class="elenco-progetti__nome">Compresso</span>
-          <span class="elenco-progetti__tipo">più veloce da scaricare · PDF, 10 MB</span>
-        </a></li>
-      </ol>
     </section>
 
     <!-- Il pannello della stella scelta nel quiz (js/quiz.js mostra la risposta giusta).
