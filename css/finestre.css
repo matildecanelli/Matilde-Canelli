@@ -130,7 +130,7 @@
 .nastro__scorre { display: flex; width: max-content; height: 100%; align-items: center; }
 .nastro__scorre p {
   display: flex; align-items: center; margin: 0; white-space: nowrap;
-  font-family: var(--mono); font-size: 0.875rem; letter-spacing: 0.02em;
+  font-family: "Anton", Impact, sans-serif; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase;   /* in Anton si legge meglio */
   color: var(--lilla);
 }
 /* in fondo a tutto, sotto la striscia: powered by… */
@@ -217,17 +217,21 @@
   :root .lucina { width: 1.4rem; height: 1.4rem; }
   :root .lucina--1 { right: 8%; top: 27%; }
   :root .lucina--2 { left: 55%; bottom: 30%; }
-  :root .finestra--firmamento { left: var(--margine); width: 50%; bottom: calc(var(--nastro) + var(--piede) + var(--margine) + 1.5rem); rotate: -2deg; }
-  :root .finestra--firmamento .finestra__corpo { padding: 0.75rem 0.8rem 0.85rem; }
-  :root .finestra--firmamento .finestra__giu { flex-direction: column; align-items: flex-start; gap: 0.7rem; font-size: 0.9375rem; }
+  :root .finestra--firmamento { left: var(--margine); width: 50%; bottom: calc(var(--nastro) + var(--margine) * 0.5 + 0.7rem); rotate: -2deg; }
+  :root .finestra--firmamento .finestra__corpo { padding: 0.55rem 0.8rem 0.6rem; }
+  :root .finestra--firmamento .finestra__giu { flex-direction: column; align-items: flex-start; gap: 0.4rem; font-size: 0.875rem; line-height: 1.4; }
+  :root .finestra--firmamento .finestra__tondo { width: 2.25rem; height: 2.25rem; border-width: 2.5px; }
+  :root .finestra--firmamento .finestra__tondo svg { width: 1.1rem; height: 1.1rem; }
   :root .finestra--firmamento .finestra__barra, :root .finestra--spark .finestra__barra { font-size: 0.75rem; }
-  :root .finestra--spark { right: var(--margine); bottom: calc(var(--nastro) + var(--piede) + var(--margine) + 2.5rem); rotate: 2deg; }
+  :root .finestra--spark { right: var(--margine); bottom: calc(var(--nastro) + var(--margine) * 0.5 + 1.6rem); rotate: 2deg; }
   :root .finestra--spark .finestra__oggetto--alto { width: 4rem; }
   :root .finestra--spark .finestra__oggetto--largo { width: 5.5rem; }
   /* sul telefono le due finestre stanno affiancate: i tastini decorativi della barra non ci starebbero */
   :root .finestra__tasti { display: none; }
   :root .giu:not([aria-expanded="true"]) { display: none; }   /* il firmamento si apre dalla sua finestra; aperto, la freccia torna per chiuderlo */
-  :root { --nastro: 2.5rem; --piede: 2.75rem; }   /* "powered by…" sul telefono va su due righe */
-  :root .piede { font-size: 0.75rem; line-height: 1.4; text-wrap: balance; }   /* 12px: più piccolo non si legge */
-  .nastro__scorre p { font-size: 0.8125rem; }
+  /* sul telefono niente "powered by": la striscia scende in fondo e le finestre con lei */
+  :root { --nastro: 2.5rem; --piede: 0rem; }
+  :root .piede { display: none; }
+  :root .nastro { bottom: calc(var(--margine) * 0.5); }
+  .nastro__scorre p { font-size: 0.9375rem; }
 }
