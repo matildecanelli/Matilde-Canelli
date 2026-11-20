@@ -3,7 +3,7 @@
 
    Il lato creativo di Matilde dentro la scheda di Synapses.
    1. La pelle: dieci foto della lattina vera, scattate girandole intorno e
-      cucite in un'unica immagine a 360° (assets/img/lattina-pelle.jpg). Gli
+      cucite in un'unica immagine a 360° (assets/img/lattina-pelle.webp). Gli
       strass che si vedono sono quelli veri.
    2. La forma: il profilo della lattina (collo stretto, corpo dritto, fondo
       tondo), fatto girare su sé stesso come al tornio. La superficie si
@@ -276,7 +276,7 @@ function prepara(figura) {
   function chiediPelle() {
     if (chiesta) return;
     chiesta = true;
-    new THREE.TextureLoader().load('assets/img/lattina-pelle.jpg', (tex) => {
+    new THREE.TextureLoader().load('assets/img/lattina-pelle.webp', (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.flipY = false;                      // uv.y scende dall'alto, come la foto
       tex.wrapS = THREE.RepeatWrapping;       // il giro si richiude senza stacco

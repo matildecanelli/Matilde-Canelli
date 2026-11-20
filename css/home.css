@@ -10,7 +10,7 @@
   padding: var(--margine);
 }
 .js body { overflow: hidden; }   /* la pagina non scorre: si aprono le particelle */
-.js .palco { height: 100svh; }
+.js .palco { height: calc(100svh + var(--scena-extra, 0px)); }   /* sugli schermi bassi si allunga (js/spazio.js) */
 
 /* Il canvas 3D con PORTFOLIO e le bolle di vetro copre tutta la scena */
 .palco__scena { display: none; }

@@ -7,7 +7,7 @@
       di Apple), danno una sola statua vera, uguale da ogni lato (assets/3d/madonna.bin).
    2. La pelle: 27 fotogrammi del video proiettati sulla forma. Ogni punto prende il colore
       da quello che lo vede più di fronte, quindi le pietre sono quelle vere
-      (assets/3d/madonna-pelle.jpg). La luce del sole è stata attenuata.
+      (assets/3d/madonna-pelle.webp). La luce del sole è stata attenuata.
    3. Il piedistallo è un blocco rigido, costruito qui sulle misure vere, con le sue
       pietre proiettate dai fotogrammi (assets/3d/madonna-base.jpg): girando resta squadrato.
    Il rilievo e i lampi si ricavano dalla pelle, come sulla lattina.
@@ -256,7 +256,7 @@ function prepara(figura) {
       ok(tex);
     }, undefined, no));
     const scarica = (file) => fetch(file).then((r) => { if (!r.ok) throw new Error(file); return r.arrayBuffer(); });
-    Promise.all([scarica('assets/3d/madonna.bin'), carica('assets/3d/madonna-pelle.jpg', true), carica('assets/3d/madonna-base.jpg', true)]).then(([dati, pelle, base]) => {
+    Promise.all([scarica('assets/3d/madonna.bin'), carica('assets/3d/madonna-pelle.webp', true), carica('assets/3d/madonna-base.jpg', true)]).then(([dati, pelle, base]) => {
       costruisci(dati);
       base.wrapS = THREE.RepeatWrapping; base.wrapT = THREE.MirroredRepeatWrapping; base.needsUpdate = true;
       costruisciBlocco(base);

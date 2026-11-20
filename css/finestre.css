@@ -195,7 +195,7 @@
   /* la freccia non serve: il firmamento si apre dalla sua finestra (quando è aperto, la freccia torna per chiuderlo) */
   :root .giu:not([aria-expanded="true"]) { display: none; }
 
-  :root .orbita { left: 64%; top: 40%; width: calc(var(--stella) * 1.7); height: calc(var(--stella) * 0.62); }
+  :root .orbita { left: 64%; top: 40svh; width: calc(var(--stella) * 1.7); height: calc(var(--stella) * 0.62); }
   :root .lucina--1 { left: 2.5%; top: 37%; }
   :root .lucina--2 { left: 43.5%; top: 80%; }
   :root .lucina--3 { left: 57%; top: calc(var(--margine) + 4rem); width: 1.2rem; height: 1.2rem; }   /* sotto la riga di CV e portfolio, mai sopra le scritte */
@@ -234,4 +234,15 @@
   :root .piede { display: none; }
   :root .nastro { bottom: calc(var(--margine) * 0.5); }
   .nastro__scorre p { font-size: 0.9375rem; }
+}
+
+/* ---------- Schermi bassi in orizzontale (telefono girato, finestra del browser bassa) ----------
+   Non c'è posto per tutto: restano il nome, la stella, il menu e il firmamento; chi_sono.txt
+   (Chi sono è già nel menu) e l'oggetto si tolgono. Se ancora non ci sta, la scena si allunga
+   e il resto si raggiunge scorrendo (js/spazio.js). */
+@media (min-width: 40.01rem) and (min-aspect-ratio: 1/1) and (max-height: 31.25rem) {
+  :root .finestra--me, :root .finestra--spark, :root .lucina--3 { display: none; }
+}
+@media (min-width: 40.01rem) and (min-aspect-ratio: 1/1) and (max-height: 31.25rem) {
+  :root .menu { width: 12rem; }   /* "Chi sono" su una riga sola */
 }

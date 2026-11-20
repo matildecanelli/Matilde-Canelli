@@ -3,7 +3,7 @@
 
    Il lato creativo di Matilde dentro la scheda di Energia Pura, costruita come la lattina:
    1. La pelle, fatta come quella del barattolo di Virtuoso: davanti e dietro c'è la stampa della
-      fotocamera vera (le sue foto, in assets/3d/fotocamera-*.jpg) con il fucsia pieno al posto degli
+      fotocamera vera (le sue foto, in assets/3d/fotocamera-*.webp) con il fucsia pieno al posto degli
       strass, e sopra una griglia pulita di cristalli trasparenti, tutti uguali, in file sfalsate.
       Attraverso il vetro si vedono il fucsia e le scritte (LUMIX, 12 MEGA PIXELS), un po' ingrandite,
       come CeraVe sotto i cristalli del barattolo. Restano liberi obiettivo, flash, schermo e tasti.
@@ -442,7 +442,7 @@ function prepara(figura) {
   function chiediFotocamera() {
     if (chiesta) return;
     chiesta = true;
-    const carica = (nome) => new THREE.TextureLoader().loadAsync(`assets/3d/fotocamera-${nome}.jpg`).then((tex) => {
+    const carica = (nome) => new THREE.TextureLoader().loadAsync(`assets/3d/fotocamera-${nome}.webp`).then((tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.anisotropy = Math.min(8, motore.capabilities.getMaxAnisotropy());
       return tex;

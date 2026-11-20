@@ -42,7 +42,7 @@ const REGOLA = {
     telefono: { x: 0.72, y: 0.44, scala: 0.5 },
     verticale: { x: 0.76, y: 0.33, scala: 0.42 },   // tablet in verticale: resta appoggiata alla fine di MATILDE, come sugli altri schermi
   },
-  scroll: { computer: 0.9, telefono: 0.7 },   // quanto si scorre per tutta l'animazione (in schermi)
+  scroll: { computer: 0.5, telefono: 0.45 },  // quanto si scorre per tutta l'animazione (in schermi): poco, il nome deve arrivare subito
   fluidita: 0.8,                              // quanto il movimento "insegue" lo scroll (secondi; 0 = rigido)
   comparsa: 1.6,                              // quanto durano gli strass che compaiono all'apertura (secondi)
   // gli strass, come nella stella di cristalli: misure diverse, le piccole negli spazi tra le grandi.
@@ -533,13 +533,33 @@ function avvia() {
   /* ---------- 4. Dove sta la stella: lo decide lo scroll ---------- */
   // "avanzamento" va da 0 (inizio: stella sola al centro) a 1 (fine: stella in basso)
   const stato = { avanzamento: menoMovimento ? 1 : 0 };
-  let L = 0, A = 0, altaStella = 0;
+  let L = 0, A = 0, V = 0, altaStella = 0;
+  // A è l'altezza della scena, V quella dello schermo: sugli schermi bassi la scena è più alta
+  // dello schermo (js/spazio.js) e la stella si regola su quello che si vede, non sulla scena intera
+  const nomeEl = document.querySelector('.nome');
+  const riga2 = document.querySelector('.nome__riga--2');
+  let nomeBox = null;
+  // sul telefono la stella si appoggia sotto la fine di MATILDE: misuriamo dove finisce la scritta
+  function misuraNome() {
+    if (!nomeEl || !riga2) { nomeBox = null; return; }
+    const c = canvas.getBoundingClientRect(), n = nomeEl.getBoundingClientRect();
+    const r = document.createRange(); r.selectNodeContents(riga2);
+    nomeBox = { destra: r.getBoundingClientRect().right - c.left, sotto: n.bottom - c.top };
+  }
   function piazzaStella() {
     const tel = stretto();
     const fine = tel ? (piccolo() ? REGOLA.stellaFine.telefono : REGOLA.stellaFine.verticale) : REGOLA.stellaFine.computer;
     const k = stato.avanzamento;
-    const x = THREE.MathUtils.lerp(0, (fine.x - 0.5) * L, k);
-    const y = THREE.MathUtils.lerp(0, (0.5 - fine.y) * A, k);
+    // all'inizio la stella sta al centro di quello che si vede
+    let fx = fine.x * L, fy = fine.y * V;
+    if (tel && piccolo() && nomeBox) {
+      // telefono: sotto la E di MATILDE, appena sovrapposta, così il nome si legge tutto
+      const s = altaStella * fine.scala;
+      fx = Math.min(nomeBox.destra - 0.2 * s, L - 0.6 * s);   // senza uscire dallo schermo
+      fy = nomeBox.sotto + 0.3 * s;
+    }
+    const x = THREE.MathUtils.lerp(0, fx - L / 2, k);
+    const y = THREE.MathUtils.lerp(A / 2 - V / 2, A / 2 - fy, k);
     stella.position.set(x, y, 0);
     stella.scale.setScalar(THREE.MathUtils.lerp(1, fine.scala, k));
     // il giro: frontale all'inizio; mentre scende fa una capriola su tutti e tre gli assi
@@ -551,12 +571,14 @@ function avvia() {
 
   function misura() {
     L = canvas.clientWidth || window.innerWidth; A = canvas.clientHeight || window.innerHeight;
+    V = Math.min(A, window.innerHeight);
     motore.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     motore.setSize(L, A, false);
     camera.left = -L / 2; camera.right = L / 2; camera.top = A / 2; camera.bottom = -A / 2;
     camera.updateProjectionMatrix();
+    misuraNome();
     const tel = stretto();
-    const alta = tel ? Math.min(A * REGOLA.stellaInizio.telefono, L * 0.85) : Math.min(A * REGOLA.stellaInizio.computer, L * 0.55);
+    const alta = tel ? Math.min(V * REGOLA.stellaInizio.telefono, L * 0.85) : Math.min(V * REGOLA.stellaInizio.computer, L * 0.55);
     // ricostruiamo gli strass solo se la misura cambia davvero (il telefono cambia altezza scorrendo)
     if (Math.abs(alta - altaStella) > 12) { altaStella = alta; costruisciStella(alta); }
     piazzaStella();
@@ -701,9 +723,9 @@ function avvia() {
       });
       tl.to(stato, { avanzamento: 1, duration: 1, ease: 'power2.inOut' }, 0)
         .to('[data-scorri]', { autoAlpha: 0, duration: 0.15 }, 0)
-        .fromTo('.nome__riga--1', { yPercent: -40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.25)
-        .fromTo('.nome__riga--2', { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.32)
-        .fromTo('[data-entra]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out' }, 0.6);
+        .fromTo('.nome__riga--1', { yPercent: -40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.05)
+        .fromTo('.nome__riga--2', { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.1)
+        .fromTo('[data-entra]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.04, ease: 'power2.out' }, 0.35);
       accendiClic();
     });
     document.documentElement.classList.add('con-scroll');
@@ -763,8 +785,10 @@ function avvia() {
     disegna(performance.now());
     if (!menoMovimento) requestAnimationFrame(passo);
     // quando anche i font sono pronti, ScrollTrigger rifà le misure (il nome cambia larghezza)
-    document.fonts.ready.then(() => window.ScrollTrigger && window.ScrollTrigger.refresh());
+    document.fonts.ready.then(() => { misuraNome(); piazzaStella(); window.ScrollTrigger && window.ScrollTrigger.refresh(); });
   });
+  // la scena si è allungata o accorciata (js/spazio.js): rimisuriamo tutto
+  document.addEventListener('scena-alta', () => { if (pronto) { misura(); disegna(performance.now()); } });
   // la stella si rimisura quando cambia la misura VERA del canvas, non solo quella della finestra:
   // durante lo scroll GSAP tiene ferma la scena e la ridimensiona dopo la finestra; misurando troppo
   // presto la stella si disegnava con le misure vecchie e poi il browser la stirava (grande e deformata)

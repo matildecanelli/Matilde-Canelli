@@ -3,7 +3,7 @@
 
    Il lato creativo di Matilde dentro la scheda di Virtuoso, costruito come la lattina:
    1. La pelle: quattro viste del barattolo, srotolate e cucite in un'unica
-      immagine che gira tutto intorno (assets/3d/barattolo-pelle.jpg). I testi restano leggibili.
+      immagine che gira tutto intorno (assets/3d/barattolo-pelle.webp). I testi restano leggibili.
    2. La forma: un tornio con il corpo, la giuntura e il coperchio. Sopra il coperchio,
       che le viste non mostrano bene, ci sono gemme 3D dello stesso azzurro.
    3. Si gira trascinando (mouse o dito), con le frecce della tastiera, e quando
@@ -228,7 +228,7 @@ function prepara(figura) {
   function chiediPelle() {
     if (chiesta) return;
     chiesta = true;
-    new THREE.TextureLoader().load('assets/3d/barattolo-pelle.jpg', (tex) => {
+    new THREE.TextureLoader().load('assets/3d/barattolo-pelle.webp', (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.flipY = false;                      // uv.y scende dall'alto, come la foto
       tex.wrapS = THREE.RepeatWrapping;       // il giro si richiude senza stacco
