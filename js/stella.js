@@ -557,6 +557,12 @@ function avvia() {
       const s = altaStella * fine.scala;
       fx = Math.min(nomeBox.destra - 0.2 * s, L - 0.6 * s);   // senza uscire dallo schermo
       fy = nomeBox.sotto + 0.3 * s;
+      // dove finisce la stella: js/spazio.js tiene le finestre lontane anche da lei
+      const prima = window.stellaFine;
+      window.stellaFine = { x: fx, y: fy, r: 0.45 * s };
+      if (!prima || Math.abs(prima.y - fy) > 2 || Math.abs(prima.r - 0.45 * s) > 2) document.dispatchEvent(new CustomEvent('stella-piazzata'));
+    } else {
+      window.stellaFine = null;
     }
     const x = THREE.MathUtils.lerp(0, fx - L / 2, k);
     const y = THREE.MathUtils.lerp(A / 2 - V / 2, A / 2 - fy, k);

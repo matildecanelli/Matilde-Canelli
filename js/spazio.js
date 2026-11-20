@@ -14,7 +14,7 @@
   if (!palco || !radice.classList.contains('js')) return;
 
   const computer = window.matchMedia('(min-width: 40.01rem) and (min-aspect-ratio: 1/1)');
-  const STACCO = 16;   // lo spazio minimo tra il menu (o i link in alto) e la finestra sotto (px); col nome basta non toccarsi
+  const STACCO = 16;   // lo spazio minimo tra il menu (o i link in alto) e la finestra sotto (px); col nome 24 px di aria
 
   // ancorati in alto, con la parte dell'altezza della scena di cui scendono (chi_sono.txt sta al 13%)
   const inAlto = () => [['.azioni', 0], ['.ruolo', 0], ['.nome', 0], ['.finestra--me', 0.13]]
@@ -50,7 +50,12 @@
     const p = palco.getBoundingClientRect();
     const H = p.height;
     let serve = 0;
-    const su = inAlto().map(([s, quota]) => [scatola(s), quota, s === '.nome' ? 0 : STACCO]).filter(([r]) => r);
+    const su = inAlto().map(([s, quota]) => [scatola(s), quota, s === '.nome' ? 24 : STACCO]).filter(([r]) => r);
+    // sul telefono anche la stella di strass, appoggiata sotto il nome (js/stella.js dice dove finisce)
+    const st = window.stellaFine;
+    if (st && !computer.matches) {
+      su.push([{ left: p.left + st.x - st.r, right: p.left + st.x + st.r, top: p.top + st.y - st.r, bottom: p.top + st.y + st.r }, 0, 24]);   // 24: un po' d'aria sotto le punte
+    }
     for (const b of inFondo().map(scatola).filter(Boolean)) {
       const dalFondo = p.bottom - b.top;
       for (const [a, quota, stacco] of su) {
@@ -78,6 +83,7 @@
     presto();
   });
   window.addEventListener('load', presto);
+  document.addEventListener('stella-piazzata', presto);
   // ScrollTrigger rifà le misure dopo un resize o una rotazione: si ricontrolla dopo di lui
   if (window.ScrollTrigger) window.ScrollTrigger.addEventListener('refresh', presto);
   if (document.fonts) document.fonts.ready.then(presto);
