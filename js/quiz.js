@@ -84,10 +84,38 @@
     cielo.classList.toggle('si-trascina', telaLarga > W + 1);
     muovi(x);
   }
+  const frecce = mano ? [...mano.querySelectorAll('[data-va]')] : [];
   function muovi(nuova) {
-    x = Math.min(Math.max(0, nuova), Math.max(0, telaLarga - largo));
+    const fine = Math.max(0, telaLarga - largo);
+    x = Math.min(Math.max(0, nuova), fine);
     tela.style.transform = `translate3d(${-x}px, 0, 0)`;
+    // le frecce si spengono quando da quella parte non c'è più cielo
+    frecce.forEach((f) => {
+      const finito = f.dataset.va < 0 ? x <= 1 : x >= fine - 1;
+      f.setAttribute('aria-disabled', String(finito));
+    });
   }
+
+  /* ---------- Le frecce di "trascina il cielo": per chi non ha voglia di trascinare ----------
+     Ogni tocco fa scorrere il cielo di poco più di mezzo schermo, con una scivolata morbida. */
+  let corsa = 0;
+  function vai(verso) {
+    cancelAnimationFrame(corsa);
+    const da = x, a = Math.min(Math.max(0, x + verso * largo * 0.6), Math.max(0, telaLarga - largo));
+    if (meno) { muovi(a); return; }
+    const t0 = performance.now(), durata = 520;
+    const passo = (t) => {
+      if (presa) return;   // se nel frattempo lo si prende col dito, comanda il dito
+      const k = Math.min(1, (t - t0) / durata);
+      muovi(da + (a - da) * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) corsa = requestAnimationFrame(passo);
+    };
+    corsa = requestAnimationFrame(passo);
+  }
+  frecce.forEach((f) => f.addEventListener('click', () => {
+    if (f.getAttribute('aria-disabled') === 'true') return;
+    vai(Number(f.dataset.va));
+  }));
   new ResizeObserver(disponi).observe(cielo);
 
   /* ---------- Trascinare il cielo (col pollice o col mouse) ----------

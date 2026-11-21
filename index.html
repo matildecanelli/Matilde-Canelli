@@ -22,7 +22,7 @@
   <link rel="preload" href="assets/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/base.css?v=20261120b">
   <link rel="stylesheet" href="css/home.css?v=20261120b">
-  <link rel="stylesheet" href="css/stella.css?v=20261120b">
+  <link rel="stylesheet" href="css/stella.css?v=20261122a">
   <!-- Three.js (la libreria per il 3D nel browser) caricato da un CDN, senza installare niente -->
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js" } }
@@ -41,7 +41,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap">
-  <link rel="stylesheet" href="css/finestre.css?v=20261120b">
+  <link rel="stylesheet" href="css/finestre.css?v=20261122a">
   <!-- Se Three.js non arriva dal CDN, stella.js non parte e window.palco non esiste:
        a pagina caricata lo controlliamo e mostriamo la composizione finale, ferma -->
   <script>
@@ -244,8 +244,13 @@
         </ol>
       </div>
     </div>
-    <!-- c'è solo quando il cielo è più largo dello schermo: dice che ci sono altre stelle -->
-    <div class="cielo-tel__mano" aria-hidden="true" data-mano>← trascina il cielo →</div>
+    <!-- c'è solo quando il cielo è più largo dello schermo: dice che ci sono altre stelle,
+         e le frecce fanno scorrere il cielo anche senza trascinarlo (js/quiz.js) -->
+    <div class="cielo-tel__mano" data-mano>
+      <button class="cielo-tel__va" type="button" data-va="-1" aria-label="Scorri il cielo verso sinistra"><span aria-hidden="true">←</span></button>
+      <span class="cielo-tel__scritta">trascina il cielo</span>
+      <button class="cielo-tel__va" type="button" data-va="1" aria-label="Scorri il cielo verso destra"><span aria-hidden="true">→</span></button>
+    </div>
     <p class="cielo-tel__invito" data-invito>Tocca una stella: ti dico chi sei.</p>
   </section>
 
@@ -638,7 +643,7 @@
         <article class="quiz__risposta" data-risposta="3" hidden>
           <svg class="costellazione quiz__scelta" viewBox="0 0 458 409" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-03" width="458" height="409"/></svg>
           <h3 class="quiz__titolo" tabindex="-1">Caos con la partita IVA</h3>
-          <p class="quiz__testo">Sei un agente del caos di primo livello. Sul desktop convivono almeno 47 file chiamati «definitivo_perdavverostavolta». Eppure, nonostante la baraonda, il sistema funziona. Non chiedere come: non abbiamo tempo per queste domande.</p>
+          <p class="quiz__testo">Sei un agente del caos di primo livello. Sul desktop convivono almeno 47 file chiamati «definitivo_perdavverostavolta». Eppure, nonostante la baraonda, il sistema funziona. E soprattutto, per l’amor di Dio, nessuno tocchi niente.</p>
           <p class="quiz__vai"><a class="link" href="#synapses">Allora guarda Synapses: un lavoro di gruppo dove il caos è diventato un’identità ufficiale.</a></p>
         </article>
         <article class="quiz__risposta" data-risposta="4" hidden>
@@ -656,7 +661,7 @@
         <article class="quiz__risposta" data-risposta="6" hidden>
           <svg class="costellazione quiz__scelta" viewBox="0 0 454 369" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#essenziale-06" width="454" height="369"/></svg>
           <h3 class="quiz__titolo" tabindex="-1">Human Sources sede WC</h3>
-          <p class="quiz__testo">Hai delle doti da PR decisamente invidiabili. Tipo quelle due sconosciute che entrano in discoteca, si incontrano in bagno e nel giro di sette minuti diventano migliori amiche da una vita. Piangono insieme, si tengono i capelli e si impediscono a vicenda di svenire sul pavimento. Un’amicizia più solida di certi matrimoni.</p>
+          <p class="quiz__testo">Hai delle doti da PR decisamente invidiabili. Hai presente quelle due sconosciute che entrano in discoteca, si incontrano in bagno e nel giro di sette minuti diventano migliori amiche da una vita? Proprio della serie che piangono insieme, si tengono i capelli e si impediscono a vicenda di svenire sul pavimento o, peggio ancora, di tornare con l’ex. Ecco, tu sei in grado di creare un’amicizia del genere, che è ancora più solida di certi matrimoni. Sei una specie di mental coach delle relazioni umane, ma senza il corso da 998,99 euro.</p>
           <p class="quiz__vai"><a class="link" href="#ju1ce">Allora guarda JU1CE: un format nato per le serate, bagno compreso.</a></p>
         </article>
         <article class="quiz__risposta" data-risposta="7" hidden>
@@ -668,7 +673,7 @@
         <article class="quiz__risposta" data-risposta="8" hidden>
           <svg class="costellazione quiz__scelta" viewBox="0 0 499 377" aria-hidden="true" focusable="false"><use href="assets/img/stelle/costellazione.svg#espressiva-02" width="499" height="377"/></svg>
           <h3 class="quiz__titolo" tabindex="-1">Variabile «quarto d’ora accademico»</h3>
-          <p class="quiz__testo">Perennemente in ritardo, ma almeno arrivi con grande stile. Lasci una scia ovunque tu passi: profumo, glitter e probabilmente qualche problema organizzativo. La puntualità non sarà il tuo forte, ma l’ingresso in scena decisamente sì.</p>
+          <p class="quiz__testo">Perennemente in ritardo, ma almeno arrivi con grande stile. Lasci una scia ovunque tu passi: profumo, glitter e probabilmente il telefono all’orecchio mentre urli «tra 5 minuti sono lì» quando palesemente te ne mancano almeno 15. La puntualità non sarà il tuo forte, ma l’ingresso in scena decisamente sì.</p>
           <p class="quiz__vai"><a class="link" href="#energiapura">Allora guarda EnergiaPura: un video che sull’ingresso in scena ha vinto Miglior Soggetto.</a></p>
         </article>
         <article class="quiz__risposta" data-risposta="9" hidden>
@@ -712,7 +717,7 @@
   <script src="js/nomi-strass.js?v=20261120b" type="module"></script>
   <script src="js/spazio.js?v=20261121a" defer></script>
   <script src="js/pannelli.js?v=20261120b" defer></script>
-  <script src="js/quiz.js" defer></script>
+  <script src="js/quiz.js?v=20261122a" defer></script>
   <script src="js/tema.js" defer></script>
   <script src="js/progetti.js" defer></script>
   <script src="js/bijou-asset.js" defer></script>

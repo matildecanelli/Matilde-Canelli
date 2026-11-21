@@ -628,11 +628,23 @@ html:not([data-tema="chiaro"]) .cielo-tel__invito { color: var(--palette-salvia-
 /* il suggerimento "trascina il cielo": sotto il cielo, centrato, sempre visibile quando il cielo
    è più largo dello schermo (ci sono altre stelle da scoprire). Sul computer grande non c'è */
 .cielo-tel__mano {
-  flex: none; width: max-content; margin: 0.75rem auto 0;
-  padding: 0.45rem 0.9rem; border-radius: 999px; white-space: nowrap;
+  flex: none; display: flex; align-items: center; width: max-content; margin: 0.75rem auto 0;
+  border-radius: 999px; white-space: nowrap;
   font-size: 0.8125rem; font-weight: 700; color: var(--chiaro);
   border: 2px solid var(--palette-salvia-chiaro);
 }
+.cielo-tel__scritta { padding-block: 0.45rem; }
+/* le frecce sono bottoni: un tocco e il cielo scorre (alte quanto un pollice) */
+.cielo-tel__va {
+  display: grid; place-items: center; min-width: 2.75rem; min-height: 2.5rem; padding: 0 0.7rem;
+  border: 0; border-radius: 999px; background: none; color: inherit; font: inherit; font-size: 1rem;
+  cursor: pointer; touch-action: manipulation;
+  transition: background-color 0.2s, opacity 0.2s, scale 0.15s;
+}
+@media (hover: hover) { .cielo-tel__va:hover { background: color-mix(in srgb, var(--palette-salvia-chiaro) 22%, transparent); } }   /* sul telefono niente evidenziato che resta acceso dopo il tocco */
+.cielo-tel__va:active { scale: 0.9; }
+.cielo-tel__va:focus-visible { outline: 2px solid var(--palette-salvia-chiaro); outline-offset: 2px; }
+.cielo-tel__va[aria-disabled="true"] { opacity: 0.3; cursor: default; background: none; scale: 1; }
 [data-tema="chiaro"] .cielo-tel__mano { border-color: var(--palette-salvia); }
 .cielo-tel:not(.si-trascina) + .cielo-tel__mano { display: none; }
 

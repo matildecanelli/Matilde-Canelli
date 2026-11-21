@@ -215,7 +215,7 @@
   :root .finestra--me, :root .lucina--3 { display: none; }
   :root .orbita { display: none; }
   :root .lucina { width: 1.4rem; height: 1.4rem; }
-  :root .lucina--1 { right: 8%; top: 27%; }
+  :root .lucina--1 { left: 33%; top: auto; bottom: 36%; }   /* nel vuoto sotto il menu: mai sopra il nome (prima finiva sulla E di MATILDE) */
   :root .lucina--2 { left: 55%; bottom: 30%; }
   :root .finestra--firmamento { left: var(--margine); width: 50%; bottom: calc(var(--nastro) + var(--margine) * 0.5 + 0.7rem); rotate: -2deg; }
   :root .finestra--firmamento .finestra__corpo { padding: 0.55rem 0.8rem 0.6rem; }
