@@ -12,7 +12,7 @@ e risultato, e finisce con uno dei miei oggetti di strass (veri) ricostruito in 
 - **[three.js](https://threejs.org/) 0.169** (da jsDelivr, con un import map) per la stella e gli oggetti 3D.
 - **[GSAP](https://gsap.com/) 3.12 con ScrollTrigger** per l'animazione d'ingresso legata allo scroll.
 - Font self-hosted (Anton, Bricolage Grotesque) e Space Mono da Google Fonts.
-- Pubblicato su **Netlify** a ogni push sul ramo `main`.
+- Pubblicato su **GitHub Pages** a ogni push sul ramo `main`, con il dominio matildecanelli.com.
 
 ## Struttura
 
