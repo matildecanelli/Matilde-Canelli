@@ -79,7 +79,7 @@ Il sito è nato da una collaborazione tra me e un assistente AI, e voglio raccon
 
 - La maggior parte del codice (HTML, CSS, JavaScript, le scene three.js e gli shader degli strass)
   l'ha scritta **Claude Code** (Anthropic), seguendo le mie indicazioni.
-- I commenti nel codice li ha scritti l'assistente, seguendo le mie indicazioni; li ho rivisti e fatti
-  riscrivere in forma impersonale.
+- I commenti nel codice li ha scritti l'assistente, seguendo le mie indicazioni; li ho rivisti e li ho
+  fatti riscrivere in forma impersonale, per leggerli e studiarli più facilmente.
 
 Sto studiando il codice per saperlo spiegare e modificare da sola, a partire da `js/spazio.js`.
