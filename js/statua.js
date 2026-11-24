@@ -1,7 +1,7 @@
 /* ==========================================================================
-   statua.js: la Madonna di strass di Matilde, in 3D (Three.js)
+   statua.js: la Madonna di strass, in 3D (Three.js)
 
-   Il lato creativo di Matilde dentro la scheda di Imaze. Si comporta come la
+   Il lato creativo dentro la scheda di Imaze. Si comporta come la
    lattina di Synapses, e come lei indossa le foto vere:
    1. La forma: 88 fotogrammi del video, passati in fotogrammetria (Object Capture
       di Apple), danno una sola statua vera, uguale da ogni lato (assets/3d/madonna.bin).

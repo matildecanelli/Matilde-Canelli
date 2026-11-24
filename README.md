@@ -8,9 +8,9 @@ e risultato, e finisce con uno dei miei oggetti di strass (veri) ricostruito in 
 
 ## Tecnologie
 
-- **HTML, CSS e JavaScript scritti a mano**, senza framework né build: si apre `index.html` e funziona.
+- **HTML, CSS e JavaScript**, senza framework né build: si apre `index.html` e funziona.
 - **[three.js](https://threejs.org/) 0.169** (da jsDelivr, con un import map) per la stella e gli oggetti 3D.
-- **[GSAP](https://gsap.com/) 3.12 con ScrollTrigger** per l'animazione d'ingresso legata allo scroll.
+- **[GSAP](https://gsap.com/) 3.12** per l'animazione d'ingresso della home.
 - Font self-hosted (Anton, Bricolage Grotesque) e Space Mono da Google Fonts.
 - Pubblicato su **GitHub Pages** a ogni push sul ramo `main`, con il dominio matildecanelli.com.
 
@@ -60,8 +60,26 @@ python3 -m http.server 8000
 
 poi si apre `http://localhost:8000`.
 
-## Uso dell'AI
+## Come è stato fatto
 
-Parte del codice è stata scritta insieme a un assistente AI (Claude), con le mie
-indicazioni, i miei disegni, le mie foto e le mie revisioni. Le scelte di design e i
-contenuti sono miei.
+Il sito è nato da una collaborazione tra me e un assistente AI, e voglio raccontarla con precisione.
+
+**Cosa ho deciso e fatto io**
+
+- Il concept: un portfolio come una scrivania da vecchio computer, con una stella di strass al centro.
+- La direzione visiva: palette, font, impaginazione, il tono delle finestrelle e del nastro.
+- Gli oggetti di strass dei progetti: sono oggetti veri che ho tempestato a mano e fotografato.
+  Ho scelto di ricostruirli in 3D partendo dalle mie foto (anche con la fotogrammetria) invece
+  di generare pietre finte.
+- I disegni delle 12 stelle del firmamento e i testi, compresi quelli del quiz.
+- Le revisioni: ho provato il sito su schermi diversi, ho chiesto cambi e correzioni, ho scelto
+  tra le proposte e ho integrato i suggerimenti del mio professore.
+
+**Cosa ha fatto l'AI**
+
+- La maggior parte del codice (HTML, CSS, JavaScript, le scene three.js e gli shader degli strass)
+  l'ha scritta **Claude Code** (Anthropic), seguendo le mie indicazioni.
+- I commenti nel codice li ha scritti l'assistente, seguendo le mie indicazioni; li ho rivisti e fatti
+  riscrivere in forma impersonale.
+
+Sto studiando il codice per saperlo spiegare e modificare da sola, a partire da `js/spazio.js`.

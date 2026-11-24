@@ -1,7 +1,7 @@
 /* ==========================================================================
-   lattina.js: la lattina di strass di Matilde, da girare (Three.js)
+   lattina.js: la lattina di strass, da girare (Three.js)
 
-   Il lato creativo di Matilde dentro la scheda di Synapses.
+   Il lato creativo dentro la scheda di Synapses.
    1. La pelle: dieci foto della lattina vera, scattate girandole intorno e
       cucite in un'unica immagine a 360° (assets/img/lattina-pelle.webp). Gli
       strass che si vedono sono quelli veri.

@@ -1,7 +1,7 @@
 /* ==========================================================================
    quiz.js: "Scegli la tua stella", il firmamento
 
-   Le 12 stelle sono quelle disegnate da Matilde, ognuna da un tratto del suo
+   Le 12 stelle sono disegni originali, ognuna da un tratto del
    carattere, sparse in un cielo pieno di puntini (stelle lontane).
    - Sul computer il cielo è largo quanto lo schermo e si vedono tutte e 12.
    - Più lo schermo è stretto, meno stelle si vedono (gradualmente, fino a 6 sul
@@ -207,7 +207,6 @@
         return;
       }
       // la fascia: la pagina si allunga, si scende fin lì e poi lo scorrimento si blocca
-      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
       requestAnimationFrame(() => {
         const blocca = () => { radice.classList.add('firmamento-aperto'); alleStelle(); };
         if (subito || meno) { quiz.scrollIntoView({ block: 'start' }); blocca(); return; }
@@ -235,11 +234,10 @@
         setTimeout(() => { if (quiz.classList.contains('e-chiude')) togli(); }, 600);
         return;
       }
-      // la fascia: si sblocca, si torna su alla scena finita e solo dopo la fascia sparisce (niente salti)
+      // la fascia: si sblocca, si torna su alla home e solo dopo la fascia sparisce (niente salti)
       radice.classList.remove('firmamento-aperto');
-      const st = window.ScrollTrigger && window.ScrollTrigger.getAll()[0];
-      const su = st ? st.end : 0;
-      const togli = () => { quiz.classList.remove('e-aperto'); rimettiFreccia(); if (window.ScrollTrigger) window.ScrollTrigger.refresh(); };
+      const su = 0;
+      const togli = () => { quiz.classList.remove('e-aperto'); rimettiFreccia(); };
       if (window.scrollY <= su + 2) { togli(); return; }
       window.scrollTo({ top: su, behavior: meno ? 'auto' : 'smooth' });
       dopoLoScorrimento(togli);

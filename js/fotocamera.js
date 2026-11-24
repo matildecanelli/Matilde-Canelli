@@ -1,13 +1,13 @@
 /* ==========================================================================
-   fotocamera.js: la Panasonic Lumix rosa di strass di Matilde, da girare (Three.js)
+   fotocamera.js: la Panasonic Lumix rosa di strass, da girare (Three.js)
 
-   Il lato creativo di Matilde dentro la scheda di Energia Pura, costruita come la lattina:
+   Il lato creativo dentro la scheda di Energia Pura, costruita come la lattina:
    1. La pelle, fatta come quella del barattolo di Virtuoso: davanti e dietro c'è la stampa della
-      fotocamera vera (le sue foto, in assets/3d/fotocamera-*.webp) con il fucsia pieno al posto degli
+      fotocamera vera (le foto, in assets/3d/fotocamera-*.webp) con il fucsia pieno al posto degli
       strass, e sopra una griglia pulita di cristalli trasparenti, tutti uguali, in file sfalsate.
       Attraverso il vetro si vedono il fucsia e le scritte (LUMIX, 12 MEGA PIXELS), un po' ingrandite,
       come CeraVe sotto i cristalli del barattolo. Restano liberi obiettivo, flash, schermo e tasti.
-      Sui fianchi ci sono le sue foto, con gli strass veri.
+      Sui fianchi ci sono le foto vere, con gli strass veri.
    2. La forma: un blocco rigido con gli spigoli tondi, misurato sulle foto. Ogni pelle è
       proiettata sul suo lato e sugli spigoli vicini; sopra e sotto, che le foto non mostrano,
       c'è la fascia del fianco, ripetuta. L'obiettivo e la ghiera dello scatto sporgono in 3D.

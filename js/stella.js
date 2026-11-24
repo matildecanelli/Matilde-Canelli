@@ -2,17 +2,16 @@
    stella.js: la stella di strass, il caricamento e lo scroll (Three.js + GSAP)
 
    L'idea, in quattro passi:
-   1. La stella di Matilde (il suo PNG) viene riempita di strass di misure
+   1. La stella disegnata (il PNG) viene riempita di strass di misure
       diverse, come quando si tempesta una forma a mano: prima le pietre
       grandi, poi le piccole negli spazi rimasti.
    2. All'apertura gli strass compaiono uno a uno, dal centro verso le punte:
-      è lo stato di caricamento della pagina. Nessuna attesa obbligatoria:
-      si può scorrere subito.
+      è lo stato di caricamento della pagina.
    3. Gli strass sono cristallo; la luce sta sopra il mouse e i riflessi
       vicini prendono i colori dei progetti, che cambiano a caso.
-   4. Scorrendo (GSAP + ScrollTrigger, con "scrub": il movimento segue lo
-      scroll e torna indietro se torni su) la stella scende, entrano il nome,
-      il ruolo e il menu. Poi la pagina scorre normalmente.
+   4. Subito dopo, da sola e senza bisogno di scorrere (GSAP), la stella scende
+      al suo posto ed entrano il nome, il ruolo e il menu: in meno di due secondi
+      la prima schermata è completa. La pagina scorre normalmente.
    ========================================================================== */
 
 import * as THREE from 'three';
@@ -42,8 +41,9 @@ const REGOLA = {
     telefono: { x: 0.72, y: 0.44, scala: 0.5 },
     verticale: { x: 0.76, y: 0.33, scala: 0.42 },   // tablet in verticale: resta appoggiata alla fine di MATILDE, come sugli altri schermi
   },
-  scroll: { computer: 0.5, telefono: 0.45 },  // quanto si scorre per tutta l'animazione (in schermi): poco, il nome deve arrivare subito
-  fluidita: 0.8,                              // quanto il movimento "insegue" lo scroll (secondi; 0 = rigido)
+  // l'ingresso parte da solo all'apertura: dopo quanto (secondi) e quanto dura in tutto.
+  // Corto apposta: chi apre il link deve vedere subito nome e menu
+  ingresso: { attesa: 0.25, durata: 1.6 },
   comparsa: 1.6,                              // quanto durano gli strass che compaiono all'apertura (secondi)
   // gli strass, come nella stella di cristalli: misure diverse, le piccole negli spazi tra le grandi.
   // misura = la pietra più grande (rispetto alla stella); misure = le altre, in proporzione
@@ -693,57 +693,33 @@ function avvia() {
     v.menu.addEventListener('blur', giu);
   });
 
-  /* ---------- 6. Lo scroll: GSAP muove la stella, il nome, il ruolo e il menu ---------- */
+  /* ---------- 6. L'ingresso: GSAP muove la stella, il nome, il ruolo e il menu ----------
+     Parte da solo appena la stella è pronta (non serve scorrere): la prima schermata
+     è completa in meno di due secondi. */
   // finché un comando non è comparso (menu, CV, tema, freccia, stelle) non risponde ai clic:
   // si tocca solo quello che si vede. Con la tastiera invece ci si arriva lo stesso (vedi sotto)
   const daAccendere = [...document.querySelectorAll('[data-entra]')];
   function accendiClic() {
     daAccendere.forEach((el) => el.classList.toggle('e-spento', parseFloat(getComputedStyle(el).opacity) < 0.6));
   }
-  function preparaScroll() {
-    const gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
-    // senza GSAP o con "riduci movimento": composizione finale, ferma, senza pin
-    if (!gsap || !ScrollTrigger || menoMovimento) {
+  function preparaIngresso() {
+    const gsap = window.gsap;
+    // senza GSAP o con "riduci movimento": composizione finale, ferma
+    if (!gsap || menoMovimento) {
       stato.avanzamento = 1;
       document.documentElement.classList.add('statica');
       return;
     }
-    gsap.registerPlugin(ScrollTrigger);
-    // due versioni della timeline: computer e telefono. gsap.matchMedia le scambia da sola
-    // quando cambia la finestra o si ruota il telefono, e pulisce quella vecchia.
-    const mm = gsap.matchMedia();
-    let tl = null;
-    mm.add({ telefono: '(max-width: 639px), (max-aspect-ratio: 1/1)', computer: '(min-width: 640px) and (min-aspect-ratio: 1/1)', piccolo: '(max-width: 639px)' }, (ctx) => {
-      const tel = ctx.conditions.telefono;
-      tl = gsap.timeline({
-        defaults: { ease: 'none' },
-        onUpdate: accendiClic,
-        scrollTrigger: {
-          trigger: palcoEl,
-          start: 'top top',
-          end: () => `+=${window.innerHeight * (tel ? REGOLA.scroll.telefono : REGOLA.scroll.computer)}`,
-          pin: true,                     // la scena resta ferma mentre l'animazione avanza
-          scrub: REGOLA.fluidita,        // l'animazione segue lo scroll, avanti e indietro
-          invalidateOnRefresh: true,     // ricalcola le misure dopo un resize o una rotazione
-        },
-      });
-      tl.to(stato, { avanzamento: 1, duration: 1, ease: 'power2.inOut' }, 0)
-        .to('[data-scorri]', { autoAlpha: 0, duration: 0.15 }, 0)
-        .fromTo('.nome__riga--1', { yPercent: -40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.05)
-        .fromTo('.nome__riga--2', { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.1)
-        .fromTo('[data-entra]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.04, ease: 'power2.out' }, 0.35);
-      accendiClic();
-    });
-    document.documentElement.classList.add('con-scroll');
-    // ricontrollo anche quando ScrollTrigger rifà le misure (rotazione, barra del browser che
-    // si nasconde) e quando lo scroll si ferma: un comando che si vede deve sempre rispondere
-    ScrollTrigger.addEventListener('refresh', () => requestAnimationFrame(accendiClic));
-    ScrollTrigger.addEventListener('scrollEnd', accendiClic);
-    // chi usa la tastiera e arriva su un link ancora nascosto: saltiamo alla fine dell'animazione
-    document.querySelectorAll('[data-entra]').forEach((el) => el.addEventListener('focusin', () => {
-      const st = tl && tl.scrollTrigger;
-      if (st && st.progress < 1) window.scrollTo(0, st.end);
-    }));
+    const finito = () => { accendiClic(); document.dispatchEvent(new CustomEvent('ingresso-finito')); };   // js/spazio.js rimisura a ingresso finito
+    const tl = gsap.timeline({ delay: REGOLA.ingresso.attesa, onUpdate: accendiClic, onComplete: finito });
+    tl.to(stato, { avanzamento: 1, duration: 1, ease: 'power2.inOut' }, 0)
+      .fromTo('.nome__riga--1', { yPercent: -40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.05)
+      .fromTo('.nome__riga--2', { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, 0.1)
+      .fromTo('[data-entra]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.04, ease: 'power2.out' }, 0.35);
+    tl.timeScale(tl.duration() / REGOLA.ingresso.durata);   // tutta la sequenza dura REGOLA.ingresso.durata secondi
+    accendiClic();
+    // chi usa la tastiera e arriva su un link ancora nascosto: l'ingresso finisce subito
+    daAccendere.forEach((el) => el.addEventListener('focusin', () => { if (tl.progress() < 1) tl.progress(1); }));
   }
 
   /* ---------- 7. Il bling: un piccolo riflesso a stella dalla voce del menu ---------- */
@@ -787,17 +763,16 @@ function avvia() {
     misuraSagoma();
     misura();
     preparaScintille();
-    preparaScroll();
+    preparaIngresso();
     disegna(performance.now());
     if (!menoMovimento) requestAnimationFrame(passo);
-    // quando anche i font sono pronti, ScrollTrigger rifà le misure (il nome cambia larghezza)
-    document.fonts.ready.then(() => { misuraNome(); piazzaStella(); window.ScrollTrigger && window.ScrollTrigger.refresh(); });
+    // quando anche i font sono pronti il nome cambia larghezza: la stella si riappoggia
+    document.fonts.ready.then(() => { misuraNome(); piazzaStella(); });
   });
   // la scena si è allungata o accorciata (js/spazio.js): rimisuriamo tutto
   document.addEventListener('scena-alta', () => { if (pronto) { misura(); disegna(performance.now()); } });
   // la stella si rimisura quando cambia la misura VERA del canvas, non solo quella della finestra:
-  // durante lo scroll GSAP tiene ferma la scena e la ridimensiona dopo la finestra; misurando troppo
-  // presto la stella si disegnava con le misure vecchie e poi il browser la stirava (grande e deformata)
+  // misurando troppo presto la stella si disegnerebbe con le misure vecchie e il browser la stirerebbe
   let attesa;
   const rimisura = () => {
     cancelAnimationFrame(attesa);
@@ -808,7 +783,6 @@ function avvia() {
   };
   if (window.ResizeObserver) new ResizeObserver(rimisura).observe(canvas);
   window.addEventListener('resize', rimisura);
-  if (window.ScrollTrigger) window.ScrollTrigger.addEventListener('refresh', rimisura);
 
   // Quello che serve a pannelli.js: il pannello si apre dalla voce del menu, dopo il piccolo bling
   window.palco = {

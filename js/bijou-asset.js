@@ -1,7 +1,7 @@
 /* ==========================================================================
    bijou-asset.js: la CONFIGURAZIONE del gioco con Bijou (solo dati, niente logica)
 
-   Le pose sono le illustrazioni di Matilde, scontornate (fondo trasparente,
+   Le pose sono illustrazioni originali, scontornate (fondo trasparente,
    bianchi del pelo e degli occhi intatti). Ogni posa è scalata perché il
    cappuccio sia sempre largo 300 unità e le zampe poggino sul pavimento
    (y 580) del palco, al centro (x 500): così, cambiando posa, Bijou non salta e non cambia misura.

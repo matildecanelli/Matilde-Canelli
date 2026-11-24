@@ -69,7 +69,6 @@
     if (Math.abs(nuovo - extra) < 2) return;
     extra = nuovo;
     radice.style.setProperty('--scena-extra', `${extra}px`);
-    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
     document.dispatchEvent(new CustomEvent('scena-alta'));
   }
 
@@ -84,8 +83,8 @@
   });
   window.addEventListener('load', presto);
   document.addEventListener('stella-piazzata', presto);
-  // ScrollTrigger rifà le misure dopo un resize o una rotazione: si ricontrolla dopo di lui
-  if (window.ScrollTrigger) window.ScrollTrigger.addEventListener('refresh', presto);
+  // durante l'ingresso le finestre sono ancora spostate: si misura di nuovo quando sono al loro posto
+  document.addEventListener('ingresso-finito', presto);
   if (document.fonts) document.fonts.ready.then(presto);
   presto();
 })();

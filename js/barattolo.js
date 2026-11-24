@@ -1,7 +1,7 @@
 /* ==========================================================================
    barattolo.js: il barattolo di crema tempestato di strass, da girare (Three.js)
 
-   Il lato creativo di Matilde dentro la scheda di Virtuoso, costruito come la lattina:
+   Il lato creativo dentro la scheda di Virtuoso, costruito come la lattina:
    1. La pelle: quattro viste del barattolo, srotolate e cucite in un'unica
       immagine che gira tutto intorno (assets/3d/barattolo-pelle.webp). I testi restano leggibili.
    2. La forma: un tornio con il corpo, la giuntura e il coperchio. Sopra il coperchio,

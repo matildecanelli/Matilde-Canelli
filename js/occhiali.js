@@ -1,8 +1,8 @@
 /* ==========================================================================
-   occhiali.js: gli occhiali da sole di strass di Matilde, in 3D (Three.js)
+   occhiali.js: gli occhiali da sole di strass, in 3D (Three.js)
 
-   Il lato creativo di Matilde dentro la scheda di Ju1ce. La forma è misurata sulle
-   sagome delle sue foto: montatura e aste sono un solo pezzo che avvolge il viso e si
+   Il lato creativo dentro la scheda di Ju1ce. La forma è misurata sulle
+   sagome delle foto: montatura e aste sono un solo pezzo che avvolge il viso e si
    assottiglia verso i terminali. Fuori è coperto di pietre chiare, dentro è bianco
    perlato e liscio, davanti alle lenti ci sono pietre nere. Ogni pietra è un oggetto
    a sé. Forma e pietre sono calcolate una volta sola (strumenti/occhiali-genera.js,

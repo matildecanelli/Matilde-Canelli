@@ -33,8 +33,8 @@
     return `inset(${b.y - b.raggio}px ${L - b.x - b.raggio}px ${A - b.y - b.raggio}px ${b.x - b.raggio}px round ${b.raggio}px)`;
   }
   /* ---------- Prima del pop: un disegno di stelle sullo schermo ----------
-     Ogni voce ha il suo, legato a Matilde: Saturno per Progetti, il Capricorno
-     (il suo segno, governato da Saturno) per Chi sono, la sfera di cristallo
+     Ogni voce ha il suo, con un significato personale: Saturno per Progetti, il Capricorno
+     (il segno zodiacale, governato da Saturno) per Chi sono, la sfera di cristallo
      per Contatti. Il disegno si forma, poi da un punto parte uno scoppio di
      stelline e il pannello esce proprio da lì. */
   const formeStelle = ['01', '02', '03', '04'].map((n) => `url("${new URL(`assets/img/stelle/singole/essenziale-${n}.svg`, document.baseURI).href}")`);
@@ -197,7 +197,7 @@
     return finale(c, { x: centro.x, y: centro.y, raggio: r * k }, 1200);
   }
 
-  /* La falena luna, come il tatuaggio di Matilde: vista di fronte, simmetrica. Il corpo pieno a goccia,
+  /* La falena luna, come il tatuaggio: vista di fronte, simmetrica. Il corpo pieno a goccia,
      le antenne arricciate, le ali davanti con il bordo spesso, quelle dietro con l'orlo mosso che
      finiscono in due code lunghe e ondulate, una falce di luna in ogni ala, le venature a raggiera,
      e sopra l'arco di puntini. Si disegna solo la metà sinistra (misure prese dalla foto) e la

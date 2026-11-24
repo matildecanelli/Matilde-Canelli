@@ -129,7 +129,7 @@
   }
 
   /* ---------- 4. La mano e la stellina sul palco ----------
-     Le mani sono le illustrazioni di Matilde (bijou-asset.js, "mani"): lato = larghezza in unità del palco. */
+     Le mani sono illustrazioni originali (bijou-asset.js, "mani"): lato = larghezza in unità del palco. */
   // specchio: la mano girata (per il pancino arriva da destra, come nell'illustrazione della pancia)
   function mettiMano(id, x, y, lato = 220, giro = 0, specchio = false) {
     const m = CONF.mani[id], alto = (lato * m.altezza) / m.larghezza;

@@ -59,7 +59,7 @@ html { overflow-x: hidden; }
 [data-tema="chiaro"] .tema__luna { opacity: 0; transform: rotate(90deg) scale(0.6); }
 [data-tema="chiaro"] .tema__sole { opacity: 1; transform: none; }
 
-/* Le stelline dello scoppio: piccole costellazioni di Matilde che volano via dal pulsante.
+/* Le stelline dello scoppio: piccole costellazioni che volano via dal pulsante.
    La forma arriva da --forma (una delle stelle essenziali, scelta a caso da tema.js) */
 .stellina {
   position: fixed; z-index: 50; left: 0; top: 0;
@@ -126,15 +126,7 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
   left: 66%; top: 70%; transform: translate(-50%, -50%);
 }
 
-/* L'invito a scorrere, in fondo al centro */
-.scorri {
-  position: absolute; z-index: 3; left: 50%; bottom: var(--margine);
-  transform: translateX(-50%);
-  font-size: var(--t-piccolo); font-weight: 500; color: var(--tenue);
-}
-.statica .scorri, .senza-webgl .scorri, html:not(.js) .scorri { display: none; }
-
-/* Prima che GSAP parta, nome, ruolo e menu sono nascosti (li fa entrare lo scroll).
+/* Prima che GSAP parta, nome, ruolo e menu sono nascosti (li fa entrare l'ingresso, js/stella.js).
    Solo se c'è JavaScript e non siamo in versione statica: altrimenti restano visibili. */
 .js:not(.statica):not(.senza-webgl) .nome__riga { visibility: hidden; }
 .js:not(.statica):not(.senza-webgl) [data-entra] { opacity: 0; }
@@ -180,7 +172,7 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
 .pannello__testo--sotto { grid-row: 2; }
 @media (max-width: 52rem) {
   /* sul telefono: il pannello ha più spazio sopra (per Chiudi). La foto è ingrandita
-     (larga 1,65 volte il riquadro) così Matilde si vede bene, ed è tagliata come sul
+     (larga 1,65 volte il riquadro) così il ritratto si vede bene, ed è tagliata come sul
      computer, a metà del bicipite (il 77% dell'altezza della foto): sotto si vede il testo.
      Altezza del riquadro = 1,65 × (2/3 per la foto 3:2) × 0,77 = 0,846 della larghezza.
      Il centro è la testa: sta al 52,4% della larghezza della foto; spostando la foto
@@ -233,10 +225,6 @@ html, body { transition: background-color 400ms ease, color 400ms ease; }
   .pannello__dopo { order: 5; }
   .pannello:has(.pannello__immagini) { row-gap: 1.25rem; }
 }
-
-/* "Scorri": bianco nel tema scuro, bordeaux nel tema chiaro (lo stesso colore del pulsante del tema) */
-.scorri { color: var(--colore-tema); font-weight: 700; }
-
 
 /* ---------- Il menu: tre voci ---------- */
 .menu a { font-size: 1.0625rem; }
@@ -413,7 +401,7 @@ html:not([data-tema="chiaro"]) .menu a:hover, html:not([data-tema="chiaro"]) .me
 
 /* i colori dei progetti nel tema chiaro: pastello, nella tinta dei nomi del tema scuro (--sopra).
    Sono testi grandissimi e decorativi; sulla lavanda il contrasto è tra 2,5 e 2,8 (sotto il 3:1
-   dei testi grandi), scelto da Matilde per la morbidezza: chi li legge li ha anche nell'elenco del menu */
+   dei testi grandi), scelto per la morbidezza: chi li legge li ha anche nell'elenco del menu */
 [data-tema="chiaro"] #imaze .pannello__nome, [data-tema="chiaro"] .elenco-progetti__voce[href="#imaze"] { --c1: #f0758e !important; }
 [data-tema="chiaro"] #synapses, [data-tema="chiaro"] .elenco-progetti__voce[href="#synapses"] { --c1: #c9963a !important; }
 [data-tema="chiaro"] #ju1ce .pannello__nome, [data-tema="chiaro"] .elenco-progetti__voce[href="#ju1ce"] { --c1: #9b85f2 !important; }
@@ -421,7 +409,7 @@ html:not([data-tema="chiaro"]) .menu a:hover, html:not([data-tema="chiaro"]) .me
 [data-tema="chiaro"] #virtuoso .pannello__nome, [data-tema="chiaro"] .elenco-progetti__voce[href="#virtuoso"] { --c1: #c58f80 !important; }
 
 /* ==========================================================================
-   LE COSTELLAZIONI: le 12 composizioni di stelle di Matilde
+   LE COSTELLAZIONI: le 12 composizioni di stelle
    Stanno tutte in assets/img/stelle/costellazione.svg (uno "sprite": un file
    con 12 simboli). Nell'HTML se ne richiama una così:
      <svg class="costellazione ..." viewBox="0 0 L A" aria-hidden="true" focusable="false">
@@ -545,7 +533,7 @@ html.firmamento-aperto body::after {
 
 /* ---------- La fascia delle stelle: il quiz "Scegli la tua stella" (js/quiz.js) ----------
    Computer: subito sotto la scena, larga quanto lo schermo. In alto il titolo e, accanto,
-   il testo di Matilde; sotto il nastro delle stelle, da bordo a bordo.
+   il testo; sotto il nastro delle stelle, da bordo a bordo.
    Telefono (e schermi in verticale): il nastro sale dentro la scena, sotto il nome (la scena
    è alta uno schermo: il margine negativo lo riporta su); titolo e testo arrivano scorrendo.
    La risposta si apre nel pannello piccolo #stella. */
@@ -568,7 +556,7 @@ html.firmamento-aperto body::after {
   font-size: clamp(2.2rem, 1rem + 3.2vw, 5rem); line-height: 0.95; color: var(--colore-nome, var(--chiaro));
 }
 .quiz__sotto { margin: 0.4rem 0 0; font-size: 1rem; color: var(--tenue); }
-/* il testo di Matilde: chiaro, non verde, a una misura comoda; l'ultima frase è la battuta finale */
+/* il testo: chiaro, non verde, a una misura comoda; l'ultima frase è la battuta finale */
 .quiz__nota { font-size: 0.9375rem; line-height: 1.6; color: var(--chiaro); text-wrap: pretty; hyphens: manual; }
 .quiz__nota p { margin: 0 0 0.9em; }
 .quiz__nota p:last-child { font-weight: 700; color: var(--colore-tema); }
@@ -850,7 +838,7 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
 
 /* ---------- La lattina di strass (Synapses): un oggetto 3D da girare ---------- */
 /* in fondo al progetto, dopo tutte le immagini e da bordo a bordo della griglia: prima il racconto
-   di Matilde, poi l'oggetto da girare. Sul telefono viene dopo le immagini (order 4, come loro) */
+   poi l'oggetto da girare. Sul telefono viene dopo le immagini (order 4, come loro) */
 .oggetto { grid-column: 1 / -1; margin-top: 1.5rem; width: 100%; max-width: 34rem; justify-self: center; text-align: center; }
 @media (max-width: 40rem) { .pannello > .oggetto { order: 4; } }
 /* la statua e la lattina sono alte e strette: l'oggetto resta stretto, il testo sotto no */
@@ -876,7 +864,7 @@ html:not(.js) .bijou__aiuto, html:not(.js) .bijou__progressi, html:not(.js) .bij
 .oggetto__palco canvas { opacity: 0; transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1); }
 .oggetto.e-3d .oggetto__palco canvas { opacity: 1; }
 .oggetto figcaption { margin-bottom: 1rem; font-size: var(--t-piccolo); color: var(--tenue); }
-/* sopra l'oggetto: il racconto di Matilde, allineato a sinistra e largo quanto una colonna di
+/* sopra l'oggetto: il racconto, allineato a sinistra e largo quanto una colonna di
    testo comoda; poi l'istruzione, piccola e al centro, subito sopra l'oggetto */
 .oggetto__istruzione { display: block; margin-top: 1.5rem; }
 .oggetto figcaption p { margin: 0; text-align: start; font-size: 0.9375rem; line-height: 1.65; color: var(--chiaro); text-wrap: pretty; }
