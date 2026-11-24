@@ -201,6 +201,18 @@ html:has(.palco[inert]) body > .giu { filter: blur(10px); opacity: 0.35 !importa
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem; align-items: start;
 }
+/* Il logo di Virtuoso: rosa cipria sul bordeaux scuro (#3d1614), i colori del brand. Il PNG fa da maschera,
+   così il colore della scritta si sceglie qui. Non più largo del file (252 px), per restare nitido. */
+.logo-virtuoso {
+  aspect-ratio: 16 / 9; border-radius: 1.25rem; background: #3d1614;
+  display: grid; place-items: center;
+}
+.logo-virtuoso::before {
+  content: ""; width: min(55%, 252px); aspect-ratio: 252 / 111;
+  background: #dcb8ae;
+  -webkit-mask: url("../assets/img/pannelli/virtuoso-logo.png") center / contain no-repeat;
+          mask: url("../assets/img/pannelli/virtuoso-logo.png") center / contain no-repeat;
+}
 .pannello__immagini figcaption { margin-top: 0.5rem; font-size: var(--t-piccolo); color: var(--tenue); }
 
 .pannello__dopo { grid-column: 1 / -1; font-weight: 700; font-size: var(--t-frase); }
